@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>日志列表</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green"})
+        });
+    </script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>系统配置</h3>
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>系统配置</li>
+            <li><strong>系统日志</strong></li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="panel panel-danger">
+        <div class="panel-heading"><b>搜索</b></div>
+        <form method="post" action="" class="form-inline" onsubmit="return checkpost(document.checkform);"
+              name="checkform" enctype="multipart/form-data">
+            <div class="panel-body">
+                <div class="form-group">
+                    <select id="job" name="job" class="form-control">
+                        <option value="admin" name="job">操作员</option>
+                    </select>
+
+                    <div class="form-group"><input type="text" id="keys" name="keys" class="form-control"
+                                                   style="width: 300px"></div>
+                </div>
+                <button value="搜 索" type="submit" class="btn btn-primary">搜 索</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="float-e-margins">
+        <div class="ibox-title"><b>系统日志</b>
+        </div>
+    </div>
+    <form method="post" action="" name="FORM">
+        <div class="ibox-content">
+            <table class="table table-hover m-b-none">
+                <thead>
+                <tr>
+                    <th><span onclick="CheckAll(document.FORM,'')">全选</span></th>
+                    <th>操作员标号</th>
+                    <th>操作员名称</th>
+                    <th>操作功能</th>
+                    <th>操作内容</th>
+                    <th>原内容</th>
+                    <th>操作日期</th>
+                    <th>登录IP</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {#foreach from=$list item=item#}
+                <tr>
+                    <td><input type="checkbox" value="{#$item.id#}" name="ids[{#$item.id#}]" class="i-checks"></td>
+                    <td>{#$item.uid#}</td>
+                    <td>{#$item.username#}</td>
+                    <td>{#$item.operateuse#}</td>
+                    <td>{#$item.operatedesc#}</td>
+                    <td>{#$item.operateolddesc#}</td>
+                    <td>{#$item.logdate|date_format:"%Y-%m-%d"#}</td>
+                    <td>{#$item.ip#}</td>
+                    <td><a href="index.php?a=edit&c=log&id={#$item.id#}&p={#$page#}">[编辑]</a> <a
+                            href="index.php?a=del&c=log&id={#$item.id#}&p={#$page#}">[删除]</a></td>
+                </tr>
+                {#/foreach#}
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center m-t-sm">
+            {#$strPages#}
+        </div>
+
+        <div class="text-center m-t-sm"><span>选中操作：
+			<input type="radio" name="jb" value="logsexport" class="btn btn-primary i-checks">导出日志
+        </div>
+
+
+        <div class="text-center m-t-sm">
+            <button type="button" onclick="CheckAll(document.FORM,'')" class="btn btn-danger">全选</button>
+            <button type="submit" class="btn btn-primary">提 交</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    function checkpost() {
+        if ($('#keys').val() == '') {
+            alert('输入检索关键词');
+            $('#keys').focus();
+            return false;
+        }
+    }
+</script>
+</body>
+</html>

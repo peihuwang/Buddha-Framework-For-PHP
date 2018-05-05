@@ -1,0 +1,206 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<script src="js/jquery.js"></script> 
+<script src="js/main.js?v=1.0"></script>
+<script type="text/javascript" src="js/jquery.form.js"></script>
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+<script>
+$(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+</script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+<div class="col-sm-12">
+<h3>订单管理</h3><ol class="breadcrumb"><li>当前位置</li><li>订单管理</li><li> <strong>票务订单</strong></li></ol>
+</div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+<p><a href="index.php?a=more&c=orders&view={#$view#}&p={#$page#}" class="btn btn-primary">返回上一步</a></p>
+
+<form method="post" action="" onsubmit="return checkpost(document.checkform);" name="checkform" >
+<div class="float-e-margins">
+<div class="ibox-title"><b>基本信息</b></div>
+</div>
+<div class="ibox-content">
+<table class="table table-hover m-b-none">
+<tbody>
+<tr>
+	<td width="120">订单号</td>
+	<td width="300">{#$orders.order_id#}</td>
+	<td></td>
+</tr>
+<tr>
+	<td width="120">订单日期 </td>
+	<td width="300">{#$orders.acttime|date_format:"%Y-%m-%d"#}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>订单类型</td>
+	<td>{#if $orders.order_type eq 'ticket.online'#}线上订单
+		{#elseif $orders.order_type eq 'ticket.offline'#}线下订单{#/if#}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>订单状态</td>
+	<td>{#if $orders.status eq active#}正常{#elseif $orders.status eq finish#}完成{#/if#}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>订单来源</td>
+	<td>{#if $orders.order_type eq 'ticket.online'#}网络订票
+		{#elseif $orders.order_type eq 'ticket.offline'#}门店订票{#/if#}</td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="float-e-margins m-t-sm">
+<div class="ibox-title"><b>票务信息</b></div>
+	<div class="ibox-content">
+<table class="table table-hover m-b-none">
+	<thead>
+	<tr>
+		<th>名称</th>
+		<th>价格ID</th>
+		<th>座位ID</th>
+		<th>区域ID</th>
+		<th></th>
+	</tr>
+	</thead>
+	<tbody>
+	{#if $orders.xinxi#}
+	{#foreach from=$orders.xinxi item=item#}
+	<tr>
+		<td>{#$orders.scene_name#}</td>
+		<td>{#$orders.final_amount#}</td>
+		<td>{#$item.col#}</td>
+		<td>{#$item.zone#}</td>
+	</tr>
+	{#/foreach#}
+	{#else#}
+	<tr><td class="text-center" colspan="4">没有数据</td></tr>
+	{#/if#}
+	</tbody>
+</table>
+</div>
+</div>
+
+<!-- 收货人信息 -->
+<div class="float-e-margins m-t-sm">
+<div class="ibox-title"><b>收货人信息</b></div>
+</div>
+<div class="ibox-content">
+<table class="table table-hover m-b-none">
+<tbody>
+<tr>
+	<td width="120">姓名 </td>
+	<td width="300">{#$orders.ship_name#}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>手机号</td>
+	<td>{#$orders.ship_mobile#}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>收货地址</td>
+	<td>{#$orders.province#} {#$orders.ship_addr#}</td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- 付款信息 -->
+<div class="float-e-margins m-t-sm">
+<div class="ibox-title"><b>付款信息</b></div>
+</div>
+<div class="ibox-content">
+<table class="table table-hover m-b-none">
+<tbody>
+<tr>
+	<td width="120">付款状态</td>
+	<td width="300">{#if $orders.pay_status eq 1#}已付款{#else#}未付款{#/if#}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>付款类型</td>
+	<td>{#$orders.payment_name#}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>运费</td>
+	<td>{#$orders.cost_freight#}元</td>
+	<td></td>
+</tr>
+<tr>
+	<td>付款金额</td>
+	<td>{#$orders.total_amount#}元</td>
+	<td></td>
+</tr>
+<tr>
+	<td>最终价格</td>
+	<td>{#$orders.final_amount#}元</td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+	<!--发货-->
+	<div class="float-e-margins m-t-sm">
+		<div class="ibox-title"><b>订单配送</b></div>
+	</div>
+	<div class="ibox-content">
+		<table class="table table-hover m-b-none">
+			<tbody>
+			<tr>
+				<td width="120">物流公司</td>
+				<td width="300"><input type="text" name="logi_name" value="{#$orders.shipping_name#}" class="form-control">
+					<input type="hidden" value="{#$orders.shipping_id#}" name="logi_id"></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>物流单号</td>
+				<td><input type="text" name="logi_no" class="form-control"></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>备注</td>
+				<td><textarea rows="8"  class="form-control" name="memo"></textarea></td>
+				<td></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+<div class="text-center m-t-sm">
+<button type="submit" class="btn btn-primary">提 交</button></div>
+</form>
+</div>
+<script>
+function checkpost(){
+var logi_name=$('input[name="logi_name"]').val()
+var logi_no=$('input[name="logi_no"]').val();
+	if(logi_name==''){
+		alert('输入物流公司')
+		$('input[name="logi_name"]').focus();
+		return false;
+	}
+	if(logi_no==''){
+		alert('输入物流公司')
+		$('input[name="logi_name"]').focus();
+		return false;
+	}
+	return confirm("确实此订单发货吗？");
+}
+</script>
+</body>
+</html>

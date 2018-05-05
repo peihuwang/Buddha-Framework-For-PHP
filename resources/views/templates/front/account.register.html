@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>本地商家</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link href="/style/css/web.style.css" rel="stylesheet" type="text/css">
+</head>
+<style type="text/css">
+#ClickMe {border: 1px solid #C40000;background: #3ca8ef;width: 45%;height:30px;margin-left:10px; color: #fff;font-size: 1rem;text-align: center;line-height:30px;}
+#goodcover {display: none;position: absolute;top: 0%;left: 0%;width: 100%;height: 200%;background-color: black;z-index: 1001;-moz-opacity: 0.8;opacity: 0.70;filter: alpha(opacity=80);}
+#code {background-color: #fff;position: absolute;display: none;left: 45%;z-index: 1002;}
+.code-img {width: 250px;margin:0 auto;}
+.code-img img {width: 250px;}
+</style>
+<body>
+<div class="login">
+    <ul>
+        <li><a href="index.php?a=login&c=account">会员登录</a></li>
+        <li class="cur"><a href="index.php?a=register&c=account">注册新账号</a></li>
+    </ul>
+</div>
+
+
+
+<form action="" id="reg">
+    <div class="loginr">
+        <ul>
+            <li style="display:none;"><input type="text" name="reg_username" id="reg_username" placeholder="用户名" value="bendisahngjia"></li>
+            <li><input type="tel" name="reg_mobile" id="reg_mobile" placeholder="手机号"></li>
+            <li class="Verification"><input type="text" name="reg_yanzheng" id="reg_yanzheng" placeholder="短信验证码">
+                <button type="button" class="cover" onclick="tacticsm()">获取验证码</button></li>
+            <li><input type="password" name="reg_pwd" id="reg_pwd" placeholder="请输入密码"></li>
+            <li><input type="password" name="reg_newpwd" id="reg_newpwd" placeholder="再次输入密码"></li>
+            <li class="role">角色选择：
+                <label onclick="shangjia();" class="on">
+                    <input type="radio" name="usertype" value="1" checked="checked">商家
+                </label>
+                <label onclick="geren();">
+                    <input type="radio" name="usertype" value="4">个人
+                </label>
+                {#if $judge eq 1#}
+                <label id="ClickMe">
+                    点击关注公众号
+                </label>
+                {#/if#}
+            </li>
+        </ul>
+    </div>
+    <div class="remember"><label><span class="checkbox"><input type="checkbox" class="checked-switch" value="1" name="isok" checked="checked"><b></b></span>我已阅读并同意<em>《用户注册协议》</em></label> <a href="index.php?a=login&c=account">已有账号</a></div>
+    <div style="margin: 5px 0 15px 15px;">查看流程请点击：<a href="/index.php?a=mylist&c=singleinformation&id=162" style="color: red;font-size: 12px;font-weight: 600;">商家操作流程</a><a href="/index.php?a=index&c=index" style="float: right; margin-right: 10px;">进入首页</a></div>
+    <div id="shangjia" style="width: 90%;margin: 5px auto;font-size: 10px;color: #E36A26;">PS: 免费发布各类产品，需求，招聘，租赁，促销，活动，简介，地址，导航，名片，传单等功能。</div>
+
+    <div id="geren" style="display: none;width: 90%;margin: 5px auto;font-size: 10px;color: #E36A26;">PS: 免费发布需求，租赁，求职等。</div>
+    
+    <button type="button" class="loginlg" onclick="_user.Reg()">注册</button>
+
+</form>
+
+<div id="goodcover"></div>
+<div id="code">
+  <div class="code-img"><img id="ewmsrc"  src="style/images/qrcode_for_gh_0f246af8a3ff_430.jpg"/></div>
+</div>
+<script src="/style/js/jquery/jquery.min.js"></script>
+<script src="/style/js/user.js"></script>
+<script type="text/javascript">
+    function shangjia(){
+        $('#geren').css('display','none');
+        $('#shangjia').css('display','');
+    }
+    function geren(){
+        $('#shangjia').css('display','none');
+        $('#geren').css('display','');
+    }
+
+
+$(function() {
+    //alert($(window).height());
+    $('#ClickMe').click(function() {
+        $('#code').center();
+        $('#goodcover').show();
+        $('#code').fadeIn();
+    });
+    $('#closebt').click(function() {
+        $('#code').hide();
+        $('#goodcover').hide();
+    });
+    $('#goodcover').click(function() {
+        $('#code').hide();
+        $('#goodcover').hide();
+    });
+    /*var val=$(window).height();
+    var codeheight=$("#code").height();
+    var topheight=(val-codeheight)/2;
+    $('#code').css('top',topheight);*/
+    jQuery.fn.center = function(loaded) {
+        var obj = this;
+        body_width = parseInt($(window).width());
+        body_height = parseInt($(window).height());
+        block_width = parseInt(obj.width());
+        block_height = parseInt(obj.height());
+
+        left_position = parseInt((body_width / 2) - (block_width / 2) + $(window).scrollLeft());
+        if (body_width < block_width) {
+            left_position = 0 + $(window).scrollLeft();
+        };
+
+        top_position = parseInt((body_height / 2) - (block_height / 2) + $(window).scrollTop());
+        if (body_height < block_height) {
+            top_position = 0 + $(window).scrollTop();
+        };
+
+        if (!loaded) {
+
+            obj.css({
+                'position': 'absolute'
+            });
+            obj.css({
+                'top': ($(window).height() - $('#code').height()) * 0.5,
+                'left': left_position
+            });
+            $(window).bind('resize', function() {
+                obj.center(!loaded);
+            });
+            $(window).bind('scroll', function() {
+                obj.center(!loaded);
+            });
+
+        } else {
+            obj.stop();
+            obj.css({
+                'position': 'absolute'
+            });
+            obj.animate({
+                'top': top_position
+            }, 200, 'linear');
+        }
+    }
+
+})
+
+
+
+</script>
+</body>
+</html>

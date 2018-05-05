@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<script src="js/jquery.js"></script>
+<script src="js/main.js?v=1.0"></script>
+<script type="text/javascript" src="js/jquery.form.js"></script>
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+<script>
+$(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+</script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+<div class="col-sm-12">
+<h3>订单列表</h3><ol class="breadcrumb"><li>当前位置</li><li>订单管理</li><li> <strong>订单列表</strong></li></ol>
+</div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+<p>
+	{#foreach from=$finder item=item key=key#}
+<a href="index.php?a=more&c=orders&view={#$key#}" class="btn {#if $view eq $key#}btn-primary{#else#}btn-danger{#/if#}">{#$item#}</a>
+	{#/foreach#}
+</p>
+<div class="panel panel-danger">
+<div class="panel-heading"><b>搜索</b></div>
+<form method="post" action="" class="form-inline">
+<div class="panel-body">
+<div class="form-group">
+<select id="option" name="option" class="form-control">
+	{#foreach from=$searchType item=item key=key#}
+<option value="{#$key#}" {#if $params.option eq $key#} selected{#/if#}>{#$item#}</option>
+	{#/foreach#}
+</select>
+</div>
+<div class="form-group"><input type="text" value="{#$keyword#}" name="keyword" id="keyword" class="form-control" style="width: 300px;"></div>
+<button value="搜 索" type="submit" class="btn btn-danger">搜 索</button>
+</div>
+</form>
+</div>
+<div class="float-e-margins">
+<div class="ibox-title"><b>订单列表</b></div>
+</div>
+
+<form method="post" action="" name="FORM">
+<div class="ibox-content">
+<div class="table-responsive">
+<table class="table table-hover m-b-none">
+<thead>
+	<tr>
+		<th width="50"><span onclick="CheckAll(document.FORM,'')">全选</span></th>
+		<th>订单号</th>
+		<th>订单类型</th>
+		<th>订单状态</th>
+		<th>用户名</th>
+		<th>收货人</th>
+		<th>手机号</th>
+		<th>付款状态</th>
+		<th>订单日期</th>
+		<th>操作</th>
+	</tr>
+</thead>
+<tbody>
+{#foreach from=$list item=item#}
+	<tr>
+		<td><input type="checkbox" value="{#$item.id#}" name="orderids[]" class="i-checks"></td>
+		<td>{#$item.order_id#}</td>
+		<td>{#if $item.order_type eq 'ticket.online'#}线上订单
+			{#elseif $item.order_type eq 'ticket.offline'#}线下订单
+			{#elseif $item.order_type eq 'member.upgrade'#}升级订单
+			{#elseif $item.order_type eq 'member.renew'#}续费订单
+			{#elseif $item.order_type eq 'active.enter'#}活动订单
+			{#elseif $item.order_type eq 'member.exchange'#}商城订单{#/if#}</td>
+		<td>{#if $item.status eq 'active'#}正常{#/if#}</td>
+		<td>{#$item.user_name#}</td>
+		<td>{#if $item.ship_name#}{#$item.ship_name#}{#else#}{#$item.user_name#}{#/if#}</td>
+		<td>{#if $item.ship_mobile#}{#$item.ship_mobile#}{#else#}{#$item.ship_tel#}{#/if#}</td>
+		<td>{#if $item.pay_status eq 1#}已付款{#else#}未支付{#/if#}</td>
+		<td>{#$item.createtime|date_format:"%Y-%m-%d"#}</td>
+		<td>{#if $item.order_type eq 'ticket.online'#}<a href="index.php?a=editonline&c=orders&id={#$item.id#}&view={#$view#}&p={#$page#}">[查看]</a>
+			{#if $item.status eq 'active'  && $item.ship_status eq 0#}
+			<a href="index.php?a=deliveronline&c=orders&id={#$item.id#}&view={#$view#}&p={#$page#}" title="编辑">[编辑]</a>
+			{#/if#}
+			{#elseif $item.order_type eq 'ticket.offline'#}<a href="index.php?a=edit.online&c=orders&id={#$item.id#}&view={#$view#}&p={#$page#}">[查看]</a>
+			{#if $item.status eq 'active' and $item.ship_status eq 0#}
+			<a href="index.php?a=deliveronline&c=orders&id={#$item.id#}&view={#$view#}&p={#$page#}" title="编辑">[编辑]</a>
+			{#/if#}
+			{#elseif $item.order_type eq 'member.upgrade'#}<a href="index.php?a=edit.upgrade&c=orders&id={#$item.id#}&view={#$view#}&p={#$page#}">[查看]</a>
+			{#elseif $item.order_type eq 'member.renew'#}<a href="index.php?a=edit.renew&c=orders&id={#$item.id#}&view={#$view#}&p={#$page#}">[查看]</a>
+			{#elseif $item.order_type eq 'active.enter'#}<a href="index.php?a=edit.enter&c=orders&id={#$item.id#}&view={#$view#}&p={#$page#}">[查看]</a>
+			{#elseif $item.order_type eq 'member.exchange'#}<a href="index.php?a=edit.exchange&c=orders&id={#$item.id#}&view={#$view#}&p={#$page#}">[查看]</a>{#/if#}
+
+	</tr>
+{#/foreach#}
+</tbody>
+</table>
+</div>
+</div>
+<div class="text-center m-t-sm">
+{#$strPages#}
+</div>
+</form>
+<div class="text-center m-t-sm">
+<button type="submit" class="btn btn-primary">导出订单</button>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+{#include file='public.header.html'#}
+<div id="user-basic">
+    <div class="return" data-href="index.php?a=index&c=index"><i></i></div>
+    <h1>供应</h1>
+    <!-- <div class="addto" data-href="business/index.php?a=add&c=supplyinfo"><i></i></div> -->
+</div>
+<div class="tab_list">
+    <ul>
+        <!--<li {#if $view eq 2#}class="cur"{#/if#} data-href="index.php?a=index&c=supply&view=2">最新</li>-->
+        <!--<li {#if $view eq 1#}class="cur"{#/if#} data-href="index.php?a=index&c=supply&view=1">附近</li>-->
+        <!--<li {#if $view eq 3#}class="cur"{#/if#} data-href="index.php?a=index&c=supply&view=3">热门</li>-->
+        <!--<li {#if $view eq 4#}class="cur"{#/if#} data-href="index.php?a=index&c=supply&view=4">促销</li>-->
+        <!--<li data-href="index.php?a=category&c=supply">分类筛选</li>-->
+
+        {#foreach from=$navlist  item=item key=key name=txt#}
+        <li {#if $view eq $item.view#}class="cur"{#/if#} data-href="{#$item.url#}">{#$item.chinesename#}</li>
+        {#/foreach#}
+
+
+
+
+
+    </ul>
+</div>
+<form method="get" action="index.php">
+    <div id="agent_retrieval">
+        <input type="hidden" name="a" value="index"/> <input type="hidden" name="c" value="supply"/>
+        <input type="text" value="" id="keyword" name="keyword" placeholder="请输入地址进行查找附近商家">
+        <button type="submit" id="retrie">搜索</button>
+    </div>
+</form>
+<div id="list"></div>
+<div class="div_null hide"></div>
+
+<script src="/style/js/jquery/jquery.min.js"></script>
+<script src="/style/js/template.js"></script>
+<script src="/style/js/ajaxlist_s.js"></script>
+<script type="text/javascript">
+    $(function(){
+        var url=window.location.href;
+        $('#list').ajaxshiolist(url);
+    })
+</script>
+<script id="demo" type="text/html">
+    {{each list as value i}}
+    <div class="sup_item" data-href="index.php?a=info&c=supply&id={{value.id}}">
+        <div class="pic_img"><img src="/{{value.goods_thumb}}"></div>
+        <div class="nearby_con">
+            <div class="title">{{value.goods_name}}</div>
+            <div class="price"><i></i>价格：<em>￥<i>{{value.price}}</i></em></div>
+            <div class="address"><span class="strong"><i></i> 约 {{value.distance}}</span><span>{{value.roadfullname}}</span></div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+{#include file='public.footer.html'#}

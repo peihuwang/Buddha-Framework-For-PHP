@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>广告图片编辑</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+    </script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>广告图片管理</h3><ol class="breadcrumb"><li>当前位置</li><li>广告图片管理</li><li> <strong>添加广告图片</strong></li></ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <p class="m-t-sm">
+        <span class="btn btn-primary">基本信息</span>
+        <a href="index.php?a=more&c=image" class="btn btn-primary">返回上一步</a>
+    </p>
+    <form method="post" action=""  onsubmit="return checkpost(document.checkform);" name="checkform" enctype="multipart/form-data">
+
+                <!-- 基本信息 -->
+                <div class="float-e-margins">
+                    <div class="ibox-title"><b>基本属性</b></div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-hover m-b-none">
+                        <tbody>
+                        <tr>
+                            <td width="120">所属分类 <span class="text-danger">*</span></td>
+                            <td width="360"><select class="form-control" name="cat_id" id="cat_id">
+                                <option value="0">请选择文广告图片分类</option>
+                                {#$optionList#}
+                            </select></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>广告图片名称 <span class="text-danger">*</span></td>
+                            <td><input type="text" value="{#$article.name#}"  name="name" id="sname" class="form-control"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>广告图片编号(bn)</td>
+                            <td><input type="text" value="{#$article.number#}"  name="number"  class="form-control"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>图片宽高<span class="text-danger">*</span></td>
+                            <td class="form-inline">
+                                <div class="form-group"><input type="text"  name="width"  value="{#$article.width#}" class="form-control width" placeholder="图片宽" readonly></div>
+                                —
+                                <div class="form-group"><input type="text"  name="height" value="{#$article.height#}"  class="form-control height" placeholder="图片高" readonly></div> </td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td>广告图片</td>
+                            <td colspan="2"><img src="/{#$article.large#}" alt="{#$article.name#}" style="height: 100px; max-width:100%;"></td>
+                        </tr>
+                        <tr>
+                            <td>图片上传</td>
+                            <td>
+                                <div class="btn btn-danger btn-file">
+                                    <i class="glyphicon">点击上传</i>
+                                    <input type="file" name="Image" class="file">
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>排序</td>
+                            <td><input type="text" value="{#$article.view_order#}" name="view_order" class="form-control" ></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>是否上架</td>
+                            <td><input type="checkbox" value="1" name="buddhastatus" class="i-checks"{#if $article.buddhastatus eq 1#} checked{#/if#}></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+        <div class="text-center m-t-sm">
+            <button type="submit" class="btn btn-primary">提 交</button>
+        </div>
+    </form>
+</div>
+</div>
+<script type="text/javascript">
+    function checkpost() {
+        if($('#cat_id option:selected').val()=='0'){
+            alert("请选择所属分类");
+            $('#cat_id').focus();
+            return false;
+        };
+        if($('#name').val()==''){
+            alert("输入广告名称");
+            $('#name').focus();
+            return false;
+        };
+        if($('#cat_id option:selected').val()!='1') {
+            if ($('.width').val() == 0) {
+                alert("未设置图片宽");
+                $('#width').focus();
+                return false;
+            }
+            ;
+            if ($('.height').val() == 0) {
+                alert("未设置图片高");
+                $('#height').focus();
+                return false;
+            }
+        }
+    };
+    $(function(){
+        $('#cat_id').change(function(){
+            var cat_id=$(this).find('option:selected').val();
+            if(cat_id==0){
+                return false;
+            };
+            $.getJSON('index.php?a=imgsize&c=image',{cat_id:cat_id},function(result){
+                if(result.status==0){
+                    if(result.width==0 && result.height==0 ){
+                        $('.width').val('');
+                        $('.height').val('');
+                        alert('去设广告分类设置广告图片的宽高尺寸');
+                        return false;
+                    };
+                    $('.width').val(result.width);
+                    $('.height').val(result.height);
+                }else if(result==1){
+                    alert('请选择广告分类的末级类')
+                };
+
+            });
+        });
+    });
+</script>
+</body>
+</html>

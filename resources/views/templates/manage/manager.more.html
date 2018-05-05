@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>管理员帐号</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green"})
+        });
+    </script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>系统配置</h3>
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>系统配置</li>
+            <li><strong>操作员列表</strong></li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <p><a href="index.php?a=add&c=manager" class="btn btn-primary">添加操作员</a></p>
+
+    <div class="float-e-margins">
+        <div class="ibox-title"><b>操作员列表</b>
+        </div>
+    </div>
+    <form name="FORM" method="post" action="">
+        <div class="ibox-content">
+            <table class="table table-hover m-b-none">
+                <thead>
+                <tr>
+                    <td width="70"><span onclick="CheckAll(document.FORM,'')">全部选择</span></td>
+                    <td>操作员编号</td>
+                    <td>操作员昵称</td>
+                    <td>操作员名称</td>
+                    <td>部门</td>
+                    <td>手机号</td>
+                    <td>邮箱</td>
+                    <td>用户状态</td>
+                    <td>建立日期</td>
+                    <td width="*">操作</td>
+                </tr>
+                </thead>
+                <tbody>
+                {#foreach from=$list item=item#}
+                <tr>
+                    <td><input type="checkbox" value="{#$item.id#}" name="ids[{#$item.id#}]" class="i-checks"></td>
+                    <td>{#$item.memberid#}</td>
+                    <td>{#$item.nickname#}</td>
+                    <td>{#$item.username#}</td>
+                    <td>
+                        {#foreach from=$utypearr item=utype#}
+                        {#if $item.utype eq $utype.id#}
+                        {#$utype.name#}
+                        {#/if#}
+                        {#/foreach#}
+                    </td>
+                    <td>{#$item.mobile#}</td>
+                    <td>{#$item.email#}</td>
+                    <td>{#if $item.state eq 0#}
+                        未审核
+                        {#elseif $item.state eq 1#}
+                        未激活
+                        {#elseif $item.state eq 2#}
+                        正常
+                        {#elseif $item.state eq 3#}
+                        已停用
+                        {#/if#}
+                    </td>
+                    <td>{#$item.regtime|date_format:"%Y-%m-%d"#}</td>
+                    <td>
+                        <a href="index.php?a=edit&c=manager&id={#$item.id#}&p={#$page#}" title="编辑">[编辑]</a>
+                        <a href="index.php?a=edit&c=manager&id={#$item.id#}&p={#$page#}&err=4
+" title="编辑">[密码重置]</a>
+                        <a href="index.php?a=del&c=manager&id={#$item.id#}&p={#$page#}"
+                           onClick="return confirm('您确认要删除吗?');">[删除]</a>
+                        <a href="index.php?a=edit&c=permissions&id={#$item.id#}&p={#$page#}" title="编辑">[权限列表]</a>
+                    </td>
+                </tr>
+                {#/foreach#}
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="text-center m-t-sm">
+            {#$strPages#}
+        </div>
+
+        <div class="text-center m-t-sm">
+            <span>选中操作：</span>
+            <input type="radio" value="del" name="job" class="i-checks" checked>删除
+        </div>
+        <div class="text-center m-t-sm">
+            <button onClick="CheckAll(document.FORM,'')" type="button" class="btn btn-success">全 选</button>
+            <button onClick="return confirm('您确认要进行此操作吗?');" type="submit" class="btn btn-primary">提 交</button>
+        </div>
+    </form>
+
+</body>
+</html>

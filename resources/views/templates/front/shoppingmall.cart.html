@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <title>商城</title>
+        <meta name="Keywords" content=""/>
+        <meta name="description" content="" />
+        <script src="style/js/mui.min.js"></script>
+        <link href="style/css/mui.min.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="style/css/style2.css"/>
+        <script type="text/javascript">
+            !function(J){function H(){var d=E.getBoundingClientRect().width;var e=(d/7.5>100*B?100*B:(d/7.5<42?42:d/7.5));E.style.fontSize=e+"px",J.rem=e}var G,F=J.document,E=F.documentElement,D=F.querySelector('meta[name="viewport"]'),B=0,A=0;if(D){var y=D.getAttribute("content").match(/initial\-scale=([\d\.]+)/);y&&(A=parseFloat(y[1]),B=parseInt(1/A))}if(!B&&!A){var u=(J.navigator.appVersion.match(/android/gi),J.navigator.appVersion.match(/iphone/gi)),t=J.devicePixelRatio;B=u?t>=3&&(!B||B>=3)?3:t>=2&&(!B||B>=2)?2:1:1,A=1/B}if(E.setAttribute("data-dpr",B),!D){if(D=F.createElement("meta"),D.setAttribute("name","viewport"),D.setAttribute("content","initial-scale="+A+", maximum-scale="+A+", minimum-scale="+A+", user-scalable=no"),E.firstElementChild){E.firstElementChild.appendChild(D)}else{var s=F.createElement("div");s.appendChild(D),F.write(s.innerHTML)}}J.addEventListener("resize",function(){clearTimeout(G),G=setTimeout(H,300)},!1),J.addEventListener("pageshow",function(b){b.persisted&&(clearTimeout(G),G=setTimeout(H,300))},!1),H()}(window);
+            if (typeof(M) == 'undefined' || !M){
+                window.M = {};
+            }
+        </script>
+    </head>
+    <body>
+        <header class="mui-bar mui-bar-nav header" style="background-color: #f60;padding-left: 0;">
+            <a href="javascript:history.go(-1);">
+                <img style="width:50px;height: 50px;" src="/style/img_two/back.png"/>
+            </a>
+            <h1 class="mui-title" style="color: #fff">购物车</h1>
+        </header>
+        <div class="shopping">
+            <div class="shop-group-item">
+                <ul>
+                    <li>
+                        {#if $DB_Cart#}
+                        {#foreach from=$DB_Cart item=item key=key#}
+                        <div class="shop-info">
+                            <input type="checkbox" class="check goods-check goodsCheck">
+                            <div class="shop-info-img"><a href="#"><img src="{#$item.img#}"></a></div>
+                            <div class="shop-info-text">
+                                <h4>{#$item.goods_name#} <span style="font-size: 12px; margin-left: 5px;">{#$item.goods_brief#}</span></h4>
+                                <div class="shop-brief"><span>已选：{#$item.attr#}</span></div>
+                                <div class="shop-price">
+                                    <div class="shop-pices">￥<b class="price">{#$item.goods_price#}</b></div>
+                                    <div class="shop-arithmetic">
+                                        <a href="javascript:;" class="minus">-</a>
+                                        <span class="num">{#$item.goods_number#}</span>
+                                        <a href="javascript:;" class="plus">+</a>
+                                    </div>
+                                    <span style="color:red;float:right;margin-top: 10px;" onclick="delcart({#$item.cart_id#});">删除</span>
+                                    <div style="display: none;" class="cart_id">{#$item.cart_id#}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: none;" class="shopPrice">总计：￥<span class="shop-total-amount ShopTotal">0.00</span></div>
+                        {#/foreach#}
+                        {#else#}
+                        <div style="background-color: #f4f4f4;text-align: center;line-height: 50px;font-size: 14px;">您的购物车空空如也，赶紧去 <a style="color:red;" href="/index.php?a=index&c=shoppingmall">商城首页</a> 逛逛吧</div>
+                        {#/if#}
+                    </li>
+                </ul>
+            </div>
+            <div class="h10"></div>
+        </div>
+    <div class="payment-bar">
+        <div class="all-checkbox"><input type="checkbox" class="check goods-check" id="AllCheck">全选</div>
+        <div class="shop-total">
+            <strong>总价：<i class="total" id="AllTotal">0.00</i></strong>
+        </div>
+        <a href="javascript:void(0)" class="settlement" onclick="settlement_cart();">结算</a>
+    </div>
+    <input type="hidden" name="selected_id" id="selected_id" value=""/>
+    <script type="text/javascript" src="/style/js/jquery/jquery.min.js" ></script>
+    <script type="text/javascript" src="/style/js/cart.js" ></script>
+    </body>
+</html>

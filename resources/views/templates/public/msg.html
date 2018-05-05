@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<title>提示信息</title>
+<link href="/manage/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+<link href="/manage/css/animate.min.css" rel="stylesheet">
+<link href="/manage/css/style.min.css?v=4.1.0" rel="stylesheet">
+</head>
+<body>
+<div class="wrapper wrapper-content animated fadeInRight">
+<div class="panel panel-success">
+<div class="panel-heading">提示信息</div>
+<div class="panel-body">
+{#$msg#}
+		<p>
+{#if $redirect#}
+<a href="{#$url#}">如果您的浏览器没有自动跳转，请点击这里</a>
+<script type="text/javascript">
+	setTimeout("window.location.href ='{#$url#}';", {#if $time#}{#$time#}{#else#}500{#/if#});
+</script>
+{#else#}
+<a href="{#if $url#}{#$url#}{#else#}javascript:history.go(-1){#/if#}">返回继续操作</a>
+{#/if#}
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+html {height: 100%}
+body.signin {height: auto;background: url(../images/login-background.png) repeat-x center 0 #484b50;}
+.logo{ display:block; position:fixed; background:url(../images/logo.png) no-repeat; width:245px; height:142px; left:10%; top:10%;}
+.signinpanel { width:310px; height:310px; background:url(../images/bg.png) repeat-x 0 0; border-radius:50%; position:fixed; top:50%; left:50%; margin-left:-155px; margin-top:-155px;}
+.signinpanel .yingyin{ display:block; background:url(../images/yin.png) no-repeat; width:363px; height:52px; position:absolute; left:0; bottom:-30px; margin-left:-26px; z-index:-1}
+.signinpanel .loginsup{ display:block; background:url(../images/login_b.png) no-repeat; width:384px; height:180px; position:absolute; left:50%; top:50%; margin-top:-90px; margin-left:-192px}
+.signinpanel h1{ display:block; font-size:18px; text-align:center; padding-top:18px; font-weight:bold}
+.signinpanel p{ position:absolute; left:0; right:0; top:230px; text-align:center}
+.signinpanel form {padding:18px 70px 0; color:#fff}
+.signinpanel form .form-control{ padding:0 5px; height:25px; border:0; margin-bottom:5px; color:#000}
+.signinpanel .btn-success{ background-color:#000; border-color:#000}
+.btn-success:hover {
+    background-color:;
+    border-color:
+}

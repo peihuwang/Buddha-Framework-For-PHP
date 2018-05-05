@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>编辑无敌店铺</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<script src="js/jquery.js"></script> 
+<script src="js/main.js?v=1.0"></script>
+<script src="js/jquery.form.js"></script>
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+<script>
+$(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+</script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+<div class="col-sm-12">
+<h3>编辑无敌店铺</h3><ol class="breadcrumb"><li>当前位置</li><li>无敌软件管理</li><li> <strong>编辑无敌店铺</strong></li></ol>
+</div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+<p>
+<a href="index.php?a=more&c=supershopconf" class="btn btn-primary">返回上一步</a>
+</p>
+
+<form method="post" action="" onsubmit="return checkpost(document.checkform);" name="checkform">
+<div class="float-e-margins">
+<div class="ibox-title"><b>编辑无敌店铺</b></div>
+</div>
+<div class="ibox-content">
+<table class="table table-hover m-b-none">
+<tbody>
+<tr>
+	<td>应用名 <span class="text-danger">*</span></td>
+	<td><input type="text" value="{#$Db_Supershopconf.appname#}" name="appname" id="appname"  class="form-control"></td>
+	<td></td>
+</tr>
+<tr>
+	<td>店铺内码Id <span class="text-danger">*</span></td>
+	<td><input type="text" value="{#$Db_Supershopconf.shop_id#}" name="shop_id" id="shop_id"  class="form-control"></td>
+	<td></td>
+</tr>
+<tr>
+	<td>用户内码Id <span class="text-danger">*</span></td>
+	<td><input type="text" value="{#$Db_Supershopconf.user_id#}" name="user_id" id="user_id"  class="form-control"></td>
+	<td></td>
+</tr>
+<tr>
+	<td>公匙（相当于账号） <span class="text-danger">*</span></td>
+	<td><input type="text" value="{#$Db_Supershopconf.appKey#}" name="appKey" id="appKey" class="form-control"></td>
+	<td></td>
+</tr>
+<tr>
+	<td>私匙（相当于密码） <span class="text-danger">*</span></td>
+	<td><input type="text" value="{#$Db_Supershopconf.appSecret#}" name="appSecret" id="appSecret"  class="form-control"></td>
+	<td></td>
+</tr>
+
+<tr>
+	<td>令牌 <span class="text-danger">*</span></td>
+	<td>{#$Db_Supershopconf.opentoken#}</td>
+	<td></td>
+</tr>
+
+<tr>
+	<td>应用开始日期</td>
+	<td><input type="text" value="{#$Db_Supershopconf.starttimestr#}" name="starttime" class="form-control state some_class" ></td>
+	<td></td>
+</tr>
+
+<tr>
+	<td>应用结束日期</td>
+	<td><input type="text" value="{#$Db_Supershopconf.endtimestr#}" name="endtime" class="form-control state some_class" ></td>
+	<td></td>
+</tr>
+<tr>
+	<td>是否上架</td>
+	<td><input type="checkbox" value="1" name="buddhastatus" class="i-checks" {#if $Db_Supershopconf.buddhastatus eq 0#}checked{#/if#}></td>
+	<td></td>
+</tr>
+
+
+</tbody>
+</table>
+</div>
+<div class="text-center m-t-sm">
+<button type="submit" class="btn btn-primary">提 交</button>
+</div>
+</form>
+</div>
+</div>
+
+<link rel="stylesheet" href="js/datetimepicke/datetimepicker.css">
+<script src="js/datetimepicke/datetimepicker.full.min.js"></script>
+<script>
+
+
+	$(function() {
+         //日期时间
+		$('.some_class').datetimepicker({
+			lang: 'ch',
+			timepicker: false,
+			format: 'Y-m-d',
+			minDate: '-1970/01/02',
+		});
+
+
+	})
+</script>
+</body>
+</html>

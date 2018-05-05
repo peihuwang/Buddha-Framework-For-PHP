@@ -1,0 +1,296 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>详情</title>
+<link rel="stylesheet" type="text/css" href="/style/css/style.css">
+<link rel="stylesheet" type="text/css" href="/style/css/font_403143_nbpgsnnn79tqpvi.css">
+<link rel="stylesheet" type="text/css" href="/style/css/swiper-3.4.2.min.css">
+<script src="/style/js_two/jquery-3.1.1.min.js"></script>
+<script src="style/js/swiper-3.4.2.jquery.min.js"></script>
+<script src="/style/js/shoppingmall.js"></script>
+<style type="text/css">
+    .m5{margin: 5px;}
+    .m10{margin: 10px;}
+    .goods_desc img{width: 100%}
+</style>
+</head>
+<body>
+<!--nav-->
+<div id="navs">
+	<div id="navs_in">
+        <a href="#" class="tab_nav on">商品</a>
+        <a href="#" class="tab_nav">详情</a>
+        <a href="comment.scrollIntoView(false)" onclick="javascript:document.getElementById('comment').scrollIntoView()" class="tab_nav">评价</a>
+    </div>
+    <a style="width:30px;z-index: 999999;height: 44px;" href="javascript:history.back(-1)"><span><img style="margin-left: 15px;" src="/style/image/return.png"></span></a>
+</div>
+<!--content-->
+<div class="width100 hidden" id="tabs-container" style="margin-top:44px;margin-bottom:50px;background:#fff;">
+	<div class="swiper-wrapper">
+    	<!--商品-->
+    	<div class="swiper-slide sc_Y">
+        	<!--轮播图-->
+            <div class="swiper-container" id="swiper2">
+            	<div class="swiper-wrapper">
+                    {#foreach from=$gsllery item=item#}
+                	<div class="swiper-slide"><img src="{#$item.goods_img#}" style="width:100%;height:210px"></div>
+                    {#/foreach#}
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+            <!--正常的内容-->
+            <div class="width100 hidden bj_fff" style="border-top:1px solid #ddd;">
+            	<div class="width96 hidden center">
+            		<h3 class="font16 font100" style="line-height:20px;color:#232326;margin-top: 10px;">{#$goods.goods_name#}</h3>
+                </div>
+                <div class="width96 hidden center" style="margin-top:7px;">
+                	<b class="red font24"><font class="font16">￥</font>{#$goods.market_price#}</b>
+                </div>
+                <div class="font14 red m10" style="margin:5px;">商品简介：</div>
+                <p class="width96 hidden center block font13 m10" style="color:#81838e;">{#$goods.goods_brief#}</p>
+            </div>
+                <div class="font14 red m5">商品详情：</div>
+                <div class="goods_desc m10">{#$goods.goods_desc#}</div>
+            <!--评价-->
+            <div class="swiper-slide sc_Y">
+                <div class="width96 hidden center" id="for_eh">
+                    <!--一条-->
+                    <div class="width100 hidden"  id="comment">
+                        <a class="m5" style="color: red;font-size: 14px;">商品评论：</a>
+                        <div class="hidden yi_top m10">
+                            <img src="/style/image/31333832313438383639325f7031343730363633333338343336_sma.jpg">
+                            <span>c***4</span>
+                            <font>2017-05-06</font>
+                        </div>
+                        <div class="hidden font13 c_33 m10" style="border-bottom:1px solid #ddd;padding-top:8px;padding-bottom:8px;line-height:20px;">对于背投广告的原理来说并没有什么难度，无非打开的窗口失去焦点（blur），而原来页面得到焦点（focus）。但对于流行的浏览器来说，如果非用户行为的弹出窗口（即 onload 时，直接window.open ），会被浏览器默认拦截。
+                        </div>
+                    </div>
+                    <!--一条-->
+                    <div class="width100 hidden yi_top">
+                            <img src="/style/image/31333832313438383639325f7031343730363633333338343336_sma.jpg">
+                            <span>c***4</span>
+                            <font>2017-05-06</font>
+                        </div>
+                        <div class="width100 hidden font13 c_33" style="border-bottom:1px solid #ddd;padding-top:8px;padding-bottom:8px;line-height:20px;">对于背投广告的原理来说并没有什么难度，无非打开的窗口失去焦点（blur），而原来页面得到焦点（focus）。但对于流行的浏览器来说，如果非用户行为的弹出窗口（即 onload 时，直接window.open ），会被浏览器默认拦截。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--详情-->
+        
+    </div>
+</div>
+<!--bottom-->
+<div id="buy_in">
+    <div class="left" id="gz">
+    	<p style="margin-top:7px;"><i class="iconfont icon-weibiaoti105"></i></p>    
+        <p>关注</p>
+        <script>
+		$("#gz").click(function(){
+			$(this).hasClass("on")?$(this).removeClass("on").html("<p style=\"margin-top:7px;\"><i class=\"iconfont icon-weibiaoti105\"></i></p><p>关注</p>"):$(this).addClass("on").html("<p style=\"margin-top:7px;\"><i class=\"iconfont icon-weibiaoti105\"></i></p><p>已关注</p>")
+			})
+        </script>
+    </div>
+    <div class="left" onClick="add_car()">加入购物车</div>
+    <div class="left" onClick="add_car()">立即购买</div>
+</div>
+<!--遮罩-->
+<div class="width100 hidden" style="position:fixed;top:0;left:0;height:100%;background:rgba(0,0,0,0.5);display:none;z-index:9999" id="zhezhao" >
+	<div class="width100" style="position:fixed;top:0;left:0;height:100%;" onClick="off()"></div>
+	<div class="width100 bj_fff" style="position:absolute;bottom:0;left:0;max-height:400px;">
+    	<div class="width96 center">
+        	<div class="width100" style="margin-top:-40px;height:100px;">
+            	<img src="{#$goods.goods_thumb#}" style="width:100px;height:100px;border:1px solid #e3e5e9;border-radius:3px;float:left;margin-right:6px;">
+                <div class="red font14" id="addspan" style="padding-top:50px;">￥<span>{#$goods.market_price#}</span></div>
+                <span class="SZY-GOODS-NUMBER" id="stock">
+                库存：<em id="stocknum">{#if $stockNum neq 0#}{#$stockNum#}{#else#}999+{#/if#}</em> 件
+            </span>
+            </div>
+            <div class="width100 hidden">
+                {#if $attr#}
+            	<div class="width100% hidden size_s" style="margin-top:16px;">
+                	<span>{#$attr.attrname1#}</span>
+                    {#foreach from=$attr.attrvalue1 item=item key=key#}
+                    <a href="javascript:void(0)"  onclick="attrvalue({#$key#});" class="">{#$item#}</a>
+                    <input type="hidden" name="attrvalue1_{#$key#}" id="attrvalue1_{#$key#}" value="{#$item#}"/>
+                    {#/foreach#}
+                </div>
+                <div class="width100% hidden size_s" style="margin-top:16px;">
+                	<span>{#$attr.attrname2#}</span>
+                    {#foreach from=$attr.attrvalue2 item=item key=key#}
+                    <a href="javascript:void(0)" onclick="attrvalues({#$key#});">{#$item#}</a>
+                    <input type="hidden" name="attrvalue2_{#$key#}" id="attrvalue2_{#$key#}" value="{#$item#}" />
+                    {#/foreach#}
+                </div>
+                {#/if#}
+
+                <div class="width100% hidden" style="margin-top:16px;">
+                	<span class="left font14" style="height:27px;line-height:27px;margin-right:6px;">数量:</span>
+                    <div class="left hidden">
+                        <a href="javascript:void(0)" id="min_s">-</a>
+                        <input type="text" value="1" readonly id="t_a">
+                        <a href="javascript:void(0)" id="add_s">+</a>
+                    </div>
+					<script>
+                    var tr=$("#t_a").val();
+                    $("#add_s").click(function(){
+                        var number = $('#t_a').val();
+                        var stocknum = $('#stocknum').text();
+                        if(stocknum<=number){
+                            Message.showMessage("购买数量不能大于库存！");
+                            return false;
+                        }
+						tr++;
+						$("#t_a").val(tr)
+						
+					})
+					$("#min_s").click(function(){
+						tr--;
+						if(tr<1){
+							$("#t_a").val(1);
+							tr=1
+						}else{
+							$("#t_a").val(tr);
+						}
+							$("#ano").html(tr);
+                    })	
+                    </script>
+                </div>
+            </div>
+            <div class="width100 hidden">
+            	<a hidden="javascript:void(0)" class="left font14 tcenter fff block width50" style="height:43px;line-height:43px;background:#ffb03f;margin-top:16px;" onClick="add_cart({#$goods.id#})">加入购物车</a>
+                <a href="javascript:void(0)" class="left font14 tcenter fff block width50" style="height:43px;line-height:43px;background:#f23030;margin-top:16px;" onClick="shopping({#$goods.id#})">立即购买</a>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="attrid" value="{#$attr.id#}"/>
+<input type="hidden" id="uid" value="{#$uid#}"/>
+<script>
+window.onload = function(){
+  var ht=document.documentElement.clientHeight-95+'px';
+  $(".sc_Y").css({height:ht})   
+  var mySwiper2 = new Swiper('#swiper2', {
+    autoplay : 1500,
+    pagination:'.swiper-pagination',
+    })  
+  var tabsSwiper = new Swiper('#tabs-container',{
+    speed:500,
+    onSlideChangeStart: function(){
+      $("#navs_in .on").removeClass('on')
+      $("#navs_in a").eq(tabsSwiper.activeIndex).addClass('on')
+      /*这里可以异步添加数据*/
+      console.log(tabsSwiper.activeIndex)
+    }
+  })
+  $("#navs_in a").on('touchstart mousedown',function(e){
+    e.preventDefault()
+    $("#navs_in .on").removeClass('on')
+    $(this).addClass('on')
+    tabsSwiper.slideTo( $(this).index() )
+  })
+  $("#navs_in a").click(function(e){
+    e.preventDefault()
+  })
+}
+</script>
+<script>
+function add_car(){
+	$("#zhezhao").css({display:"block"})
+}
+$(".size_s a").click(function(){
+	$(this).addClass("on").siblings("a").removeClass("on")
+})
+function off(){
+	$("#zhezhao").css({display:"none"})
+}
+
+    var attrvalue1 = '';
+    var attrvalue2 = '';
+    var attrid = $('#attrid').val();
+    function attrvalue(id){//动态改变商品的价格
+        attrvalue1 = $('#attrvalue1_'+id).val();
+        if(attrvalue1 && attrvalue2){
+            $.ajax({
+                type:'post',
+                url:'index.php?a=attrvalue&c=shoppingmall',
+                data:{attrid:attrid,attrvalue1:attrvalue1,attrvalue2:attrvalue2},
+                dataType:'JSON',
+                success:function(o){
+                    if(o.isok == 1){
+                        var data = o.info;
+                        $('#addspan span').html(data.money);
+                        $('#uid').after('<input type="hidden" id="attrs_id" value="'+data.id+'"/>');
+                        $('#stocknum').html(data.stock);
+                        $('#stock').nextAll().remove();
+                        $('#stock').after('<span id="addspan" style="font-size:8px;">已选：' + attrvalue1 + attrvalue2 + '</span>');
+                        if(data.stock < 1){
+                            $('.f-foot').html(' <a href="javascript:void(0)" class="bg-color">确定</a>');
+                            Message.showMessage('库存不足');
+                        }else{
+                            $('.f-foot').html('<a href="javascript:void(0)" class="bg-color" onclick="shopping({#$goods.id#},{#$goods.promote_price#}?{#$goods.promote_price#}:{#$goods.market_price#});">确定</a>');
+                        }
+                    }   
+                },
+            });
+        }
+    }
+
+    function attrvalues(id){//动态改变商品的价格
+        attrvalue2 = $('#attrvalue2_'+id).val();
+        if(attrvalue1 && attrvalue2){
+            $.ajax({
+                type:'post',
+                url:'index.php?a=attrvalue&c=shoppingmall',
+                data:{attrid:attrid,attrvalue1:attrvalue1,attrvalue2:attrvalue2},
+                dataType:'JSON',
+                success:function(o){
+                    if(o.isok == 1){
+                        var data = o.info;
+                        $('#addspan span').html(data.money);
+                        $('#uid').after('<input type="hidden" id="attrs_id" value="'+data.id+'"/>');
+                        $('#stocknum').html(data.stock);
+                        $('#stock').nextAll().remove();
+                        $('#stock').after('<span id="addspan" style="font-size:8px;">已选：' + attrvalue1 + attrvalue2 + '</span>');
+                        if(data.stock < 1){
+                            $('.f-foot').html(' <a href="javascript:void(0)" class="bg-color">确定</a>');
+                            Message.showMessage('库存不足');
+                        }else{
+                            $('.f-foot').html('<a href="javascript:void(0)" class="bg-color" onclick="shopping({#$goods.id#},{#$goods.promote_price#}?{#$goods.promote_price#}:{#$goods.market_price#});">确定</a>');
+                        }
+                    } 
+                },
+            });
+        }
+    }
+
+    function increase(){
+        var num = $('#defaultnum').val();
+        var stocknum = $('#stocknum').text();
+        num++;
+        if(num<1){
+            return false;
+        }
+        if(num > stocknum){
+            Message.showMessage("购买数量不能大于库存数量");
+            num--;
+            $('#defaultnum').val(num);
+            return false;
+        }
+        $('#number').val(num);
+    }
+    function reduce(){
+        var num = $('#defaultnum').val();
+        num--;
+        if(num<1){
+            Message.showMessage("购买数量必须大于等于1");
+            return false;
+        }
+        $('#number').val(num);
+    }	
+</script>
+</body>
+</html>

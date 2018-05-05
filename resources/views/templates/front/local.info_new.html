@@ -1,0 +1,231 @@
+{#include file='public.headernew.html'#}
+<div id="main">
+    <!--头部 start-->
+    <div class="top w by pf">
+        <a class="back pa" href="javascript:void(0);">
+            <img src="/style/img_two/back.png"/>
+        </a>
+        <p class="f18 cw w tc">本地信息</p>
+    </div>
+    <!--头部 end-->
+
+    <!--分类 start-->
+    <div class="wrapper" id="retr" style="top:44px;">
+        <div class="scroller w bw brb">
+            <ul class="clearfloat" id="wrapperclearfloat">
+                {#foreach from=$shopcat item=item#}
+                <li class="f16 cb fl tc">
+                    <p onclick="Headerclick({#$item.id#})">{#$item.cat_name#}</p>
+                </li>
+                {#/foreach#}
+            </ul>
+        </div>
+        <a style="position:fixed; right:0; top:44px;" href="localinfo_classify.html"><img style="height:48px;" src="/style/img_two/classify_new.png"></a>
+    </div>
+
+    <!--分类 end-->
+
+    <!--轮播图 start-->
+    <div class="localinfo_banner pr h" style="margin-top:92px;">
+        <div class="swiper-container w h">
+            <div class="swiper-wrapper" id="swiper-wrapper">
+                <div class="swiper-slide">
+                    <img class="w" src="/style/img_two/banner.png" alt="">
+                </div>
+                <div class="swiper-slide">
+                    <img class="w" src="/style/img_two/banner.png" alt="">
+                </div>
+                <div class="swiper-slide">
+                    <img class="w" src="/style/img_two/banner.png" alt="">
+                </div>
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+    <!--轮播图 end-->
+
+    <!--列表 start-->
+    <div class="swiper-container01">
+        <div class="swiper-wrapper swiper-wrapper01">
+            <div class="swiper-slide swiper-slide01 main_list w">
+                <div class="list_item pr brb clearfloat">
+                    <div class="content fl">
+                        <div class="bw pr shop">
+                            <a class="img_box pa" href="javascript:void(0);">
+                                <img class="shop_img" src="/style/img_two/shop.png"/>
+                            </a>
+                            <div class="text pr">
+                                <h3 class="shop_name f15 cb fn pr10">付杰装饰付杰装饰付杰装饰</h3>
+                                <p class="f15 cb fn pr10">嘉善家具装饰公司首选</p>
+                                <div class="second location f14 pa w"><i class="fl"></i><p class="cy fl">约12906.6km</p><p class="cg fr pr10">环北东路苹洲以西</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="list_item pr brb clearfloat">
+                    <div class="content fl">
+                        <div class="bw pr shop">
+                            <a class="img_box pa" href="javascript:void(0);">
+                                <img class="shop_img" src="/style/img_two/shop.png"/>
+                            </a>
+                            <div class="text pr">
+                                <h3 class="shop_name f15 cb fn pr10">付杰装饰付杰装饰付杰装饰</h3>
+                                <p class="f15 cb fn pr10">嘉善家具装饰公司首选</p>
+                                <div class="second location f14 pa w"><i class="fl"></i><p class="cy fl">约12906.6km</p><p class="cg fr pr10">环北东路苹洲以西</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="list_item pr brb clearfloat">
+                    <div class="content fl">
+                        <div class="bw pr shop">
+                            <a class="img_box pa" href="javascript:void(0);">
+                                <img class="shop_img" src="/style/img_two/shop.png"/>
+                            </a>
+                            <div class="text pr">
+                                <h3 class="shop_name f15 cb fn pr10">付杰装饰付杰装饰付杰装饰</h3>
+                                <p class="f15 cb fn pr10">嘉善家具装饰公司首选</p>
+                                <div class="second location f14 pa w"><i class="fl"></i><p class="cy fl">约12906.6km</p><p class="cg fr pr10">环北东路苹洲以西</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="list_item pr brb clearfloat">
+                    <div class="content fl">
+                        <div class="bw pr shop">
+                            <a class="img_box pa" href="javascript:void(0);">
+                                <img class="shop_img" src="/style/img_two/shop.png"/>
+                            </a>
+                            <div class="text pr">
+                                <h3 class="shop_name f15 cb fn pr10">付杰装饰付杰装饰付杰装饰</h3>
+                                <p class="f15 cb fn pr10">嘉善家具装饰公司首选</p>
+                                <div class="second location f14 pa w"><i class="fl"></i><p class="cy fl">约12906.6km</p><p class="cg fr pr10">环北东路苹洲以西</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="list_item pr brb clearfloat">
+                    <div class="content fl">
+                        <div class="bw pr shop">
+                            <a class="img_box pa" href="javascript:void(0);">
+                                <img class="shop_img" src="/style/img_two/shop.png"/>
+                            </a>
+                            <div class="text pr">
+                                <h3 class="shop_name f15 cb fn pr10">付杰装饰付杰装饰付杰装饰</h3>
+                                <p class="f15 cb fn pr10">嘉善家具装饰公司首选</p>
+                                <div class="second location f14 pa w"><i class="fl"></i><p class="cy fl">约12906.6km</p><p class="cg fr pr10">环北东路苹洲以西</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="loadtip w tc cg f16">上拉加载更多</div>
+        <div class="swiper-scrollbar01"></div>
+    </div>
+    <!--列表 end-->
+
+    {#include file='public.footernew.html'#}
+<script src="/style/js/localnew.js"></script>
+<script type="text/javascript">
+    //限制字符个数
+    $(".shop_name").each(function(){
+        var maxwidth=12;
+        if($(this).text().length>maxwidth){
+            $(this).text($(this).text().substring(0,maxwidth));
+            $(this).html($(this).html()+"...");
+        }
+    });
+    $(".location p").each(function(){
+        var maxwidth=6;
+        if($(this).text().length>maxwidth){
+            $(this).text($(this).text().substring(0,maxwidth));
+            $(this).html($(this).html()+"...");
+        }
+    });
+    //    页面tab切换
+    $(".tab_list ul li span").click(function(){
+        $(this).addClass("active");
+        $(this).parent("li").siblings("li").children("span").removeClass("active");
+    });
+</script>
+<!-- Swiper JS -->
+<script src="/style/js_two/swiper.min.js"></script>
+<script>
+//    轮播图
+    var swiper = new Swiper('.swiper-container', {
+        autoplay: 3000,
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        loop:true
+    });
+//     懒加载
+    var loadFlag = true;
+    var mySwiper = new Swiper('.swiper-container01',{
+        direction: 'vertical',//方向上下
+        scrollbar: '.swiper-scrollbar01',
+        slidesPerView: 'auto',
+        mousewheelControl: true,
+        freeMode: true,
+        onTouchEnd: function(swiper) {
+            var _viewHeight = document.getElementsByClassName('swiper-wrapper01')[0].offsetHeight;
+            var _contentHeight = document.getElementsByClassName('swiper-slide01')[0].offsetHeight;
+            // 上拉加载
+            if(mySwiper.translate <= _viewHeight - _contentHeight - 50 && mySwiper.translate < 0) {
+                if(loadFlag){
+                    $(".loadtip").html('正在加载...');
+                }else{
+                    $(".loadtip").html('<div class="nomore"></div>');
+                }
+                setTimeout(function() {
+                    $(".main_list").append('<div class="list_item pr brb clearfloat">我是加载出来的...</div>');
+                    $(".loadtip").html('上拉加载更多...');
+                    mySwiper.update(); // 重新计算高度;
+                }, 800);
+            }
+            return false;
+        }
+    });
+//    tab滚动
+var swiper = new Swiper('.swiper-container02', {
+    autoplay: 1000,
+    slidesPerView : 3,
+    slidesPerGroup : 3,
+    loop:true
+});
+</script>
+<!--左右滚动导航栏-->
+<script type="text/javascript" src="/style/js_two/iscroll.js"></script>
+<script type="text/javascript" src="/style/js_two/navbarscroll.js"></script>
+<script type="text/javascript">
+    $(function(){
+        //demo示例一到四 通过lass调取，一句可以搞定，用于页面中可能有多个导航的情况
+        $('.wrapper').navbarscroll();
+    });
+
+    $(function() {
+        var $this = $(".scroller");
+        var scrollTimer;
+        $this.hover(function() {
+            clearInterval(scrollTimer);
+        }, function() {
+            scrollTimer = setInterval(function() {
+                scrollTab($this);
+            }, 2000);
+        }).trigger("touchleave");
+
+        function scrollTab(obj) {
+            var $self = obj.find("ul");
+            var lineWidth = $self.find("li:first").width();
+            $self.animate({
+                "marginLeft": -lineWidth + "px"
+            }, 600, function() {
+                $self.css({
+                    marginLeft: 0
+                }).find("li:first").appendTo($self);
+            })
+        }
+    })
+</script>
+

@@ -1,0 +1,80 @@
+{#include file='public.header.html'#}
+<div id="shop_store">
+    <div class="title">{#$shop.name#}</div>
+   <div class="shop_info"><div class="shop_info_x">
+       <span>真诚为您服务!</span>{#if $shop.is_verify eq 1#}<em>已认证<i>V</i>1</em>{#else#}未认证 {#/if#}</div>
+       <div class="shop_info_tel"><i></i> 电话：
+           {#if $shop.is_verify eq 1#}
+                <a href="tel:{#$shop.mobile#}">{#$shop.mobile#}</a>
+           {#elseif $shop.is_verify eq 0 &&  $shop.verify eq 1#}
+                <a href="tel:{#$shop.mobile#}">{#$shop.mobile#}</a>
+           {#else#}
+                {#if $see eq 1#}
+                    <a href="tel:{#$shop.mobile#}">{#$shop.mobile#}</a>
+                {#else#}<em onclick="see({#$shop.id#})">点击查看</em>
+                {#/if#}
+           {#/if#}
+       </div>
+   </div>
+</div>
+<div class="shop_menu">
+    <ul>
+        <li data-href="index.php?a=mylist&c=shop&id={#$shop.id#}"><i></i>促销</li>
+        <li data-href="index.php?a=mylist&c=shop&view=supply&id={#$shop.id#}"><i></i>供应</li>
+        <li data-href="index.php?a=mylist&c=shop&view=demand&id={#$shop.id#}"><i></i>需求</li>
+        <li data-href="index.php?a=mylist&c=shop&view=recruit&id={#$shop.id#}"><i></i>招聘</li>
+        <li data-href="index.php?a=mylist&c=shop&view=lease&id={#$shop.id#}"><i></i>租赁</li>
+    </ul>
+</div>
+<div class="shop_nav tab">
+<ul>
+    <li class="cur">店铺简介</li>
+    <li>联系我们</li>
+    <li data-href="http://apis.map.qq.com/tools/routeplan/eword={#$shop.specticloc#}&epointx={#$shop.lng#}&epointy={#$shop.lat#}&policy=1?referer=myapp&key=HM5BZ-ICHKU-VDNVI-27RMJ-YZRCQ-P5BTP">位置导航</li>
+</ul></div>
+<div id="box_con">
+<div class="box" style="display: block">{#if $shop.shopdesc#}{#$shop.shopdesc#}{#else#}<img src="{#$shop.medium#}" class="w">{#/if#}</div>
+<div  class="box">
+店铺联系人：{#$shop.realname#}<br>
+开业时间：{#$shop.createtimestr#}<br>
+    {#if $shop.is_verify eq 1#}
+        联系人手机：<a href="tel:{#$shop.mobile#}">{#$shop.mobile#}</a><br>
+        联系人电话：<a href="tel:{#$shop.tel#}">{#$shop.tel#}</a><br>
+    {#elseif $shop.is_verify eq 0 &&  $shop.verify eq 1#}<!--没有认证、没有过试用期-->
+        联系人手机：<a href="tel:{#$shop.mobile#}">{#$shop.mobile#}</a><br>
+        联系人电话：<a href="tel:{#$shop.tel#}">{#$shop.tel#}</a><br>
+        qq：{#$shop.qq#}<br>
+    {#else #}
+        {#if $see eq 0#}<!--付费30min查看-->
+        联系人手机：******<br>
+        联系人电话：******<br>
+        {#else #}
+        联系人手机：<a href="tel:{#$shop.mobile#}">{#$shop.mobile#}</a><br>
+        联系人电话：<a href="tel:{#$shop.tel#}">{#$shop.tel#}</a><br>
+        qq：{#$shop.qq#}<br>
+        {#/if#}
+    {#/if#}
+店铺地址：{#$shop.specticloc#}
+</div>
+</div>
+<script src="/style/js/jquery/jquery.min.js"></script>
+<script>
+    $('.tab').on('click','li',function(){
+        var num=$(this).index();
+        $(this).addClass('cur').siblings().removeClass('cur');
+        $('#box_con').find('.box').eq(num).show().siblings().hide();
+    });
+    function see(id){
+        Message.showConfirm("店铺未认证,支付0.2元查看联系方式", "确定", "取消", function () {
+            $.post('/pay/?a=index&c=index',{id:id,good_table:'shop',payment_code:'wxpay',order_type:'info.see',final_amt:0.01},function(re){
+                if(re.errcode==0){
+                    window.location.href=''+re.url+'';
+                }else{
+                    Message.showNotify(""+re.errmsg+"", 1200);
+                    setTimeout("window.location.href='"+re.url+"'",1300);
+                }
+            })
+        });
+    }
+</script>
+{#include file='public.footer.html'#}

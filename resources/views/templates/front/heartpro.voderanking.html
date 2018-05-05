@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>本地商家</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"  />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="applicable-device" content="mobile"/>
+    <link href="/style/css_two/reset.css" rel="stylesheet" type="text/css" />
+    <link href="/style/css_two/style.css" rel="stylesheet" type="text/css" />
+    <link href="/style/css_two/swiper.min.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/style/js_two/jquery-3.1.1.min.js"></script>
+</head>
+<body>
+<img class="w" src="{#$activity_img#}" alt="" style="height: 150px;">
+
+<input type="hidden" id="id" value="{#$id#}">
+<div class="pl10 pr10" >
+    <table class="pt10 w tc f14 cb" cellpadding="0" cellspacing="0" style="height:30px; line-height:30px;" id="contentlist" data-c="{#$c#}">
+        <tr class="bty cw">
+            <th style="width: 20%">序号</th>
+            <th style="width: 60%">申请人姓名</th>
+            <th style="width: 20%">票数</th>
+        </tr>
+        {#foreach from=$list item=item key=key#}
+            <tr class="bg">
+                <td>{#$key+1#}</td>
+                <td>{#$item.realname#}</td>
+                <td>{#$item.vote_num#}</td>
+            </tr>
+        {#/foreach#}
+    </table>
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+</body>
+{#include file='../front/public.footernew.html'#}
+</html>

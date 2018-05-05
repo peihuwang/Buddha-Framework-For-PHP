@@ -1,0 +1,222 @@
+<div id="header" style="height:auto; border:0">
+<div id="shanhai-2016">
+<div class="w clearfix">
+<ul class="fl">
+<li class="dorpdown" id="ttbar-mycity">
+<div class="dt cw-icon">
+<i class="ci-right"><s>◇</s></i>
+送至：<span class="ui-areamini-text" data-id="110000" title="北京市">北京市</span>
+</div>
+<div class="dd dorpdown-layer">
+<ul class="ui-areamini-list">
+</ul>
+</div>
+</li>
+</ul>
+<ul   class="fr">
+<li class="fore1" id="ttbar-login">
+{#if $islogin#}<font class="style-red">您好!</font>
+<a href="{#if $userInfo.groupid eq 11#}/index/business/index.html{#else#}/index/ucenter/index.html{#/if#}" style="font-weight:bold;" class="link-login">{#if $userInfo.nickName#}{#$userInfo.nickName#}{#else#}{#$userInfo.username#}{#/if#}</a>&nbsp;&nbsp;<a href="/index/logout.html" class="style-red">退出</a>
+ {#else#}
+ <a href="/index/login.html" class="link-login">您好，请登录</a>&nbsp;&nbsp;<a href="/index/reg.html" class="style-red">免费注册</a>
+{#/if#}
+</li>
+<li class="spacer"></li>
+<li class="fore3 dorpdown" id="ttbar-mycity">
+<div class="dt cw-icon">
+<i class="ci-right"><s>◇</s></i>
+我的海淘
+</div>
+<div class="dd dorpdown-layer">
+<div class="userinfo">
+<div class="u-pic">
+{#if $islogin#}
+<a href="/index/ucenter/index.html"><img src="{#if $userInfo.user_middle#}/{#$userInfo.user_middle#}{#else#}/images/no-img_mid.jpg{#/if#}" ></a>
+{#else#}
+<a href="/index/login.html"><img src="/images/no-img_mid.jpg" ></a>
+{#/if#}
+</div>
+<div class="u-name">{#if $islogin#}您好!<a href="{#if $userInfo.groupid eq 11#}/index/business/info.html{#else#}/index/ucenter/index.html{#/if#}" style="font-weight:bold;" class="link-login">{#if $userInfo.nickName#}{#$userInfo.nickName#}{#else#}{#$userInfo.username#}{#/if#}</a>&nbsp;&nbsp;<a href="/index/logout.html" class="link-login">退出</a>{#else#}
+<a href="/index/login.html"><b>您好！请登陆</b></a>
+{#/if#}</div>
+{#if $islogin#}
+<div class="u-login-time">上次登录：{#$userInfo.logouttime|date_format:"%Y-%m-%d"#}</div>{#/if#}
+</div>
+<div class="otherlist">
+<ul>
+	<li><a href="/index/ucenter/order.html&status=1">待处理订单</a></li>
+	<li><a href="/index/ucenter/collect.html">我的关注</a></li>
+	<li><a href="/index/ucenter/coupon/act-use.html">优惠券</a></li>
+	<li><a href="/index/ucenter/integral.html">我的积分</a></li>
+	<li><a href="/index/ucenter/envelope.html">我的红包</a></li>
+	<li><a href="/index/ucenter/finance.html">我的余额</a></li>
+</ul>
+</div>
+</div>
+</li>
+<li class="spacer"></li>
+<li class="fore4"><div class="dt"><a href="/index/ucenter/order.html">我的订单</a></div></li>
+<li class="spacer"></li>
+<li class="fore5"><div class="dt"><a href="#">商家入驻</a></div></li>
+<li class="spacer"></li>
+<li class="fore6 dorpdown" id="ttbar-serv">
+<div class="dt cw-icon">
+<i class="ci-right"><s>◇</s></i>
+客户服务
+</div>
+<div class="dd dorpdown-layer">
+<dl class="kef">
+<dt>客户</dt>
+<dd>
+<ul>
+<li><a href="#">帮助中心</a></li>
+<li><a href="#">售后服务</a></li>
+<li><a href="#">意见建议</a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</li>
+<li class="spacer"></li>
+<li class="fore7 dorpdown" id="ttbar-navs">
+<div class="dt cw-icon">
+<i class="ci-right"><s>◇</s></i>
+网站导航
+</div>
+<!--<div class="dd dorpdown-layer">
+<dl class="fl meun-nav">
+	<dt>行业频道</dt>
+	<dd><a href="#">服装城</a>
+	<a href="#">家用电器</a>
+	<a href="#">电脑办公</a>
+	<a href="#">手机</a>
+	<a href="#">美妆馆</a>
+	<a href="#">食品</a>
+	<a href="#">数码</a>
+	<a href="#">母婴</a>
+	<a href="#">家装城</a>
+	<a href="#">运动户外</a>
+	<a href="#">整车</a>
+	<a href="#">图书</a>
+	<a href="#">农资频道</a>
+	</dd>
+</dl>
+<dl class="fl meun-nav">
+	<dt>特色主题</dt>
+	<dd>暂无</dd>
+</dl>
+<dl class="fl meun-nav">
+	<dt>生活主题</dt>
+	<dd>暂无</dd>
+</dl>
+<dl class="fl meun-nav">
+	<dt>更多精选</dt>
+	<dd>暂无</dd>
+</dl>
+</div>-->
+</li>
+</ul>
+</div>
+</div>
+<div class="w clearfix">
+<div class="logo-2016"><a href="/index.html"><img src="/images/logo.jpg"></a></div>
+<div id="search-2016" class="fl">
+<ul>热门关键词：<a href="#">奶粉</a><a href="#">包包</a><a href="#">婴儿用品</a><a href="#">电动工具</a><a href="#">电饭桶</a></ul>
+<form action="/index/mall/list.html" method="get">
+ <input type="text" class="text" name="keys" value="{#$keys#}" placeholder="输入关键词" />
+<button type="submit" class="button"></button>
+</form>
+</div>
+<div id="settleup-2016" class="dorpdown fr">
+<div class="cw-icon">
+<i class="ci-left"></i>
+<i class="ci-right">></i>
+<i class="ci-count">{#$commenCartNumber|default:0#}</i>
+<a href="/index/mall/shopping.html">去购物车结算</a>
+</div>
+<div class="dorpdown-layer">
+{#if $myCart|@count eq 0#}
+<div class="prompt">
+<div class="nogoods"><b></b>购物车中还没有商品,赶紧选购吧！</div>
+</div>
+{#else#}
+<div class="settleup-content">
+	<div class="smt">最新加入的商品</div>
+	<div class="smc">
+     {#foreach from=$myCart item=cart key=key#}
+		<ul class="mcart-sigle">
+			<li>
+				<div class="p-img fl">
+					<a href="/index/mall/detail/id-{#$cart.goods_id#}.html"><img src="/{#$cart.small_pic#}"></a>
+				</div>
+				<div class="p-name fl">
+					<a href="/index/mall/detail/id-{#$cart.goods_id#}.html">{#$cart.name#}</a>
+				</div>
+				<div class="p-detail fr">
+					<div class="p-price"><b>￥{#$cart.price#}</b>x{#$cart.nums#}</div>
+					<a href="javascript:void(0)" onClick="_order.deleteCarts({#$key#})">删除</a>
+				</div>
+			</li>
+		</ul>
+        {#/foreach#}
+	</div>
+	<div class="smb">
+	<div class="p-total">共<b>{#$commenCartNumber|default:0#}</b>件商品　共计<b>￥ {#$commenCartPrices|default:0#}</b></div>
+	<a href="/index/mall/shopping.html">去购物车</a>
+	</div>
+</div>
+{#/if#}
+</div>
+</div>
+</div>
+<div class="w clearfix">
+{#if $pname eq 'category'#}
+<div id="categorys-2016">
+<div class="dt">{#$topclass.cat_name#}</div>
+</div>
+{#else#}
+<div id="categorys-2016">
+<div class="dt">全部商品分类</div>
+	<div class="dd"{#if $pname eq 'index'#} style="display:block"{#/if#}>
+    {#foreach item=item from=$goodsCateMenu name=menu#}
+    {#if $smarty.foreach.menu.iteration<=14#}
+   <div class="item {#if !$item.child#}on{#/if#}">
+   <h3><a href="/index/{#if $item.settings#}category/index{#else#}mall/list{#/if#}/cid-{#$item.id#}.html">{#$item.cat_name#}<i>></i></a></h3>
+    {#if $item.child#}
+   	<div class="item-list">
+    {#foreach name=second item=seconditems from=$item.child#}
+    {#if $seconditems.child#}
+	<dl {#if $smarty.foreach.second.index eq 0#}class="first"{#/if#}> 
+	<dt><a href="/index/mall/list/cid-{#$seconditems.id#}.html" title="{#$seconditems.cat_name#}">{#$seconditems.cat_name#}<i>></i></a></dt>
+	<dd>
+    {#foreach name=third item=thirditems from=$seconditems.child#}
+     <a href="/index/mall/list/cid-{#$thirditems.id#}.html">{#$thirditems.cat_name#}</a>
+     {#/foreach#}
+	</dd>
+     {#else#}
+      <dd style="width:auto">
+     <a href="/index/mall/list/index/cid-{#$seconditems.id#}.html">{#$seconditems.cat_name#}</a>
+	</dd>
+    {#/if#}
+	</dl>
+    {#/foreach#}
+   	</div>
+    {#/if#}
+   </div>
+   {#/if#}
+ {#/foreach#}
+	</div>
+</div>
+{#/if#}
+<div id="navitems-2016"><ul>
+<li><a href="/index.html" {#if $pname eq index#}class="active"{#/if#}>首页</a></li>
+<li><a href="/index/transport/purchasing.html" {#if $pname eq transport and $light.action neq transport#}class="active"{#/if#}>海外代购</a></li>
+<li><a href="/index/transport/transport.html" {#if $pname eq transport and $light.action neq purchasing#}class="active"{#/if#}>海外代运</a></li>
+<!--<li><a href="#">促销商品</a></li>-->
+<li><a href="/index/brand.html" {#if $pname eq brand#}class="active"{#/if#}>知名品牌</a></li>
+<!--<li><a href="category.html">新品发现</a></li>
+<li><a href="#">积分商城</a></li>-->
+</ul></div>
+</div>
+</div>
+<!--end-->

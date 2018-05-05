@@ -1,0 +1,28 @@
+{#include file='../front/public.header.html'#}
+<div id="user-basic">
+    <div class="return" data-href="../{#$role#}/index.php?a=index&c={#$role#}"><i></i></div>
+    <h1>{#$title#}<span style="font-size:10px; ">(你有{#$num#}消息未读)</span></h1></div>
+<div id="list"></div>
+
+<script src="/style/js/jquery/jquery.min.js"></script>
+<script src="/style/js/template.js"></script>
+<script src="/manage/style/js/ajaxlist.js"></script>
+<script type="text/javascript">
+    $(function(){
+        var url=window.location.href;
+        $('#list').ajaxshiolist(url);
+    })
+</script>
+<script id="demo" type="text/html">
+    {{each list as value i}}
+       <div class="article" data-href="index.php?a=info&c=news&id={{value.id}}">
+           <h1>{{value.name}}
+               {{if value.sure == 1}}
+                <span style="color:red;margin-left: 50px;">未读！</span>
+               {{/if}}
+           </h1>
+           {{value.addtime}}
+       </div>
+    {{/each}}
+</script>
+{#include file='../front/public.footer.html'#}

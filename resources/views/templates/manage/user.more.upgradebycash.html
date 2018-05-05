@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>无标题文档</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+    </script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>会员管理</h3><ol class="breadcrumb"><li>当前位置</li><li>会员管理</li><li> <strong>会员现金升级</strong></li></ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <p><a href="index.php?a=more&c=user" class="btn btn-danger">返回上一步</a></p>
+    <form method="post" action="index.php?a=upgradebycash&c=user&id={#$userbasic.id#}&p={#$page#}" onsubmit="return checkpost(document.checkform);" name="checkform">
+        <div class="float-e-margins">
+            <div class="ibox-title"><b>会员基本信息</b>
+            </div>
+        </div>
+        <!---->
+        <div class="ibox-content ">
+            <div class="table-responsive">
+                <table class="table table-hover m-b-none">
+                    <tbody>
+                    <tr>
+                        <td width="120">会员名称：</td>
+                        <td width="300">{#$userbasic.username#}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width="120">真实姓名：</td>
+                        <td width="300">{#$userbasic.realname#}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width="120">手机号：</td>
+                        <td width="300">{#$userbasic.mobile#}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width="120">邮箱：</td>
+                        <td width="300">{#$userbasic.email#}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width="120">会员状态：</td>
+                        <td width="300">{#if $userbasic.state eq 0#}未激活{#elseif $userbasic.state eq 1#}激活{#elseif $userbasic.state eq 4#}注销{#/if#}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width="120">会员等级：</td>
+                        <td width="300">{#if $userbasic.memberlever eq 1#}等级一{#elseif $userbasic.memberlever eq 2#}等级二{#elseif $userbasic.memberlever eq 3#}等级三{#elseif $userbasic.memberlever eq 4#}等级四{#elseif $userbasic.memberlever eq 5#}等级四{#elseif $userbasic.memberlever eq 6#}等级六{#/if#}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width="120">会员卡到期：</td>
+                        <td width="300">{#if $userbasic.membercardendtime#}{#$userbasic.membercardendtime|date_format:'%Y-%m-%d'#}{#else#}永久{#/if#}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width="120">会员卡号：</td>
+                        <td width="300">{#if $userbasic.membercardno#}{#$userbasic.membercardno#}{#else#}暂无卡号{#/if#}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width="120">会员卡积分：</td>
+                        <td width="300">{#$userbasic.memercardpoint#}</td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+        <div class="float-e-margins m-t-sm">
+            <div class="ibox-title"><b>会员升级</b></div>
+        </div>
+        <div class="ibox-content ">
+            <div class="table-responsive">
+                <table class="table table-hover m-b-none">
+                    <tbody>
+                    <tr>
+                        <td width="140">会员卡等级 <span class="text-danger">*</span></td>
+                        <td width="300"><select class="form-control" name="memberlever" id="memberlever">
+                            <option value="0">选择会员卡等级</option>
+                            {#foreach from=$userlevel item=item#}
+                            <option value="{#$item.id#}" {#if $item.id eq $userbasic.memberlever #} selected{#/if#}>{#$item.name#}</option>
+                            {#/foreach#}
+                        </select></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width="120">会员卡号 <span class="text-danger">*</span></td>
+                        <td width="300"><input type="text" class="form-control" name="membercardno" id="membercardno"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width="120">会员卡到期 <span class="text-danger">*</span></td>
+                        <td width="300"><input type="text" class="form-control some_class" name="membercardendtime" id="membercardendtime"></td>
+                        <td>（0）代表永久不过期</td>
+                    </tr>
+                    <tr>
+                        <td width="120">金额 <span class="text-danger">*</span></td>
+                        <td width="300"><input type="text" class="form-control" name="money" id="money"></td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+        <div class="text-center m-t-sm"><button type="submit" class="btn btn-danger">提 交</button> </div>
+        </form>
+    </div>
+<link rel="stylesheet" href="js/datetimepicke/datetimepicker.css">
+<script src="js/datetimepicke/datetimepicker.full.min.js"></script>
+<script type="text/javascript">
+    function checkpost(obj){
+        var user='{#$userbasic.username#}';
+     if($('#memberlever').val()=='0'){
+         alert('选择升级卡等级')
+         $('#memberlever').focus()
+         return false;
+     }
+        if($('#membercardno').val()==''){
+            alert('设置新卡号')
+            $('#membercardno').focus()
+            return false;
+        }
+        if($('#membercardendtime').val()==''){
+            alert('会员卡到期')
+            $('#membercardendtime').focus()
+            return false;
+        }
+        if($('#money').val()==''){
+            alert('设置升级金额')
+            $('#money').focus()
+            return false;
+        }
+        return confirm("您确认要为会员名《"+user+"》的会员升级？");
+    }
+    $(function() {
+//日期时间
+        $('.some_class').datetimepicker({
+            lang: 'ch',
+            timepicker: false,
+            format: 'Y-m-d',
+            minDate: '-1970/01/02',
+        });
+    });
+</script>
+</body>
+</html>

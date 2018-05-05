@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>店铺列表</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<script src="js/jquery.js"></script> 
+<script src="js/main.js?v=1.0"></script>
+<script type="text/javascript" src="js/jquery.form.js"></script>
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+<script>
+$(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+</script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+<div class="col-sm-12">
+<h3>店铺列表</h3><ol class="breadcrumb"><li>当前位置</li><li>店铺设置</li><li> <strong>
+	店铺列表</strong></li></ol>
+</div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+<p>
+	{#foreach from=$searchType item=item key=key#}
+	<a href="index.php?a=more&c=shop&view={#$key#}" class="btn{#if $params.view eq $key#} btn-primary{#else#} btn-danger{#/if#}">{#$item#}</a>
+	{#/foreach#}
+</p>
+	<div class="panel panel-danger">
+		<div class="panel-heading"><b>搜索</b></div>
+		<form method="post" action="" class="form-inline">
+			<div class="panel-body">
+				<div class="form-group">
+					<select id="option" name="view" class="form-control">
+						{#foreach from=$searchType item=item key=key#}
+						<option value="{#$key#}"  {#if $params.view eq $key#} selected{#/if#}>{#$item#}</option>
+						{#/foreach#}
+					</select>
+					</select>
+				</div>
+				<div class="form-group"><input type="text" value="{#$keyword#}" name="keyword" id="keyword"  placeholder="输入名称"  class="form-control" style="width: 300px;"></div>
+				<button value="搜 索" type="submit" class="btn btn-danger">搜 索</button>
+				<div class="text-right">今日添加店铺总数是：<a href="{#if $todayaddtotal#}index.php?a=more&c=shop&view=10{#/if#}">{#$todayaddtotal#}</a></div>
+			</div>
+		</form>
+	</div>
+<form method="post" action="" onsubmit="return checkpost(document.checkform);"  name="FORM" >
+<div class="float-e-margins">
+<div class="ibox-title"><b>店铺列表</b>
+</div>
+</div>
+<div class="ibox-content ">
+<div class="table-responsive">
+<table class="table table-hover m-b-none">
+<thead>
+<tr>
+    <th><span onclick="CheckAll(document.FORM,'')">全选</span></th>
+	<th>编号</th>
+	<th>店铺名</th>
+	<th>所在区域</th>
+	<th>所属合伙人</th>
+	<th>是否启用</th>
+	<th>店铺状态</th>
+	<th>推荐/热门</th>
+	<th>省市区</th>
+	<th>开通时间</th>
+	<th>操作</th>
+</tr>
+<tbody>
+{#if $list#}
+{#foreach name=list from=$list item=item#}
+<tr>
+	<td><input type="checkbox" value="{#$item.id#}" name="ids[{#$item.id#}]" class="i-checks"/></td>
+	<td>{#$item.number#}</td>
+	<td>{#$item.name#}</td>
+	<td>{#$item.region#} {#$item.specticloc#}</td>
+	<td>{#$item.referral#}</td>
+	<td>{#if $item.state eq 1#}<span class="text-info">未启用</span>{#else#}<span class="text-success">已启用</span>{#/if#}</td>
+	<td>{#if $item.is_sure eq 1#}<span class="text-success">审核通过</span>{#elseif $item.is_sure eq  0#}<span class="text-info">待审核</span>{#elseif $item.is_sure eq 4 and state eq 0#} <span class="text-warning">审核未通过</span> {#elseif $item.is_sure eq 4 and $item.state eq 1#} <span class="text-danger">已停用</span>{#/if#}</td>
+	<td>
+		{#if $item.is_rec eq 1#}
+		推荐
+		{#/if#}
+		{#if $item.is_hot eq 1#}
+		热门
+		{#/if#}
+		{#if $item.is_promotion eq 1#}
+		促销
+		{#/if#}
+	</td>
+	<td>{#$item.regionale#}</td>
+	<td>{#$item.createtime|date_format:'%Y-%m-%d'#}</td>
+	<td><a href="index.php?a=edit&c=shop&id={#$item.id#}&p={#$page#}&view={#$params.view#}">[审核操作]</a>
+		|<a href="index.php?a=stop&c=shop&id={#$item.id#}&p={#$page#}&view={#$params.view#}">[停用]</a>
+		|<a href="index.php?a=del&c=shop&id={#$item.id#}&p={#$page#}&view={#$params.view#}">[删除]</a>
+	</td>
+</tr>
+{#/foreach#}
+{#else#}
+<tr>
+	<td class="text-center" colspan="11">暂无数据</td>
+</tr>
+{#/if#}
+</tbody>
+
+</table>
+</div>
+</div>
+<div class="text-center m-t-sm" >
+{#$strPages#}
+	</div>
+{#if $params.view eq 2 or $params.view eq 3 or $params.view eq 4 or $params.view eq 5#}
+<div class="text-center m-t-sm"><span>选中操作：</span>
+	{#if $params.view eq 2#}
+<input type="radio" value="is_sure" name="job" class="i-checks" checked>批量审核
+	{#elseif $params.view eq 3#}
+	<input type="radio" value="stop" name="job" class="i-checks" checked>批量停用
+	<input type="radio" value="is_rec" name="job" class="i-checks" >批量推荐
+	<input type="radio" value="is_hot" name="job" class="i-checks" >批量设置热门
+	<input type="radio" value="is_promotion" name="job" class="i-checks" >批量设置促销
+	{#elseif $params.view eq 4#}
+	<input type="radio" value="sure" name="adopt" class="i-checks" checked>批量通过
+	{#elseif $params.view eq 5#}
+	<input type="radio" value="enable" name="job" class="i-checks" checked>批量启用
+	{#/if#}
+</div>
+<div class="text-center m-t-sm">
+<button type="button" onclick="CheckAll(document.FORM,'')" class="btn btn-primary">全 选</button>
+<button type="submit" class="btn btn-primary">提 交</button>
+</div>
+{#/if#}
+</form>
+</div>
+<script type="text/javascript" language="JavaScript">
+	function delnav(){
+		return confirm("确认要删除此数据吗？");
+	}
+</script>
+</body>
+</html>

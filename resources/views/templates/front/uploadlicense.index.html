@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>本地商家</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"  />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="applicable-device" content="mobile"/>
+    <link href="/style/css_two/reset.css" rel="stylesheet" type="text/css" />
+    <link href="/style/css_two/style.css" rel="stylesheet" type="text/css" />
+    <link href="/style/css_two/date.css" rel="stylesheet" type="text/css" />
+    <link href="/style/css_two/switch.css" rel="stylesheet" type="text/css" />
+    <link href="/style/css_two/imgup.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/style/css_two/area.css" />
+    <link href="/style/css_two/release.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/style/js_two/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="/style/js_two/date.js" ></script>
+    <script src="/style/js/public.js"></script>
+    <!--编辑器皮肤-->
+    <link href="/style/css_two/quill.snow.css" rel="stylesheet">
+</head>
+<style type="text/css">
+    input:disabled{ background:rgba(255,255,255,1); text-indent:5px;}
+    input::-webkit-input-placeholder { /* WebKit browsers */ font-size: 10px;}
+    input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */ font-size: 10px;}
+    input::-moz-placeholder { /* Mozilla Firefox 19+ */ font-size: 10px;}
+    input:-ms-input-placeholder { /* Internet Explorer 10+ */ font-size: 10px;}
+</style>
+<body>
+<!--头部 start-->
+<div class="top w by pf">
+    <a class="back pa" href="javascript:history.go(-1);">
+        <img src="/style/img_two/back.png"/>
+    </a>
+    <p class="f18 cw w tc">上传认证资料</p>
+    <a class="confirm pa" href="javascript:void(0);" onclick="confirmadd();">
+        <img src="/style/img_two/confirm.png"/>
+    </a>
+</div>
+<!--头部 end-->
+<!--表单 start-->
+<div class="main_form">
+    <span class="title f16 cb tr">姓名：</span><input style="border:1px solid #666; line-height: 20px;" class="f16 ml10 " id="username" type="text" placeholder="请输入您的姓名"><br>
+    <span class="title f16 cb tr">身份证号：</span><input style="border:1px solid #666; line-height: 20px" class="f16 ml10" id="number" type="text" placeholder="请输入您的身份证号"><br>
+    <div class="pr mt10 clearfloat" style="padding-left:106px;">
+        <span class="pa title f16 cb tr" style="top:28px; left:0; margin:auto 0;">身份证照：</span>
+        <div id="Album">
+            <div id="button">
+                <div class="photo" style="margin:0 2px 2px 0">
+                    <div class="img">点击上传</div>
+                    <input type="file" name="Image[]" accept="image/gif,image/jpeg,image/png,image/jpg">
+                </div>
+            </div>
+            <div id="buttons">
+                <div class="photo">
+                    <div class="imgs">点击上传</div>
+                    <input type="file" id="files" name="Image[]" accept="image/gif,image/jpeg,image/png,image/jpg">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pr mt10 clearfloat" style="padding-left:106px;">
+        <span class="pa title f16 cb tr" style="top:24px; left:0; ">营业执照：</span>
+        <div class="z_photo">
+            <section class="z_file fl">
+                <img style="width: 80px;height: 80px;" src="/style/img_two/icon_add.png" class="add-img">
+                <input type="file" name="file" id="file" class="file" value="" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple/>
+            </section>
+        </div>
+    </div>
+</div>
+<div class="pa title f16 " style="color: red;margin:10px" >&nbsp;&nbsp;PS:成为e网通需要支付人民币￥360元 添加以上信息付费后我们会尽快为您审核通过的。</div>
+<!--遮罩层-->
+<div class="mask"></div>
+<!--<div class="layer_bg" id="sfLayer"></div>-->
+<!--对话框-->
+<div class="mask-content">
+    <h2 class="pt10">提示</h2>
+    <p class="brb cb f14 pb10">您确定要删除吗？</p>
+    <p class="check-p w pa"><span class="wsdel-no brr tc f14">取消</span><span class="wsdel-ok tc f14">确定</span></p>
+</div>
+</body>
+<!--是否样式-->
+<script type="text/javascript" src="/style/js_two/switch.js" ></script>
+<script type="text/javascript">
+    $(document).ready(function(e) {
+        $('input').lc_switch();
+        $('body').delegate('.lcs_check', 'lcs-statuschange', function() {
+            var status = ($(this).is(':checked')) ? 'checked' : 'unchecked';
+        });
+
+        $('body').delegate('.lcs_check', 'lcs-on', function() {
+            $("#yidi").show();
+        });
+
+        $('body').delegate('.lcs_check', 'lcs-off', function() {
+            $("#yidi").hide();
+        });
+        $('body').delegate('.seller_check', 'lcs-on', function() {
+            $("#seller_wrap").show();
+        });
+
+        $('body').delegate('.seller_check', 'lcs-off', function() {
+            $("#seller_wrap").hide();
+        });
+    });
+</script>
+<!--单图上传-->
+<script>
+    function confirmadd(){
+        var username = $('#username').val();
+        var number = $('#number').val();
+        if(!username){
+            Message.showMessage('请填写您的姓名');
+            return false;
+        }
+        if(!number){
+            Message.showMessage('请填写您的身份证号');
+            return false;
+        }
+        if(!checkIdcard(number)){
+            return false;
+        }
+        var img = $("#img").attr("src");
+        if(!img){
+            Message.showMessage('请上传身份证正面照');
+            return false;
+        }
+        var imgs = $("#imgs").attr("src");
+        if(!imgs){
+            Message.showMessage('请上传身份证反面照');
+            return false;
+        }
+        var canvasImg = $("#canvasImg").attr("src");
+        $.ajax({
+            type:'post',
+            url:'/index.php?a=add&c=uploadlicense',
+            data:{username:username,number:number,img:img,imgs:imgs,canvasImg:canvasImg},
+            dataType:'json',
+            success:function(o){
+                if(o.isok == 1){
+                    Message.showNotify(""+ o.info+"", 1500);
+                    setTimeout("window.location.href='"+o.url+"'",1600);
+                }else{
+                    Message.showMessage(o.info);
+                }
+            }
+        });
+    }
+
+    function checkIdcard(num){  
+        num = num.toUpperCase(); 
+        //身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X。  
+        if (!(/(^\d{15}$)|(^\d{17}([0-9]|X)$)/.test(num)))  
+        {
+            Message.showMessage('输入的身份证号长度不对，或者号码不符合规定！末位可以为数字或X。');
+            return false;
+        }
+        //校验位按照ISO 7064:1983.MOD 11-2的规定生成，X可以认为是数字10。
+        //下面分别分析出生日期和校验位
+        var len, re;
+        len = num.length;
+        if (len == 15)
+        {
+            re = new RegExp(/^(\d{6})(\d{2})(\d{2})(\d{2})(\d{3})$/);
+            var arrSplit = num.match(re);
+
+            //检查生日日期是否正确
+            var dtmBirth = new Date('19' + arrSplit[2] + '/' + arrSplit[3] + '/' + arrSplit[4]);
+            var bGoodDay;
+            bGoodDay = (dtmBirth.getYear() == Number(arrSplit[2])) && ((dtmBirth.getMonth() + 1) == Number(arrSplit[3])) && (dtmBirth.getDate() == Number(arrSplit[4]));
+            if (!bGoodDay)
+            {
+                Message.showMessage('输入的身份证号不对！');  
+                return false;
+            }
+            else
+            {
+                    //将15位身份证转成18位
+                    //校验位按照ISO 7064:1983.MOD 11-2的规定生成，X可以认为是数字10。
+                    var arrInt = new Array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2);
+                    var arrCh = new Array('1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2');
+                    var nTemp = 0, i;  
+                    num = num.substr(0, 6) + '19' + num.substr(6, num.length - 6);
+                    for(i = 0; i < 17; i ++)
+                    {
+                        nTemp += num.substr(i, 1) * arrInt[i];
+                    }
+                    num += arrCh[nTemp % 11];  
+                    return true;  
+            }  
+        }
+        if (len == 18)
+        {
+            re = new RegExp(/^(\d{6})(\d{4})(\d{2})(\d{2})(\d{3})([0-9]|X)$/);
+            var arrSplit = num.match(re);
+
+            //检查生日日期是否正确
+            var dtmBirth = new Date(arrSplit[2] + "/" + arrSplit[3] + "/" + arrSplit[4]);
+            var bGoodDay;
+            bGoodDay = (dtmBirth.getFullYear() == Number(arrSplit[2])) && ((dtmBirth.getMonth() + 1) == Number(arrSplit[3])) && (dtmBirth.getDate() == Number(arrSplit[4]));
+            if (!bGoodDay)
+            {
+                //alert(dtmBirth.getYear());
+                //alert(arrSplit[2]);
+                Message.showMessage('输入的身份证号不对！');
+                return false;
+            }
+        else
+        {
+            //检验18位身份证的校验码是否正确。
+            //校验位按照ISO 7064:1983.MOD 11-2的规定生成，X可以认为是数字10。
+            var valnum;
+            var arrInt = new Array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2);
+            var arrCh = new Array('1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2');
+            var nTemp = 0, i;
+            for(i = 0; i < 17; i ++)
+            {
+                nTemp += num.substr(i, 1) * arrInt[i];
+            }
+            valnum = arrCh[nTemp % 11];
+            if (valnum != num.substr(17, 1))
+            {
+                Message.showMessage('身份证的校验不正确！');
+                return false;
+            }
+            return true;
+        }
+        }
+        return false;
+    }
+
+    
+</script>
+<script type="text/javascript">
+
+ $('#button').on('click',function(){//点击一次就将Num的值加一次
+    upload();
+
+});
+$('#buttons').on('click',function(){//点击一次就将Num的值加一次
+    uploads();
+
+});
+$(document).on('click', '.del_temp', function(){
+    $(this).parent('div').html('点击上传');
+});
+
+function upload(){
+
+    $('input[type="file"]').on("change",function(){
+        var file = this.files[0];
+        if(!/image\/\w+/.test(file.type)){
+            Message.showMessage("请确保文件为图像类型");
+            return false;
+        }
+        var size=this.files[0].size;
+        if(size>1024*1024*4){
+            Message.showMessage("图片不能大于4M");
+            return false;
+        }
+         var aa= $(this).siblings('.img');
+        srcs = new FileReader();
+        srcs.readAsDataURL(file);//返回Base64 编码
+        srcs.onload = function(e) {
+           aa.html('<span class="del_temp" style="display:block;position:absolute;background:rgba(0,0,0,.5); border-radius:50%; width:25px; height:25px; color:#fff; line-height:25px; text-align: center;z-index:999;">X</span><img id="img" style="width:80px;height: 80px;" src="' + srcs.result+ '"/>');
+           //$(".photo").find("input").remove();
+        }
+    });
+}
+function uploads(){
+    $('#files').on("change",function(){
+        var file = this.files[0];
+        if(!/image\/\w+/.test(file.type)){
+            Message.showMessage("请确保文件为图像类型");
+            return false;
+        }
+        var size=this.files[0].size;
+        if(size>1024*1024*4){
+            Message.showMessage("图片不能大于4M");
+            return false;
+        }
+         var aa= $(this).siblings('.imgs');
+        srcs = new FileReader();
+        srcs.readAsDataURL(file);//返回Base64 编码
+        srcs.onload = function(e) {
+           aa.html('<span class="del_temp" style="display:block;position:absolute;background:rgba(0,0,0,.5); border-radius:50%; width:20px; height:20px; color:#fff; line-height:20px; text-align: center;z-index:999;">X</span><img id="imgs" style="width:80px;height: 80px;" src="' + srcs.result+ '"/>');
+           //$(".photo").find("input").remove();
+        }
+    });
+}
+</script>
+<script src="/style/js_two/img.js"></script>
+</html>

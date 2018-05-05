@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>权限赋予</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<script src="js/jquery.js"></script> 
+<script src="js/main.js?v=1.0"></script>
+<script type="text/javascript" src="js/jquery.form.js"></script>
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+<script>
+$(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+</script>
+</head>
+<body  class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+<div class="col-sm-12">
+<h3>系统配置</h3><ol class="breadcrumb"><li>当前位置</li><li>系统配置</li><li> <strong>权限管理</strong></li></ol>
+</div>
+</div>
+	<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="float-e-margins">
+	<div class="ibox-title"><h5>权限管理</h5>
+	</div>
+	</div>
+<form name="FORM" method="post" action="">
+<div class="ibox-content">
+<table class="table table-hover m-b-none">
+<tbody>
+<tr>
+<td width="150">
+<label><span class="checkbox">
+<input type="checkbox" name="chkGroup" value="checkbox" class="c-checked"  onclick="check('a1,a2,a3,a4,a5,a6,a7',this)"/><b></b></span>前台售票</label></td>
+<td>
+     <label for="a1"><span class="checkbox"><input type="checkbox" name="action_code[]" value="a1" class="c-checked"/><b></b></span>售票页面</label> 
+     <label for="a2"><span class="checkbox"><input type="checkbox" name="action_code[]" value="a2" class="c-checked"/><b></b></span>票务管理</label> 
+     <label for="a3"><span class="checkbox"><input type="checkbox" name="action_code[]" value="a3" class="c-checked"/><b></b></span>订单导出</label> 
+     <label for="a4"><span class="checkbox"><input type="checkbox" name="action_code[]" value="a4" class="c-checked"><b></b></span>升级订单</label> 
+     <label for="a5"><span class="checkbox"><input type="checkbox" name="action_code[]" value="a5" class="c-checked"/><b></b></span>续费订单</label> 
+     <label for="a6"><span class="checkbox"><input type="checkbox" name="action_code[]" value="a6" class="c-checked"/><b></b></span>保留订单</label> 
+     <label for="a7"><span class="checkbox"><input type="checkbox" name="action_code[]" value="a7" class="c-checked"/><b></b></span>订单编辑</label> 
+     <label for="a7"><span class="checkbox"><input type="checkbox" name="action_code[]" value="a7" class="c-checked"/><b></b></span>订单删除</label> 
+</td>
+</tr>
+<tr>
+	<td>
+	<label><span class="checkbox">
+	<input type="checkbox" name="chkGroup" value="checkbox" class="c-checked" onclick="check('b1,b2,b3,b4,b5,b6,b7',this)"/><b></b></span>操作员</label></td>
+	<td>
+	<label for="b1"><span class="checkbox"><input type="checkbox" name="action_code[]" value="b1" class="c-checked"/><b></b></span>售票页面</label> 
+     <label for="b2"><span class="checkbox"><input type="checkbox" name="action_code[]" value="b2" class="c-checked"/><b></b></span>票务管理</label> 
+     <label for="b3"><span class="checkbox"><input type="checkbox" name="action_code[]" value="b3" class="c-checked"/><b></b></span>订单导出</label> 
+     <label for="b4"><span class="checkbox"><input type="checkbox" name="action_code[]" value="b4" class="c-checked"><b></b></span>升级订单</label> 
+     <label for="b5"><span class="checkbox"><input type="checkbox" name="action_code[]" value="b5" class="c-checked"/><b></b></span>续费订单</label> 
+     <label for="b6"><span class="checkbox"><input type="checkbox" name="action_code[]" value="b6" class="c-checked"/><b></b></span>保留订单</label> 
+     <label for="b7"><span class="checkbox"><input type="checkbox" name="action_code[]" value="b7" class="c-checked"/><b></b></span>订单编辑</label> 
+     <label for="b7"><span class="checkbox"><input type="checkbox" name="action_code[]" value="b7" class="c-checked"/><b></b></span>订单删除</label> 
+	</td>
+</tr>
+<tr>
+	<td>
+<label><span class="checkbox"><input type="checkbox" name="chkGroup"  value="checkbox" class="c-checked"/><b></b></span>会员管理</label></td>
+	<td></td>
+</tr>
+<tr>
+	<td><label><span class="checkbox"><input type="checkbox" name="chkGroup"  value="checkbox" class="c-checked"/><b></b></span>演出管理</label></td>
+	<td></td>
+</tr>
+<tr>
+	<td><label><span class="checkbox"><input type="checkbox" name="chkGroup"  value="checkbox" class="c-checked"/><b></b></span>订单管理</label></td>
+	<td></td>
+</tr>
+<tr>
+	<td><label><span class="checkbox"><input type="checkbox" name="chkGroup"  value="checkbox" class="c-checked"/><b></b></span>营销管理</label></td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="text-center m-t-sm">
+<button type="button" onclick="CheckAll(document.FORM,'')" class="btn btn-primary">全 选</button>
+<button type="submit" class="btn btn-success">提 交</button>
+</div>
+</from>
+</div>
+<script language="javascript">
+function check(list, obj){
+  var frm = obj.form;
+    for (i = 0; i < frm.elements.length; i++){
+      if (frm.elements[i].name == "action_code[]"){
+          var regx = new RegExp(frm.elements[i].value + "(?!_)", "i");
+          if (list.search(regx) > -1) 
+          	frm.elements[i].checked = obj.checked;
+      }
+    }
+}
+</script>
+</body>
+</html>

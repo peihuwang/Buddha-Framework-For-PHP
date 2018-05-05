@@ -1,0 +1,73 @@
+{#include file='public.headernew.html'#}
+<!--编辑器皮肤-->
+<link href="/style/css_two/quill.snow.css" rel="stylesheet">
+<script type="text/javascript" src="/style/js/jquery.form.js"></script>
+<link rel="stylesheet" type="text/css" href="/style/css_two/release.css"/>
+<link rel="stylesheet" type="text/css" href="/style/css_two/countdown.css" />
+<link rel="stylesheet" href="/style/css_two/jquery.countdown.css" />
+<script type="text/javascript" src="/style/js/activity.js"></script>
+
+<!--倒计时-->
+<script src="/style/js_two/jquery.countdown.js"></script>
+<div id="Div_main" style="margin:0 auto; width:94%">
+<!--头部 start-->
+<div class="top w by pf">
+    <a class="back pa" href="index.php?a=index&c=activity">
+        <img src="/style/img_two/back.png"/>
+    </a>
+    <p class="f18 cw w tc">{#$title#}详情</p>
+</div>
+<!--头部 end-->
+
+<!--活动详情页 start-->
+<p class="huodong_detail_title f18 cb pl10 pr10" style="margin-top:44px;">{#$act.name#}</p>
+
+<!--活动详情页 end-->
+
+    <p class="huodong_detail_time f12 cw pl10 pr10 pr" style="margin-top:12px;">{#$title#}添加时间：{#$act.add_time|date_format:"%Y-%m-%d"#}<span class="pa"><i></i>{#$act.click_count#}</span></p>
+
+    <p class="huodong_detail_time f12 cw pl10 pr10 pr" style="margin-top:12px;background-color:#b8b6b6 ">
+        <a href="index.php?a=mylist&c=shop&id={#$Db_Shop.id#}">
+            <span style="height: 30px; "> <img src="/{#$Db_Shop.small#}" style="width:30px; height:30px;border-radius: 50%;margin-top:10px;"/><span style=" margin-left: 15px;font-size: 16px;margin-top: 15px;">{#$Db_Shop.name#}</span></span>
+        </a>
+    </p>
+
+    <input type="hidden" value="" name="cooid"><input type="hidden" value="" name="shop_id">
+<!--内容部分 start-->
+<div class="w clearfloat">
+    <div id="contentlist" class="w" style="text-overflow:ellipsis; white-space:pre-wrap; word-wrap:break-word; word-break:normal;">
+        {#$act.desc#}
+    </div>
+    {#if $act.brief#}
+    <p class="f14 cb pl10 pr10 ">&nbsp;&nbsp;&nbsp;&nbsp;{#$act.brief#}</p>
+    {#/if#}
+</div>
+<!--内容部分 end-->
+<input type="hidden" value="{#$act.id#}" id="aid">
+<br>
+<br>
+<br>
+<br>
+<br><br><br><br/><br/>
+</div>
+
+{#include file='public.recommend.html'#}
+
+
+
+
+
+{#include file='public.footernew.html'#}
+
+</body>
+
+
+<!-- Initialize Swiper -->
+<script>
+    $('#contentlist img').each(function(){
+        $(this).addClass('w');
+    });
+</script>
+
+
+</html>

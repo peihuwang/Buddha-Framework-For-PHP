@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<title>{#$head_title#}-{#$hsk_sitename#}</title>
+<META name="keywords" content="{#$hsk_seokeywords#}">
+<META name="description" content="{#$hsk_seodescription#}">
+<link href="/style/css/common.css?v={#$version#}" rel="stylesheet" type="text/css" />
+<link href="/style/css/reg.css?v={#$version#}" rel="stylesheet" type="text/css" />
+<style>
+<!--
+.msgBoxss, .getRemark { width:970px;margin:20px auto 40px auto;border-top:1px solid #E7E7E7;text-align:center; }
+.msgBoxss .img { margin:40px 0px 20px 0px; }
+.msgBoxss strong { font-size:16px;color:#333;font-family:Verdana; }
+.msgBoxss span { display:block;line-height:80px;color:#666;font-size:14px; }
+.getRemark ul { width:700px;margin:auto;background:#FFF7D8;padding:20px 35px;text-align:left;color:#777;line-height:20px; }
+.getRemark ul strong { display:block; }
+-->
+</style>
+</head>
+<body>
+{#include file="../public/header.html"#}
+<div class="conCon">
+    <div class="landing">
+        <div class="msgBoxss">
+		    <img src="/images/login/reg_msg.gif" class="img"><br />
+            <img src="/images/login/reg_mailico.gif" align="absmiddle" style="margin-right:8px;"><strong>下一步，请验证您的Email</strong><br />
+            <span>我们发送了一封验证邮件到{#$msg[0]#}，请到您的邮箱收信，并点击其中的链接激活您的账户。</span>
+            <a href="{#$msg[1]#}" title="激活账户" target="_blank"><img src="/images/login/reg_activebtn.gif"></a>
+    	</div>
+        <div class="getRemark" style="border:none;">
+        	<ul>
+            	<strong>收不到邮件？</strong>
+                · 有可能被误判垃圾邮件了，请到垃圾邮件文件夹查找。<br />
+                · 用户{#$msg[0]#}向shahaoya@163.com发送一封邮件，几分钟后即可直接登录。
+            </ul>
+        </div>
+    </div>
+</div>
+{#include file="../public/hotcity.html"#}
+{#include file="../public/footer.html"#}
+{#if $redirect#}
+<script type="text/javascript">
+//setTimeout("window.location.href ='{#$msg[1]#}';", 15000);
+</script>
+{#/if#}
+</body>
+</html>

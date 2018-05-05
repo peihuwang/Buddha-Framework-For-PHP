@@ -1,0 +1,55 @@
+<style>
+    /*j角色切换*/ 
+    .black_overlay{display: none;position: absolute; top: 0%; left: 0%; width: 100%;height: 100%;background-color: black;z-index:1001;-moz-opacity: 0.8; opacity:.80; filter: alpha(opacity=88);}
+    .white_content {display: none;position: absolute;top: 35%; left: 5%; width: 90%; height: 30%;padding: 10px; border: 5px solid #f60; background-color: white;z-index:1002; overflow: auto;}
+    #members{width: 30%;margin: auto;}
+    #members p{height:25px;margin:20px auto;background-color:#ccc;border-radius:3px;color: #000;text-align:center;line-height:25px;}
+    /*角色申请*/
+    .black_overlay{display: none;position: absolute; top: 0%; left: 0%; width: 100%;height: 100%;background-color: black;z-index:1001;-moz-opacity: 0.8; opacity:.80; filter: alpha(opacity=88);} 
+    .white_contents {display: none;position: absolute;top: 35%; left: 5%; width: 90%; height: 30%;padding: 10px; border: 5px solid #f60; background-color: white;z-index:1002; overflow: auto;}
+    #membe{width: 30%;margin: auto;}
+    #membe p{height: 25px;margin:20px auto;background-color:#ccc;border-radius: 3px;color:#000;text-align:center;line-height: 25px;}
+</style>
+ <div id="lights" class="white_contents"> 
+    <a href = "javascript:void(0)" onclick = "document.getElementById('lights').style.display='none';document.getElementById('fades').style.display='none'">点击关闭</a>
+    <div id="membe">
+    {#if stripos($UserInfo.to_group_id,'1') || $UserInfo.groupid eq '1'#}
+    {#else#}
+        <p><a href="/index.php?a=role_changing&c=ucenter&j=1">商家会员申请</a></p>
+    {#/if#}
+    {#if stripos($UserInfo.to_group_id,'3') || $UserInfo.groupid eq '3'#}
+    {#else#}
+        <p onclick="partnre_apply();">合伙人申请</p>
+    {#/if#}
+    </div>
+</div> 
+<div id="fades" class="black_overlay"></div>
+<script type="text/javascript">
+    function partnre_apply(j){
+        if(confirm("成为合伙人后可以获得分润，同时具有商家会员身份！了解更多合伙人权益，请移步个人中心,系统公告下的操作视频板块。。。是否继续申请？？")){
+            $.ajax({
+                type:'POST',
+                url:"/index.php?a=partnre_apply&c=ucenter&j=3",
+                dataType:'JSON',
+                success:function(obj){
+                    if(obj.status == 0){
+                        alert("您已经拥有此角色！");
+                        location.reload();
+                    }else if(obj.status == 1){
+                        alert("角色添加成功！");
+                        location.reload();
+                    }else if(obj.status == 2){
+                        alert("服务器忙，请您稍后添加！");
+                        location.reload();
+                    }else if(obj.status == 3){
+                        alert("您的资料不完整，请先完善您真实姓名和区域地址，以免影响后期提现！！");
+                        location.reload();
+                    }
+                }
+            });
+        }else{
+            location.reload();
+        }
+        
+    }
+</script>

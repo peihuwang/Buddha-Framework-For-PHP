@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>会员层级关系</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<script src="js/jquery.js"></script> 
+<script src="js/main.js?v=1.0"></script>
+<script type="text/javascript" src="js/jquery.form.js"></script>
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+<script>
+$(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+</script>
+<style type="text/css">
+	.table-set{ border:1px solid #666; color:#666; width:60%; margin:0 auto;}
+	.table-set td{text-align: center;height:60px;border-bottom: 1px solid #666;border-right: 1px solid #666;}
+	.table-set td img{width: 40px;height: 40px;border-radius: 100%}
+</style>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+<div class="col-sm-12">
+<h3>会员管理</h3><ol class="breadcrumb"><li>当前位置</li><li>会员管理</li><li> <strong>
+	会员层级关系</strong></li></ol>
+</div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="panel panel-danger">
+		<div class="panel-heading"><b>搜索</b></div>
+		<form method="post" action="" class="form-inline" style="text-align: center">
+			<div class="panel-body">
+				<div class="form-group">
+					<select id="option" name="option" class="form-control">
+						{#foreach from=$searchType item=item key=key#}
+						<option value="{#$key#}"  {#if $params.option eq $key#} selected{#/if#}>{#$item#}</option>
+						{#/foreach#}
+					</select>
+
+				</div>
+				<div class="form-group"><input type="text" value="{#$keyword#}" name="keyword" id="keyword" class="form-control" style="width: 300px;"></div>
+				<button value="搜 索" type="submit" class="btn btn-danger">搜 索</button>
+			</div>
+		</form>
+	</div>
+<form method="post" action="" onsubmit="return checkpost(document.checkform);"  name="FORM" >
+<div class="float-e-margins">
+<div class="ibox-title" style="text-align: center;"><b>会员层级关系</b>
+</div>
+</div>
+<div class="ibox-content ">
+<div class="table-responsive">
+<table class="table-set">
+	{#if $list|@count neq 0#}
+		<tr>
+			<td>头像</td>
+			<td>昵称</td>
+			<td>手机</td>
+			<td>关系</td>
+		</tr>
+		<tr>
+			<td width="15%"><img src="/{#$list.logo#}"></td>
+			<td width="30%">{#if $list.realname#}{#$list.realname#}{#else#}{#$list.username#}{#/if#}</td>
+			<td width="40%">{#$list.mobile#}</td>
+			<td width="15%">上级</td>
+		</tr>
+		{#if $userInfos|@count neq 0#}
+			{#foreach from=$userInfos item=item key=key#}
+			<tr>
+				<td><img src="/{#$item.logo#}"></td>
+				<td>{#if $item.realname#}{#$item.realname#}{#else#}{#$item.username#}{#/if#}</td>
+				<td>{#$item.mobile#}</td>
+				<td>下级</td>
+			</tr>
+			{#/foreach#}
+		{#else#}
+			<tr>
+				<td colspan="4">他还没有团队</td>
+			</tr>
+		{#/if#}
+		{#else#}
+			<tr>
+				<td colspan="4">请输入手机号或用户名进行搜索</td>
+			</tr>
+		{#/if#}
+</table>
+</div>
+</div>
+</form>
+</div>
+
+<link rel="stylesheet" href="js/datetimepicke/datetimepicker.css">
+<script type="text/javascript" src="js/datetimepicke/datetimepicker.full.min.js"></script>
+<script type="text/javascript">
+	//日期时间
+	$('.some_class').datetimepicker({
+		lang: 'ch',
+		timepicker: false,
+		format: 'Y-m-d',
+		//minDate: '-1970/01/02',
+	});
+
+	function abcv(){
+
+		var start=$("#start").val();
+		var end=$("#end").val();
+		var url = 'index.php?a=exporta&c=statistics&t='+Math.random();
+		alert(url)
+		$.ajax({
+			url: url,
+			type: 'GET',
+			dataType: 'json',
+			data: {start:start,end:end},
+		})
+		.done(function(o) {
+		})
+		.fail(function() {
+		})
+		.always(function() {
+
+		});
+
+	}
+
+</script>
+</body>
+</html>

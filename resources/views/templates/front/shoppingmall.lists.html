@@ -1,0 +1,61 @@
+{#include file='public.headernew.html'#}
+<link rel="stylesheet" type="text/css" href="style/css/style.css">
+<link rel="stylesheet" type="text/css" href="/style/css/font_403143_nbpgsnnn79tqpvi.css">
+<link rel="stylesheet" type="text/css" href="style/css/swiper-3.4.2.min.css">
+<script src="style/js/jquery-1.12.1.min.js"></script>
+<script src="style/js/swiper-3.4.2.jquery.min.js"></script>
+<script src="/style/js/goodsList.js"></script>
+<style type="text/css">
+  input::-webkit-input-placeholder {
+         /* placeholder字体大小  */
+         font-size: 10px;
+     }
+</style>
+</head>
+<!--该盒子一直包括到店长推荐-->
+<script>
+$("body").css({background:"#f4f4f4"})
+</script>
+<!--头部 start-->
+<div style="position: absolute;">
+    <div class="top w by pf" style="display: block; clear: both;margin-bottom: 3px;">
+        <a class="back pa" href="javascript:history.go(-1)">
+            <img src="/style/img_two/back.png"/>
+        </a>
+        <p class="f18 cw w tc"><span id="title">{#$headers#}</span></p>
+    </div>
+    <!--头部 end-->
+</div>
+<div class="width100 hidden bj_fff" style="margin-top: 45px;">
+<!--搜索框-->
+<div class="width100 hidden bj_fff" style="height:40px;">
+    <div class="center width96 border font14 c_66 hidden" style="height:30px;margin-top:5px;border-radius:15px;line-height:28px;text-indent:10px;">
+        <input id="keyword" type="text" name="keyword" value="" placeholder="请输入要搜索的关键字" style="width: 70%">
+        <img src="style/images/fdj.jpg" width="20" height="20" class="right" style="margin-top:5px;margin-right:10px;" onClick="dw()">
+    </div>
+</div>
+<input type="hidden" id="type" value="{#$type#}">
+<input type="hidden" id="cid" value="{#$cid#}">
+<script>
+function dw(){
+    var keyword = $('#keyword').val();
+    var url=window.location.href +'&keyword=' + keyword;
+    $('#new_xz').shoppingmalllist(url);
+}
+</script>
+<div class="width100 hidden" style="margin-top:12px;margin-bottom:60px;">
+    <div class="width96 center hidden" id="new_xz">
+    </div>
+    <div class="loadtip w tc cg f16" id="more"></div>
+    <div class="swiper-scrollbar03"></div>
+</div>
+{#include file='public.bottomnav.html'#}
+
+<script type="text/javascript">
+    $(function(){
+        var url=window.location.href;
+        $('#new_xz').shoppingmalllist(url);
+    })
+</script>
+</body>
+</html>

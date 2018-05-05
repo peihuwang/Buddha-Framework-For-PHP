@@ -1,0 +1,222 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<script src="js/jquery.js"></script> 
+<script src="js/main.js?v=1.0"></script>
+<script type="text/javascript" src="js/jquery.form.js"></script>
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+<script>
+$(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+</script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+<div class="col-sm-12">
+<h3>订单添加</h3><ol class="breadcrumb"><li>当前位置</li><li>订单管理</li><li> <strong>订单添加</strong></li></ol>
+</div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+<div class="panel panel-danger">
+<div class="panel-heading"><b>订单添加</b></div>
+<form method="post" action="" class="form-inline" onsubmit="return check(document.checkform);">
+<div class="panel-body">
+<div class="form-group">
+<input type="text" value="" name="voucher" id="voucher" class="form-control some_class" style="width:300px;" placeholder="选择日期">
+</div>
+<button value="搜 索" type="submit" class="btn btn-danger">确定</button>
+</div>
+</form>
+</div>
+
+<form method="post" action="" onsubmit="return checkpost(document.checkform);" name="checkform" >
+<div class="float-e-margins">
+<div class="ibox-title"><b>基本信息</b></div>
+</div>
+<div class="ibox-content">
+<table class="table table-hover m-b-none">
+<tbody>
+<tr>
+	<td width="120">订单号</td>
+	<td width="300"><input type="text" value="{#$basic.order_id#}" class="form-control"> </td>
+	<td></td>
+</tr>
+<tr>
+	<td width="120">订单日期 </td>
+	<td width="300"><input type="text" value="{#$basic.acttime|date_format:"%Y-%m-%d"#}" class="form-control"></td>
+	<td></td>
+</tr>
+<tr>
+	<td>订单类型</td>
+	<td><input type="text" value="{#$basic.orderr_type#}" class="form-control"></td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- 订单详情 -->
+<div class="float-e-margins m-t-sm">
+<div class="ibox-title"><b>订单详情</b></div>
+</div>
+<div class="ibox-content">
+<table class="table table-hover m-b-none">
+<thead>
+	<tr>
+		<th>剧目</th>
+		<th>演出场地</th>
+		<th>演出剧场</th>
+		<th>场次</th>
+		<th>座位</th>
+		<th>数量</th>
+		<th>金额</th>
+	</tr>
+</thead>
+<tbody>
+<tr>
+	<td>雷雨</td>
+	<td>上海话剧艺术中心</td>
+	<td>1楼</td>
+	<td>2016-07-13 18:30</td>
+	<td>1排01坐,1排02坐</td>
+	<td>2</td>
+	<td>500</td>
+</tr>
+<tr>
+	<td>雷雨</td>
+	<td>上海话剧艺术中心</td>
+	<td>1楼</td>
+	<td>2016-07-13 18:30</td>
+	<td>1排01坐,1排02坐</td>
+	<td>2</td>
+	<td>500</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+	<th>合计</th>
+	<th></th>
+	<th></th>
+	<th></th>
+	<th></th>
+	<th>40</th>
+	<th>1100</th>
+</tr>
+</tfoot>
+</table>
+</div>
+<!-- 会员信息 -->
+<div class="float-e-margins m-t-sm">
+<div class="ibox-title"><b>会员信息</b></div>
+</div>
+<div class="ibox-content">
+<table class="table table-hover m-b-none">
+<tbody>
+<tr>
+	<td width="120">会员账号</td>
+	<td width="300">13213</td>
+	<td></td>
+</tr>
+<tr>
+	<td width="120">姓名 <span class="text-danger">*</span></td>
+	<td width="300">吴**</td>
+	<td></td>
+</tr>
+<tr>
+	<td>手机号</td>
+	<td>18616028726</td>
+	<td></td>
+</tr>
+<tr>
+	<td>身份证</td>
+	<td>320**********236</td>
+	<td></td>
+</tr>
+<tr>
+	<td>性别</td>
+	<td>男</td>
+	<td></td>
+</tr>
+<tr>
+	<td>会员卡号</td>
+	<td>Q8888</td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- 付款信息 -->
+<div class="float-e-margins m-t-sm">
+<div class="ibox-title"><b>付款信息</b></div>
+</div>
+<div class="ibox-content">
+<table class="table table-hover m-b-none">
+<tbody>
+<tr>
+	<td width="120">付款状态</td>
+	<td width="300"><input type="text" value="" name=""  class="form-control"></td>
+	<td></td>
+</tr>
+<tr>
+	<td>付款类型</td>
+	<td><input type="text" value="" name=""  class="form-control"></td>
+	<td></td>
+</tr>
+<tr>
+	<td>付款金额</td>
+	<td><input type="text" value="" name=""  class="form-control"></td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- 发货信息 -->
+<div class="float-e-margins m-t-sm">
+<div class="ibox-title"><b>发货信息</b></div>
+</div>
+<div class="ibox-content">
+<table class="table table-hover m-b-none">
+<tbody>
+<tr>
+	<td width="120">快递名称</td>
+	<td width="300"><input type="text" value="" name=""  class="form-control"></td>
+	<td></td>
+</tr>
+<tr>
+	<td>快递单号 </td>
+	<td><input type="text" value="" name=""  class="form-control"></td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="text-center m-t-sm">
+<button type="submit" class="btn btn-primary">提 交</button></div>
+
+</form>
+</div>
+</div>
+<link rel="stylesheet" href="js/datetimepicke/datetimepicker.css">
+<script src="js/datetimepicke/datetimepicker.full.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+//日期时间
+		$('.some_class').datetimepicker({
+			lang: 'ch',
+			timepicker: false,
+			format: 'Y-m-d',
+			minDate: '-1970/01/02',
+		});
+	})
+
+</script>
+</body>
+</html>

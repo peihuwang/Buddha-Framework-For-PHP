@@ -1,0 +1,54 @@
+{#include file='public.header.html'#}
+<div id="user-basic">
+    <div class="return" data-href="/"><i></i></div>
+    <h1>店铺搜索</h1>
+</div>
+    <div id="agent_retrieval">
+        <input type="text" value="{#$keyword#}" id="keyword" name="keyword" placeholder="输入店铺名称或者道路名称">
+        <button type="button" id="retrie">搜索</button>
+    </div>
+<div id="list">
+    <!--    <div class="nearby">
+            <div class="pic_img"><img src="style/img/dian.jpg"></div>
+            <div class="nearby_con">
+                <div class="title">哦多尅新式面包店哦多尅新式面包店哦多尅新式面包店哦多尅新式面包店</div>
+                <div class="address"><span class="strong"><i></i>54km</span><span>上海普陀区白兰路137弄A座809室</span></div>
+            </div>
+        </div>-->
+</div>
+<div class="div_null hide"></div>
+
+<script src="/style/js/jquery/jquery.min.js"></script>
+<script src="/style/js/template.js"></script>
+<script src="/style/js/ajaxshopsearchlist.js"></script>
+<script type="text/javascript">
+    $(function(){
+        var position=getCookie("sName");
+         position=JSON.parse(position);
+           var number= position.adcode;
+        $('#retrie').on('click',function () {
+            var keyword=$('#keyword').val();
+            if(keyword==''){
+                alert('你还没有输入搜索标题，请输入吧！');
+                return false;
+            }else{
+                var url='ajax/?a=shop&c=search';
+                url=url+'&keyword='+keyword+'&number='+number;
+                $('#list').ajaxshiolist(url);
+            }
+        })
+    })
+</script>
+<script id="demo" type="text/html">
+    {{each list as value i}}
+    <div class="nearby" data-href="index.php?a=mylist&c=shop&id={{value.id}}">
+        <div class="pic_img"><img src="/{{value.small}}"></div>
+        <div class="nearby_con">
+            <div class="title">{{value.name}}</div>
+            <div class="brief">{{value.brief}}</div>
+            <div class="address"><span class="strong"><i></i>约 {{value.distance}}</span><span>{{value.roadfullname}}</span></div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+{#include file='public.footer.html'#}

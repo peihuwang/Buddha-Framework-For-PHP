@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>留言编辑</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green"})
+        });
+    </script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>订单管理</h3>
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>留言管理</li>
+            <li><strong>
+                {#if $c.type eq '1'#}留言
+                {#else $c.type eq '2'#}投诉建议
+                {#/if#}
+            </strong></li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <p><a href="index.php?a=more&c=message&view={#$view#}&p={#$page#}" class="btn btn-primary">返回上一步</a></p>
+
+    <div class="float-e-margins">
+        <div class="ibox-title"><b>基本信息</b></div>
+    </div>
+    <div class="ibox-content">
+        <table class="table table-hover m-b-none">
+            <tbody>
+            <tr>
+                <td width="120">标题</td>
+                <td width="300">{#$c.title#}</td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td width="120">标题</td>
+                <td width="300">{#$c.title#}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td width="120">称呼</td>
+                <td width="300">{#$c.realname#}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td width="120">联系方式</td>
+                <td width="300">{#$c.mobile#}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td width="120">电子邮件</td>
+                <td width="300">{#$c.email#}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td width="120">留言内容</td>
+                <td width="300">{#$c.question#}</td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td width="120">日期</td>
+                <td width="300">{#$c.createtime|date_format:"%Y-%m-%d"#}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>类型</td>
+                <td>
+                    {#if $c.type eq '1'#}留言咨询{#/if#}
+                    {#if $c.type eq '2'#}投诉建议{#/if#}
+
+
+                </td>
+                <td></td>
+            </tr>
+
+
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+</body>
+</html>

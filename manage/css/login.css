@@ -1,0 +1,60 @@
+body{padding:0;margin:0px auto;font-size:12px;color:#fff;font-family:Verdana;}
+ul{ margin:0px;list-style-type:none;padding:0px; }
+li{ margin:0px;list-style-type:none;padding:0px; }
+Td {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 9pt;
+	color: #033D61;
+	text-decoration: none;
+}
+a {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 9pt;
+	color: #033D61;
+	text-decoration: none;
+}
+a:hover {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 9pt;
+	color: #FF0000;
+	text-decoration: none;
+}
+.STYLE1 {
+	font-size: 12px;
+	color: #FFFFFF;
+}
+.STYLE3 {
+	font-size: 12px;
+	color: #033d61;
+}
+.menu_title SPAN {
+	FONT-WEIGHT: bold; LEFT: 3px; COLOR: #ffffff; POSITION: relative; TOP: 2px 
+}
+.menu_title2 SPAN {
+	FONT-WEIGHT: bold; LEFT: 3px; COLOR: #FFCC00; POSITION: relative; TOP: 2px
+}/*层的样式*/
+.err1 {
+display:block;position: absolute;z-index: 1;height: 100%;width: 100%;filter:Alpha(opacity=30); -moz-opacity:1; background:#000000;
+}
+.err2 {
+display: block;position: absolute;width: 600px;top:80%;left:16%;margin:-340px 0 0 -100px;z-index: 1;
+}.err3 {
+display: none;position: absolute;z-index: 1;height: 100%;width: 100%;filter:Alpha(opacity=20); -moz-opacity:1; background:#FFFFFF;
+}
+.err4 {
+display: none;position: absolute;width: 400px;top:60%;left:40%;margin:-250px 0 0 -100px;z-index: 1;
+}
+/*弹出样式配置*/
+.Ta{text-align:right;height:19px; width:400px; background-color:#D2D1FC;}
+.Tb{float:left; width:250px; text-align:left; padding-left:10px; padding:5px;}
+.Tc{float:right; width:30px; text-align:center; padding-top:2px;}
+.submit { background:url(/images/admin/submit.gif) no-repeat;border:none;width:70px;height:28px;cursor:pointer;}
+.loginbox { font-family:'宋体';color:#fff; }
+.loginbox ul { margin:15px; }
+.loginbox li { padding:5px 0px 8px 0px;line-height:150%;float:left; }
+.menu { width:70px;float:left;text-align:right; }
+.input { padding-left:5px;float:left; }
+.inputs { border:1px solid #333;background:#FFF;width:150px;height:18px; }
+.y { width:100px; }
+.btn { background:url(/images/admin/submit.jpg) no-repeat;width:68px;height:28px;border:none;cursor:pointer; }
+.reset { background:url(/images/admin/reset.jpg) no-repeat;width:68px;height:28px;border:none;cursor:pointer; }

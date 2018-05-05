@@ -1,0 +1,63 @@
+{#include file='public.headernew.html'#}
+<!--头部 start-->
+<div class="top w by pf">
+    <a class="back pa" href="index.php?a=index&c=index">
+        <img src="/style/img_two/back.png"/>
+    </a>
+    <p class="f18 cw w tc">本地信息</p>
+    <a class="classify pa" href="index.php?a=index&c=local">
+        <img src="/style/img_two/classify.png"/>
+    </a>
+</div>
+<!--头部 end-->
+<div id="main" style="padding-top:44px;">
+    <!--轮播图 start-->
+    <div class="localinfo_banner pr h">
+        <div class="swiper-container w h">
+            <div class="swiper-wrapper">
+                {#foreach from=$localmore['img'] item=item key=key#}
+                <div class="swiper-slide"><a href="index.php?a=index&c=shop&id={#$item.id#}">
+                    <img class="w" src="{#$item.large#}" alt="{#$item.name#}"></a>
+                </div>
+                {#/foreach#}
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+    <!--轮播图 end-->
+    <!--分类 start-->
+    <div class="tab_list pr w bw brb" style="top:0;" id="typelist">
+        <ul class="w">
+            {#foreach from=$localmore['shopcat'] item=item key=key#}
+                <li class="f16 cb fl tc w25" onclick="localmore({#$item.id#},{#$localmore.local_p#})">
+                    <span {#if $key eq 0 #} class="active" {#/if#}>{#$item.cat_name#} <input type="hidden" id="cat_id" value="{#$item.id#}"> </span>
+                </li>
+            {#/foreach#}
+        </ul>
+    </div>
+    <!--分类 end-->
+    <!--列表 start-->
+    <div class="main_list w" id="main_list">
+
+    </div>
+
+
+</div>
+<br>
+<br>
+<br>
+
+
+{#include file='public.footernew.html'#}
+<script src="/style/js/ajaxlocalmore.js"></script>
+<!-- Swiper JS -->
+<script src="/style/js_two/swiper.min.js"></script>
+
+<script type="text/javascript">
+    $(function(){
+        $('#main').ajaxshiolist();
+    })
+</script>
+
+

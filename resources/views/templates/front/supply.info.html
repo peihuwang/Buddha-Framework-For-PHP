@@ -1,0 +1,459 @@
+{#include file='public.header.html'#}
+<style>
+    .recommend_header{width:100%;display:inline-block;height: 70px;margin-top: 20px;border-top: 35px solid  #F0F0F0;padding-top: 15px;}
+    .header_me{width: 80px;float: left;font-size: 18px;margin-left: 10px;}
+    .header_more{width: 80px;float: right;color: #787878;}
+    .recommend{
+        background-color: #F0F0F0;
+        /*border: 1px solid red;*/
+        /*height: 325px;width: 100%;*/
+    }
+    .recommend_menu {font-size: 12px;font-weight: bolder; width: 100%;text-align: center;margin: 2px 2px 4px 2px;padding-top: 8px;
+    }
+    .recommend_menu li{list-style-image: none;list-style-type: none;border-right-width: 1px;
+        /*border-right-style: solid;*/ /*border-right-color: #000000;*/float: left; margin-bottom: 8px;margin-left: 5px;
+        text-align: center;height: 150px; width: 31.3%;background-color:  #FFFFFF;}
+    .recommend_menu li a{color: #FFFFFF;text-decoration: none; margin: 0px; padding-top: 8px;  display: block; /* 作为一个块 */
+        padding-right: 50px; /* 设置块的属性 */    padding-bottom: 8px; width: 100%; zoom: 1;}
+    .recommend_menu li a img{width: 80px;height: 80px;float: left;margin-left: 15px;}
+    .recommend_menu li a span{/*width: 20px;float: left;margin-left: 2px;*/overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 100px;font-size: 1.2em;line-height: 1.5; display: block;}
+    .recommend_menu li a:hover{background-color: #0099CC;}
+</style>
+<script type="text/javascript">
+        var w,h,className;
+        function getSrceenWH(){
+            w = $(window).width();
+            h = $(window).height();
+            $('#dialogBg').width(w).height(h);
+        }
+        window.onresize = function(){
+            getSrceenWH();
+        };
+        $(window).resize();
+        $(function(){
+            getSrceenWH();
+            //显示弹框
+            $('.box a').click(function(){
+                className = $(this).attr('class');
+                $('#dialogBg').fadeIn(300);
+                $('#dialog').removeAttr('class').addClass('animated '+className+'').fadeIn();
+            });
+            //关闭弹窗
+            $('.claseDialogBtn').click(function(){
+                $('#dialogBg').fadeOut(300,function(){
+                    $('#dialog').addClass('bounceOutUp').fadeOut();
+                });
+            });
+            var screenwidth=screen.width;
+            setCookie('screenwidth',screenwidth);//将当前屏幕宽度设置为COOKIE便于文字截取
+        });
+    </script>
+    <script>
+        function select_spec(event) {
+    $("#choose_attr .f-foot a").removeClass('add-cart');
+    $("#choose_attr .f-foot a").removeClass('buy-goods');
+    $(".mask-div").show();
+    $('#public_foot').css('display','none');
+    var total = 0, h = $(window).height(), top = $('.f-title-attr').height() || 0, bottom = $('.f-foot').height() || 0, con = $('.f-content-attr');
+    var li_length=con.find('li').length;
+    if(li_length>1){
+        $("#choose_attr").animate({
+            height: '70%'
+        }, [10000]);
+        total = 0.7 * h;
+    }
+    else
+    {
+        $("#choose_attr").animate({
+            height: '55%'
+        }, [10000]);
+        total = 0.55 * h;
+    }
+    $("#choose_attr .f-foot a").addClass(event);
+    con.height(total - top - bottom-24+ 'px');
+    scrollheight = $(document).scrollTop();
+    $("body").css("top","-" + scrollheight+"px");
+    $("body").addClass("visibly");
+
+}
+
+function close_choose_spec() {
+    $(".mask-div").hide();
+    $("body").css("top","auto");    
+    $("body").removeClass("visibly");
+    $(window).scrollTop(scrollheight);
+    $('#public_foot').css('display','');
+    $('#choose_attr').animate({
+        height: '0'
+    }, [10000]);
+}
+</script>
+</head>
+<style>
+    /*j角色切换*/ 
+    .black_overlay{display: none;position: absolute; top: 0%; left: 0%; width: 100%;height: 100%;background-color: black;z-index:1001;-moz-opacity: 0.8; opacity:.80; filter: alpha(opacity=88);}
+    .white_content {display: none;position: absolute;top: 15%; left: 5%; width: 90%; height: 65%;padding: 10px; background-color: white;z-index:1002; overflow: auto;}
+    #member{width: 30%;margin: auto;}
+    .codeimgs img{width:100%; margin:auto;}
+</style>
+<link href="/style/css_two/reset.css" rel="stylesheet" type="text/css" />
+<link href="/style/css_two/style.css" rel="stylesheet" type="text/css" />
+<link href="/style/css_two/buy.css" rel="stylesheet" type="text/css" />
+
+<link href="style/css_two/date.css" rel="stylesheet" type="text/css" />
+<link href="style/css_two/switch.css" rel="stylesheet" type="text/css" />
+<link href="style/css_two/swiper.min.css" rel="stylesheet" type="text/css" />
+<div id="gallery">
+    <div id="goods_gallery" class="goods_gallery ">
+        <div class="hd"><ul></ul></div>
+        <div class="bd">
+            <ul>
+                {#foreach from=$gsllery item=item#}
+                <li><img src="{#$item.goods_img#}"></li>
+                {#/foreach#}
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="goods_info">
+    <div class="title">{#$goods.goods_name#}</div>{#if $uid eq $goods.user_id#}<div id="top_up" onclick="Top('{#$goods.id#}','info.top','supply','0.2')">置  顶</div>{#/if#}
+    <div class="price">{#if $goods.is_promote eq 1#}促  销  价：<em>￥<b>{#$goods.promote_price#}</b></em>元
+        <span style="text-decoration: line-through">原价：{#$goods.market_price#}</span>{#else#}售价：<em>￥<b>{#$goods.market_price#}</b></em>{#/if#}
+        
+    </div>
+    <div class="tiem">
+        <span class="update_time">更新时间：{#$goods.last_update|date_format:'%Y-%m-%d %H:%M'#}</span>
+        <span class="number">浏览：{#$goods.click_count#}人</span>
+    </div>
+</div>
+<div class="shop_info_supply">
+    <div class="shop_title" data-href="{#$shop_url#}{#$goods.shop_id#}"><div class="shop_img"><img src="{#if $shopinfo.small#}{#$shopinfo.small#}{#else#}/style/images/buslogo.png{#/if#}" alt=""></div><div class="shop_name" style="color: red;font-size: 14px;margin-left: 15%;"> [进入店铺] 
+        {#if $info#}
+        <div style="float: right;color: #666;font-size: 12px;width: 80px; height: 50px;display:inline;text-align: center;}">
+            <img src="style/images/zhuanfayoushang.png" style="width: 40px;height: 40px;"/>
+        </div>
+        {#/if#}
+    </div>
+</div>
+
+
+    <div class="steat"><div class="renzheng">{#if $shopinfo.is_verify eq 1#}认证店铺 <em><b>V</b>1</em>{#else#}店铺未认证 {#/if#} {#if $isok eq 1#}
+        <span class="codeimg">
+            <img onclick="document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'" src="{#$nlog#}">
+        </span>
+        {#/if#}
+    </div>
+        {#if $showphone.isshowphone eq 1#}
+            <div class="tel" style="width: 130px;">电话：<a style="float: right;margin-right: 2px;" href="tel:{#$showphone.mobile#}">{#$showphone.phone#}</a></div>
+        {#else#}
+            <div class="tel" onclick="see({#$goods.id#})"><i></i>{#$showphone.phone#}</div>
+        {#/if#}
+    </div>
+
+
+
+    <div class="address">
+        <div><span data-href="http://apis.map.qq.com/tools/routeplan/eword={#$shopinfo.specticloc#}&epointx={#$shopinfo.lng#}&epointy={#$shopinfo.lat#}&policy=1?referer=myapp&key=HM5BZ-ICHKU-VDNVI-27RMJ-YZRCQ-P5BTP"><i></i>{#$shopinfo.distance#}</span> {#$shopinfo.level2#}{#$shopinfo.level3#}{#$shopinfo.specticloc#}</div>
+        {#if $goods.is_promote eq 1#}
+        <p>促销时间：{#$goods.promote_start_date|date_format:"%Y-%m-%d %H:$M:%S"#} - {#$goods.promote_end_date|date_format:"%Y-%m-%d %H:$M:%S"#}</p>
+        {#/if#}
+    </div>
+</div>
+{#if $goods.goods_brief#}
+<div class="detailed">
+    <h2>商品简述</h2>
+    <div id="content">
+        {#$goods.goods_brief#}
+    </div>
+</div>
+{#/if#}
+<div class="detailed">
+    <h2>详细描述</h2>
+    <div id="content">
+        {#$goods.goods_desc#}
+    </div>
+</div>
+<div class="goodsad"></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<div id="light" class="white_content">
+    <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">点击关闭</a>
+    <div id="membe">
+        <div class="codeimgs"><img src="{#$nlog#}"></div>
+    </div>
+</div>
+
+<section class="mask-div" style="display: none;"></section>
+<section class="f-block" id="choose_attr" style="height: 0; overflow: hidden;">
+    <div class="f-title-attr">
+        <img class="SZY-GOODS-IMAGE-THUMB" src="{#$gsllery.0.goods_img#}" style="float: left;">
+        <div class="f-title-arr-right">
+            <span class="goodprice SZY-GOODS-PRICE price-color" id="moneys" style="color:red;">{#if $goods.is_promote eq 1#}<em>￥<b>{#$goods.promote_price#}</b></em>
+        <span style="text-decoration: line-through;">￥{#$goods.market_price#}</span>{#else#}<em>￥<b>{#$goods.market_price#}</b></em>{#/if#}</span>
+            <span class="SZY-GOODS-NUMBER" id="stock">
+                库存：<em id="stocknum">{#if $stockNum neq 0#}{#$stockNum#}{#else#}999+{#/if#}</em> 件
+            </span>
+        </div>
+        <a class="c-close-attr" href="javascript:close_choose_spec()"></a>
+        <div style="height: 0px; line-height: 0px; clear: both;"></div>
+    </div>
+    <div class="f-content-attr">
+        <ul class="navContent choose" style="display: block;">
+            <!-- 产品规格 -->
+            
+            
+            {#if $attr#}
+            <li>
+                {#if $attr.attrname1#}
+                <div class="title1" style="width: 100%;">{#$attr.attrname1#}</div>
+                <div class="lbdiv">
+                {#foreach from=$attr.attrvalue1 item=item key=key#}
+                <div class="" onclick="attrvalue({#$key#});">{#$item#}</div>
+                <input type="hidden" name="attrvalue1_{#$key#}" id="attrvalue1_{#$key#}" value="{#$item#}"/>
+                {#/foreach#}
+                </div>
+                {#/if#}
+                {#if $attr.attrname2#}
+                <div class="title1" style="width: 100%;">{#$attr.attrname2#}</div>
+                <div class="lbdiv">
+                {#foreach from=$attr.attrvalue2 item=item key=key#}
+                <div class="" onclick="attrvalues({#$key#});">{#$item#}</div>
+                <input type="hidden" name="attrvalue2_{#$key#}" id="attrvalue2_{#$key#}" value="{#$item#}" />
+                {#/foreach#}
+                </div>
+                {#/if#}
+                
+            </li>
+            {#/if#}
+            <li>
+                <div class="title1">购买数量</div>
+                <div class="item1">
+                    <div class="goods-num amount amount-btn cart-box">
+                    
+                        <i class="decrease amount-minus input-number-decrement input-num" onclick="reduce();">–</i>
+                           <input class="input-number amount-input num" type="text" id="defaultnum" value="1">
+                        <i class=" increase amount-plus input-number-increment input-num" onclick="increase();">+</i>
+                    </div>
+                </div>
+                <div>
+                </div>
+            </li>
+        </ul>
+        <!--限购提示  每人限购数量是1件时，则购物车数量达到1件时在点击加号则提示“您已达到限购数量”-->
+        
+        <div style="height: 10px"></div>
+    </div>
+    <input type="hidden" id="attrid" value="{#$attr.id#}"/>
+    <input type="hidden" id="number" value="1"/>
+    <div class="f-foot">
+        <a href="javascript:void(0)" class="bg-color" onclick="shopping({#$goods.id#},{#$goods.promote_price#}?{#$goods.promote_price#}:{#$goods.market_price#});">确定</a>
+    </div>
+</section>
+<div id="fade" class="black_overlay"></div>
+
+
+{#include file='public.recommend.html'#}
+
+
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+
+<input type="hidden" id="s_id" value="{#$goods.shop_id#}">
+<script src="/style/js/jquery/jquery.min.js"></script>
+<script src="/style/js/TouchSlide/TouchSlide.1.1.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.lbdiv div').click(function() {
+        var index=$(this).index();
+        $(this).addClass('curr').siblings().removeClass();
+    
+    });
+});
+(function(){
+    $(".input-num").unbind("dbclick");
+    window.inputNumber = function(el) {
+        var min = el.attr('min') || false;
+        var max = el.attr('max') || false;
+        var els = {};
+        els.dec = el.prev();
+        els.inc = el.next();
+        el.each(function() {
+            init($(this));
+        });
+        function init(el) {
+            els.dec.on('click', decrement);
+            els.inc.on('click', increment);
+            function decrement() {
+                var value = el[0].value;
+                value--;
+                if(!min || value >= min) {
+                    el[0].value = value;
+                }
+            }
+            function increment() {
+                var value = el[0].value;
+                value++;
+                if(!max || value <= max) {
+                    el[0].value = value++;
+                }
+            }
+        }
+    }
+})();
+
+inputNumber($('.input-number'));
+</script>
+<script>
+    TouchSlide({
+        slideCell :"#goods_gallery",
+        titCell : ".hd ul", // 开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+        mainCell : ".bd ul",
+        effect : "leftLoop",
+        autoPlay : true, // 自动播放
+        autoPage : true, // 自动分页
+        delayTime: 200, // 毫秒；切换效果持续时间（执行一次效果用多少毫秒）
+        interTime: 2500, // 毫秒；自动运行间隔（隔多少毫秒后执行下一个效果
+
+    });
+    function see(id){
+        Message.showConfirm("店铺未认证,支付0.2元查看联系方式", "确定", "取消", function () {
+            $.post('/pay/?a=index&c=index',{id:id,good_table:'supply',payment_code:'wxpay',order_type:'info.see2',final_amt:0.2},function(re){
+                if(re.errcode==0){
+                    window.location.href=''+re.url+'';
+                }else{
+                    Message.showNotify(""+re.errmsg+"", 1200);
+                }
+            })
+        });
+    }
+</script>
+
+<script>
+    var attrvalue1 = '';
+    var attrvalue2 = '';
+    var attrid = $('#attrid').val();
+    function attrvalue(id){//动态改变商品的价格
+        attrvalue1 = $('#attrvalue1_'+id).val();
+        if(attrvalue1 && attrvalue2){
+            $.ajax({
+                type:'post',
+                url:'index.php?a=attrvalue&c=supply',
+                data:{attrid:attrid,attrvalue1:attrvalue1,attrvalue2:attrvalue2},
+                dataType:'JSON',
+                success:function(o){
+                    if(o.isok == 1){
+                        var data = o.info;
+                        $('#addspan').remove();
+                        $('#moneys').html('<span style="color:red;"><em>￥<b>' + data.money + '</b></em></span>');
+                        $('#stocknum').html(data.stock);
+                        $('#stock').after('<span id="addspan" style="font-size:8px;">已选：' + attrvalue1 + attrvalue2 + '</span>');
+                        if(data.stock < 1){
+                            $('.f-foot').html(' <a href="javascript:void(0)" class="bg-color">确定</a>');
+                            Message.showMessage('库存不足');
+                        }else{
+                            $('.f-foot').html('<a href="javascript:void(0)" class="bg-color" onclick="shopping({#$goods.id#},{#$goods.promote_price#}?{#$goods.promote_price#}:{#$goods.market_price#});">确定</a>');
+                        }
+                    }   
+                },
+            });
+        }
+    }
+    function attrvalues(id){//动态改变商品的价格
+        attrvalue2 = $('#attrvalue2_'+id).val();
+        if(attrvalue1 && attrvalue2){
+            $.ajax({
+                type:'post',
+                url:'index.php?a=attrvalue&c=supply',
+                data:{attrid:attrid,attrvalue1:attrvalue1,attrvalue2:attrvalue2},
+                dataType:'JSON',
+                success:function(o){
+                    if(o.isok == 1){
+                        var data = o.info;
+                        $('#addspan').remove();
+                        $('#moneys').html('<span style="color:red;"><em>￥<b>' + data.money + '</b></em></span>');
+                        $('#stocknum').html(data.stock);
+                        $('#stock').after('<span id="addspan" style="font-size:8px;">已选：' + attrvalue1 + attrvalue2 + '</span>');
+                        if(data.stock < 1){
+                            $('.f-foot').html(' <a href="javascript:void(0)" class="bg-color">确定</a>');
+                            Message.showMessage('库存不足');
+                        }else{
+                            $('.f-foot').html('<a href="javascript:void(0)" class="bg-color" onclick="shopping({#$goods.id#},{#$goods.promote_price#}?{#$goods.promote_price#}:{#$goods.market_price#});">确定</a>');
+                        }
+                    } 
+                },
+            });
+        }
+    }
+
+    function increase(){
+        var num = $('#defaultnum').val();
+        var stocknum = $('#stocknum').text();
+        num++;
+        if(num<1){
+            return false;
+        }
+        if(num > stocknum){
+            Message.showMessage("购买数量不能大于库存数量");
+            num--;
+            $('#defaultnum').val(num);
+            return false;
+        }
+        $('#number').val(num);
+    }
+    function reduce(){
+        var num = $('#defaultnum').val();
+        num--;
+        if(num<1){
+            Message.showMessage("购买数量必须大于等于1");
+            num=1;
+            $('#defaultnum').val(num);
+            return false;
+        }
+        $('#number').val(num);
+        
+    }
+
+    //上海人才创业园A1栋702室
+    function Top(id, order_type, good_table, final_amt) {
+        Message.showConfirm("信息置顶,0.2元每次", "确定", "取消", function () {
+            $.post('/pay/index.php?a=index&c=index',
+                    {id: id, order_type: order_type, good_table: good_table, final_amt: final_amt,pc:1},
+                    function (re) {
+                        if (re.errcode == 0) {
+                            window.location.href = '' + re.url + '';
+                        } else {
+                            Message.showNotify("" + re.errmsg + "", 1200);
+                        };
+                    });
+        });
+    };
+</script>
+<!-- <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
+
+<script>
+        var geocoder, map, marker = null;
+   
+        geocoder = new qq.maps.Geocoder();
+
+        function codeAddress() {
+            var address = '中国,浙江,嘉善县,上海人才创业园A1栋';
+            //对指定地址进行解析
+            geocoder.getLocation(address);
+            //设置服务请求成功的回调函数
+            geocoder.setComplete(function(result) {
+            console.log(result);
+            });
+            //若服务请求失败，则运行以下函数
+            geocoder.setError(function() {
+                alert("出错了，请输入正确的地址！！！");
+            });
+        }
+        codeAddress();
+</script> -->
+{#if $shopinfo.is_verify || $userfeeinfo.fee_type#}
+{#include file='public.shopping.html'#}
+{#else#}
+{#include file='public.footernew.html'#}
+{#/if#}

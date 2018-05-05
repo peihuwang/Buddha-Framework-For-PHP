@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<script src="js/jquery.js"></script> 
+<script src="js/main.js?v=1.0"></script>
+<script type="text/javascript" src="js/jquery.form.js"></script>
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+<script>
+$(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+</script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+<div class="col-sm-12">
+<h3>会员管理</h3><ol class="breadcrumb"><li>当前位置</li><li>收货地址管理</li><li> <strong>地址列表</strong></li></ol>
+</div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+<p>
+<a href="index.php?a=add&c=useraddress&user_id={#$user_id#}" class="btn btn-primary">添加地址</a>
+<a href="index.php?a=more&c=user&id={#$user_id#}" class="btn btn-primary">返回上一步</a>
+</p>
+
+<div class="float-e-margins">
+<div class="ibox-title"><h5>收货地址</h5></div>
+</div>
+<div class="ibox-content">
+<table class="table table-hover m-b-none">
+<thead>
+	<tr>
+		<td>选择</td>
+		<td>省</td>
+		<td>市</td>
+		<td>详细地址</td>
+		<td>联系人</td>
+		<td>联系电话</td>
+		<td>默认地址</td>
+		<td>状态</td>
+		<td>操作</td>
+	</tr>
+</thead>
+<tbody>
+{#foreach from=$list item=item#}
+<tr>
+	<td><input type="checkbox" value="{#$item.id#}" name="useraddress_id[]" class="i-checks"/></td>
+	<td>{#$item.province#}</td>
+	<td>{#$item.city#}</td>
+	<td>{#$item.area#}</td>
+	<td>{#$item.name#}</td>
+	<td>{#$item.mobile#}</td>
+	<td>{#if $item.def_addr eq 1#}是{#else#}否{#/if#}</td>
+	<td>{#if $item.isdel eq 0 #}启用{#else#}禁用{#/if#}</td>
+	<td><a href="index.php?a=edit&c=useraddress&user_id={#$user_id#}&id={#$item.id#}&p={#$page#}">[编辑]</a>
+		<a href="index.php?a=del&c=useraddress&user_id={#$user_id#}&id={#$item.id#}&p={#$page#}" onclick="return delnav()">[删除]</a></td>
+</tr>
+{#/foreach#}
+</tbody>
+</table>
+</div>
+	<div class="text-center m-t-sm">
+		{#$strPages#}
+	</div>
+</div>
+<script type="text/javascript" language="JavaScript">
+	function delnav(){
+		return confirm("确认要删除收货地址吗？");
+	}
+</script>
+</body>
+</html>

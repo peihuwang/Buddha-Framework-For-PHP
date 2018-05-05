@@ -1,0 +1,170 @@
+{#include file='public.header.html'#}
+<style>
+    .recommend_header{width:100%;display:inline-block;height: 70px;margin-top: 20px;border-top: 35px solid  #F0F0F0;padding-top: 15px;}
+    .header_me{width: 80px;float: left;font-size: 18px;margin-left: 10px;}
+    .header_more{width: 80px;float: right;color: #787878;}
+    .recommend{
+        background-color: #F0F0F0;
+        /*border: 1px solid red;*/
+        /*height: 325px;width: 100%;*/
+    }
+    .recommend_menu {
+        font-size: 12px;
+        font-weight: bolder;
+        width: 100%;
+        text-align: center;
+        margin: 2px 2px 4px 2px;
+        /*background-color: #999999;*/
+        padding-top: 8px;
+    }
+    .recommend_menu li{
+        list-style-image: none;
+        list-style-type: none;
+        padding: 15px;
+        border-right-width: 1px;
+        /*border-right-style: solid;*/
+        /*border-right-color: #000000;*/
+        float: left;
+        margin-top: 8px;
+        margin-left: 5px;
+        text-align: center;
+        height: 150px;
+        width: 31.3%;
+        background-color:  #FFFFFF;
+    }
+    .recommend_menu li a{
+        color: #FFFFFF;
+        text-decoration: none;
+        margin: 0px;
+        padding-top: 8px;
+        display: block; /* 作为一个块 */
+        padding-right: 50px; /* 设置块的属性 */
+        padding-bottom: 8px;
+        /*padding-left: 17px;*/
+        width: 100%;
+        zoom: 1;
+    }
+    .recommend_menu li a img{
+        width: 80px;height: 80px;float: left;margin-left: 15px;
+    }
+    .recommend_menu li a span{
+        /*width: 20px;float: left;margin-left: 2px;*/
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100px;
+        font-size: 1.2em;
+        line-height: 1.5;
+        display: block;
+    }
+    .recommend_menu li a:hover{
+        background-color: #0099CC;
+    }
+</style>
+<link href="style/css_two/switch.css" rel="stylesheet" type="text/css" />
+<link href="style/css_two/swiper.min.css" rel="stylesheet" type="text/css" />
+
+
+<!--<div id="gallery">-->
+<!--{#if $goods.demand_img#}-->
+    <!--<img src="{#$goods.demand_img#}"  style="width: 100%; max-height:100%;">-->
+<!--{#else#}-->
+    <!--<img src="style/images/big_demand_img.jpg"  style="width: 100%; max-height:100%;">-->
+<!--{#/if#}-->
+<!--</div>-->
+<div id="gallery">
+    <div id="goods_gallery" class="goods_gallery ">
+        <div class="hd"><ul></ul></div>
+        <div class="bd">
+            <ul>
+                {#foreach from=$gallery item=item#}
+                <li><img src="{#$item.img#}"></li>
+                {#/foreach#}
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="goods_info">
+    <div class="title">{#$goods.name#}</div>{#if $uid eq $goods.user_id#}<div id="top_up" onclick="Top('{#$goods.id#}','info.top','demand','0.2')">置  顶</div>{#/if#}
+    <div class="price">预算：<em>￥<b>{#$goods.budget#}</b>元</em></div>
+    <div class="tiem"><span class="update_time">有效时间：{#$goods.demand_start_time|date_format:"%Y-%m-%d "#}—{#$goods.demand_end_time|date_format:"%Y-%m-%d"#}</span><span class="number">浏览：{#$goods.click_count#}人</span></div>
+</div>
+<div class="shop_info_supply">
+    <div class="shop_title" data-href="{#$shop_url#}{#$goods.shop_id#}"><div class="shop_img"><img src="{#if $shopinfo.small#}{#$shopinfo.small#}{#else#}/style/images/buslogo.png{#/if#}" alt=""></div><div class="shop_name" style="color: red;font-size: 14px;margin-left: 15%;"> [进入店铺]
+        {#if $info#}
+        <div style="float: right;color: #666;font-size: 12px;width: 80px; height: 50px;display:inline;text-align: center;}">
+            <img src="style/images/zhuanfayoushang.png" style="width: 40px;height: 40px;" />
+        </div>
+        {#/if#}
+    </div>
+</div>
+
+    <div class="steat"><div class="renzheng">{#if $shopinfo.is_verify eq 1#}认证店铺 <em><b>V</b>1</em>{#else#}店铺未认证{#/if#} </div>
+        {#if $showphone.isshowphone eq 1#}
+        <div class="tel" style="width: 130px;">电话：<a style="float: right;margin-right: 2px;" href="tel:{#$showphone.mobile#}">{#$showphone.phone#}</a></div>
+        {#else#}
+            <div class="tel" onclick="see({#$goods.id#})"><i></i>电话</div>
+        {#/if#}
+    </div>
+    <div class="address">
+        <div><span data-href="http://apis.map.qq.com/tools/routeplan/eword={#$shopinfo.specticloc#}&epointx={#$shopinfo.lng#}&epointy={#$shopinfo.lat#}&policy=1?referer=myapp&key=HM5BZ-ICHKU-VDNVI-27RMJ-YZRCQ-P5BTP"><i></i>{#$shopinfo.distance#}</span> {#$shopinfo.level2#}{#$shopinfo.level3#}{#$shopinfo.specticloc#}</div>
+    </div>
+</div>
+
+<div class="detailed">
+    <h2>详细描述</h2>
+    <div id="content">
+        {#$goods.demand_desc#}
+    </div>
+</div>
+<div class="goodsad"></div>
+
+{#include file='public.recommend.html'#}
+
+<br/><br/>
+<script src="/style/js/jquery/jquery.min.js"></script>
+<script src="/style/js/TouchSlide/TouchSlide.1.1.js"></script>
+
+<script>
+
+    TouchSlide({
+        slideCell :"#goods_gallery",
+        titCell : ".hd ul", // 开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+        mainCell : ".bd ul",
+        effect : "leftLoop",
+        autoPlay : true, // 自动播放
+        autoPage : true, // 自动分页
+        delayTime: 200, // 毫秒；切换效果持续时间（执行一次效果用多少毫秒）
+        interTime: 2500, // 毫秒；自动运行间隔（隔多少毫秒后执行下一个效果
+
+    });
+    function see(id){
+        Message.showConfirm("店铺未认证,支付0.2元查看联系方式", "确定", "取消", function () {
+            $.post('/pay/?a=index&c=index',{id:id,good_table:'demand',payment_code:'wxpay',order_type:'info.see',final_amt:0.2},function(re){
+                if(re.errcode==0){
+                    window.location.href=''+re.url+'';
+                }else{
+                    Message.showNotify(""+re.errmsg+"", 1200);
+                }
+            })
+        });
+    }
+</script>
+<script>
+    function Top(id, order_type, good_table, final_amt) {
+        Message.showConfirm("信息置顶,0.2元每次", "确定", "取消", function () {
+            $.post('/pay/index.php?a=index&c=index',
+                {id: id, order_type: order_type, good_table: good_table, final_amt: final_amt,pc:1},
+                function (re) {
+                    if (re.errcode == 0) {
+                        window.location.href = '' + re.url + '';
+                    } else {
+                        Message.showNotify("" + re.errmsg + "", 1200);
+                    };
+                });
+        });
+    };
+</script>
+{#include file='public.footer.html'#}

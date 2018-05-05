@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>添加分类</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+    </script>
+
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>广告图片管理</h3><ol class="breadcrumb"><li>当前位置</li><li>广告图片管理</li><li> <strong>添加广告图片分类</strong></li></ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="m-b-sm">
+        <a href="index.php?a=more&c=imagecatalog" class="btn btn-primary">返回上一步</a>
+    </div>
+    <div class="float-e-margins">
+        <div class="ibox-title"><b>添加分类</b>
+        </div>
+    </div>
+    <form method="post" action="" onsubmit="return checkpost(document.checkform);" name="checkform" enctype="multipart/form-data">
+
+        <div class="ibox-content">
+            <table class="table table-hover m-b-none">
+                <tbody>
+                <tr>
+                    <td width="120">上级分类 </td>
+                    <td width="400"><select class="form-control selector" name="sub">
+                        <option value="0">顶级分类</option>
+                        {#$optionList#}
+                    </select></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>分类名称 <span class="text-danger">*</span></td>
+                    <td><input type="text"  name="name" id="name" class="form-control"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>广告最多张数<span class="text-danger">*</span></td>
+                    <td><input type="text"  name="imgmax" id="imagemax" class="form-control"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>图片唯一标识 <span class="text-danger">*</span></td>
+                    <td><input type="text"  name="identify" id="identify" class="form-control"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>图片宽高<span class="text-danger">*</span></td>
+                    <td class="form-inline">
+                        <div class="form-group"><input type="text"  name="width"  class="form-control width" placeholder="图片宽"></div>
+                        —
+                        <div class="form-group"><input type="text"  name="height"  class="form-control height" placeholder="图片高"></div> </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>位置序号</td>
+                    <td><input type="text" value="0" name="view_order" class="form-control"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>代理商显示</td>
+                    <td><input type="checkbox" value="1" name="isopen" class="i-checks" checked></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>是否显示</td>
+                    <td><input type="checkbox" value="1" name="buddhastatus" class="i-checks" checked></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center m-t-sm">
+            <button type="submit" class="btn btn-primary">提 交</button>
+        </div>
+    </form>
+</div>
+</div>
+<script>
+    function checkpost(obj){
+        if( $(".selector").find("option:selected").val()==''){
+            alert("选择分类");
+            $("#selector").focus();
+            return false;
+        }
+        if($('#name').val()==''){
+            alert("输入分类名称");
+            $("#name").focus();
+            return false;
+        }
+        if($('#imagemax').val()==''){
+            alert("设置最大张数");
+            $("#imagemax").focus();
+            return false;
+        }
+        if($('#identify').val()==''){
+            alert('输入图片唯一标识');
+            $("#identify").focus();
+            return false;
+        }
+        if($('.width').val()=='' ){
+            alert('图片宽不能为空');
+            $(".width").focus();
+            return false;
+        }
+        if($('.width').val()==''){
+            alert('图片高不能为空');
+            $(".height").focus();
+            return false;
+        }
+    }
+</script>
+</body>
+</html>

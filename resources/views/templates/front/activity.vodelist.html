@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>本地商家</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"  />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="applicable-device" content="mobile"/>
+    <link href="/style/css_two/reset.css" rel="stylesheet" type="text/css" />
+    <link href="/style/css_two/style.css" rel="stylesheet" type="text/css" />
+    <link href="/style/css_two/swiper.min.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/style/js_two/jquery-3.1.1.min.js"></script>
+</head>
+<body class="bg">
+<div id="main">
+    <!--头部 start-->
+    <div class="top w by pf">
+        <a class="back pa" href="javascript:history.go(-1);">
+            <img src="/style/img_two/back.png"/>
+        </a>
+        <p class="f18 cw w tc">活动投票详情</p>
+    </div>
+
+    <!--头部 end-->
+
+    <!--轮播图 start-->
+    <div class="localinfo_banner pr h" style="margin-top:44px;">
+        <div class="swiper-container w h">
+            <div class="swiper-wrapper">
+                {#foreach from=$car.list item=item key=key#}
+                <div class="swiper-slide">
+                    {#if $key eq 0#}
+                      <img class="w" src="{#$item.goods_img#}" alt="" style="height: 200px;">
+                    {#else#}
+                      <a href="{#$car.shop_url#}{#$item.shop_id#}">
+                        <img class="w" src="{#$item.goods_img#}" alt="" style="height: 200px;">
+                      </a>
+                    {#/if#}
+                </div>
+                {#/foreach#}
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+    <!--轮播图 end-->
+<input type="hidden" name="id" value="{#$id#}">
+
+    <!--投票简介 start-->
+    <div class="lease_detail_content bw">
+        <div class="w clearfloat pt10 pb10">
+            <div class="w333 tc fl">
+                <p class="f14 cg">参与选手</p>
+                <p class="f14 cy">{#$count#}</p>
+            </div>
+            <div class="w334 tc fl">
+                <p class="f14 cg brl brr">累计投票</p>
+                <p class="f14 cy brl brr">{#$praise_num#}</p>
+            </div>
+            <div class="w333 tc fl">
+                <p class="f14 cg">访问量</p>
+                <p class="f14 cy">{#$Act.click_count#}</p>
+            </div>
+        </div>
+        <div class="w clearfloat pt10 pb10 brb">
+            <div class="pl10 pr10">
+                <p class="f14 cb">
+                    <img src="/style/img_two/icon_time.png" alt="" style="width:18px; vertical-align:middle;">
+                    投票日期：{#$Act.start_date|date_format:"%m/%d %H:%M"#} 至 {#$Act.end_date|date_format:"%m/%d %H:%M"#}
+                </p>
+            </div>
+        </div>
+        <div class="w clearfloat pt10 pb10 brb">
+            <div class="pl10 pr10">
+                <p class="f14 cb">
+                    <img src="/style/img_two/icon_time.png" alt="" style="width:18px; vertical-align:middle;">
+                    <!--活动倒计时 start-->
+                    活动剩余：<span id="countdown"></span>
+                    <!--活动倒计时 end-->
+                </p>
+            </div>
+        </div>
+        <input type="hidden" id="endtime" value='{#$Act.end_date|date_format:"%Y/%m/%d %H:%M:%S"#}'>
+    </div>
+    <!--投票简介 end-->
+    <div class="bord"></div>
+
+    <!--搜索商家描述 start-->
+    <div class="vote_search clearfloat pl10 pr10">
+        <input class="search_text bw pl10 fl br3 bor" type="search" placeholder="请输入店铺名称或店铺编号">
+        <a class="search_btn f14 cw fr bty ml10 tc br3" href="javascript:void(0);" onclick="ajax_list(1,1)">搜索</a>
+    </div>
+    <!--搜索商家描述 end-->
+    <div class="bord"></div>
+
+    <!--投票分页 start-->
+    <div class="vote_tab clearfloat pl10 pr10">
+        <a class="f14 cg bw bor tc br3 ml10 mr10 fl" href="{#$url['prize']#}">规则/奖品</a>
+        <a class="f14 cg bw bor tc br3 ml10 mr10 fl" href="{#$url['ranking']#}">投票排名</a>
+        <a class="f14 cg bw bor tc br3 ml10 mr10 fl" href="{#$url['sign']#}">我要报名</a>
+    </div>
+    <!--投票分页 end-->
+    <div class="bord"></div>
+
+    <!--投票内容 start-->
+    <div class="vote_content tc pr">
+        <ul class="tab clearfloat ma bor" id="title">
+            <li class="fl w50">
+                <a class="f14 active" href="javascript:void(0);" onclick="ajax_list(1,2)" data-index="2">人气排序</a>
+            </li>
+            <li class="fl w50">
+                <a class="f14" href="javascript:void(0);" onclick="ajax_list(1,3)" data-index="3">最新参与</a>
+            </li>
+        </ul>
+        <div class="bord"></div>
+
+        <ul class="wall clearfloat" id="list" data-c="{#$c#}"></ul>
+        <div  id="nomore" class="mc tc f14 cg" style="line-height: 30px;margin-top: 10px;"></div>
+    </div>
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <!--投票内容 end-->
+    <div class="bord"></div>
+
+    <!--底部导航 start-->
+    {#include file='../front/public.footernew.html'#}
+    <!--底部导航 end-->
+</div>
+</body>
+<script type="text/javascript">
+    //限制字符个数
+    $(".shop_name").each(function(){
+        var maxwidth=12;
+        if($(this).text().length>maxwidth){
+            $(this).text($(this).text().substring(0,maxwidth));
+            $(this).html($(this).html()+"...");
+        }
+    });
+    $(".location p").each(function(){
+        var maxwidth=6;
+        if($(this).text().length>maxwidth){
+            $(this).text($(this).text().substring(0,maxwidth));
+            $(this).html($(this).html()+"...");
+        }
+    });
+    //    页面tab切换
+    $(".vote_content ul li a").click(function(){
+        $(this).addClass("active");
+        $(this).parent("li").siblings("li").children("a").removeClass("active");
+    });
+    //    搜索跳转
+    $("#go_search").click(function(){
+        $("body").scrollTop(0);
+        $("#main").css("display","none");
+        $("#search_page").css("display","block");
+    });
+    $("#back_main").click(function(){
+        $("#search_page").css("display","none");
+        $("#search_page .search_text").val("");
+        $("#main").css("display","block");
+    });
+</script>
+<!-- Swiper JS -->
+<script src="/style/js_two/swiper.min.js"></script>
+<!-- Initialize Swiper -->
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        autoplay: 3000,
+        pagination: '.swiper-pagination',
+        paginationClickable: true
+    });
+</script>
+<!--倒计时-->
+<script src="/style/js_two/jquery.countdown.js"></script>
+<script>
+    $(function(){
+        var note = $('#note');
+        // Notice the *1000 at the end - time must be in milliseconds
+//        var endtime = new Date("2017/11/1 20:10:10");
+        var etime=$('#endtime').val();
+        var endtime = new Date(etime);
+        var nowtime = new Date();
+        var magnitude = endtime - nowtime;
+        ts = (new Date()).getTime() +magnitude;
+        //console.log(ts);
+        $('#countdown').countdown({
+            timestamp	: ts,
+            callback	: function(days, hours, minutes, seconds){
+                //console.log(days);
+                var message = "";
+                message += "距离活动结束时间";
+                note.html(message);
+            }
+        });
+        $('.countDays').append('天');
+        $('.countHours').append('时');
+        $('.countMinutes').append('分');
+        $('.countSeconds').append('秒');
+    });
+</script>
+<!--倒计时-->
+<script src="/style/js_two/jaliswall.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $('.wall').jaliswall({ item: '.article' });
+    });
+
+
+    function vodesign(){
+        var url='index.php?a=vodesign&c=activity';
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: 'json',
+            data: {},
+        })
+        .done(function (o) {
+            if (o.isok == 'true') {
+                $('#showLoading').hide();
+                Message.showNotify("" + o.data + "", 1000);
+                $('#goods_' + id).remove();
+            } else {
+                Message.showNotify("" + o.data + "", 1000);
+            }
+        })
+        .fail(function () {
+        })
+        .always(function () {
+            $('#showLoading').hide();
+        });
+    }
+
+
+    $(function(){
+        $('#list').activityajax();
+    })
+
+    $.fn.activityajax = function(url){
+        var PageSize=15,p=1;
+        var scrollHandler = function () {
+            var scrollT = $(document).scrollTop(); //滚动条滚动高度
+            var pageH = $(document).height();  //滚动条高度
+            var winH= $(window).height(); //页面可视区域高度
+            var aa = (pageH-winH-scrollT)/winH;
+            if(aa<=0.001){
+                if(p>=1){
+                    p++;
+                }
+                ajax_list(p,0);
+            }
+        }
+        $(window).scroll(scrollHandler);//执行滚动
+        ajax_list(1,0)//默认加载一页
+    }
+// p:页码
+// err:   1 搜索; 2人气  ； 3 最新（表示点击过来的）
+
+    function ajax_list(p,err) {
+        var title=0,id=$('input[name="id"]').val(),c=$('#list').data('c');
+        if(err==1||err==2||err==3){
+            $('#list li').remove();
+        }
+        var search=$('input[type="search"]').val();
+        $('#title li a').each(function () {//3最新参与和2人气排序
+            if( $(this).hasClass('active')){
+              title =$(this).data('index');
+            }
+        });
+
+        var url='index.php?a=vodelist_ajax&c='+c;
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: 'json',
+            data: {title:title,id:id,p:p,search:search},
+        })
+        .done(function (o) {
+            if (o.isok == 'true') {
+                insertListDiv(o.data,o.shop_url);
+            } else {
+                $('#nomre').html("你查询的数据不存在");
+//                Message.showNotify("你查询的数据不存在", 1000);
+            }
+        })
+        .fail(function () {
+        })
+        .always(function () {
+            $('#showLoading').hide();
+        });
+    }
+    //生成数据html,append到div中
+    function insertListDiv(list,shop_url) {
+        var $mainDiv = $("#list");
+        var html = '';
+        for (var i = 0; i< list.length; i++) {
+            url = '\''+shop_url+list[i].shop_id+'\'';
+            html += '<li class="article pr bw" style="width: 45%;float: left;margin:0 1px 4% 0;padding:1%;margin-right: 8px;">';
+                html += '<a class="clearfloat" href="javascript:void(0);">';
+                    html += '<img src="/'+list[i].small+'" onclick="jump_url('+url+')" style="height: 100px;"/>';
+                    html += '<p class="f12 cb tl" style="text-align: center;">'+list[i].shop_name+'</p>';
+                    html += '<span class="f12 cb fl"  style="margin-left: 18px;line-height: 20px;">共投票：<span id="p_'+list[i].shop_id+'">'+list[i].praise_num+'</span> 票</span>';
+                    html += '<input class="fr cw by br3" type="button" value="投票" onclick="ajax_vote('+list[i].shop_id+')" />';
+                html += '</a>';
+            html += '</li>';
+        }
+        $mainDiv.append(html);
+    }
+    function ajax_vote(shop_id){//投票
+        var id=$('input[name="id"]').val(),c=$('#list').data('c');
+        var url='index.php?a=ajaxvote&c='+c;
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: 'json',
+            data: {shop_id:shop_id,id:id,},
+        })
+        .done(function (o) {
+            if (o.isok == 'true') {
+                Message.showNotify('投票成功', 1000);
+                var aa='#p_'+o.shop_id;
+                $(aa).html(o.num);//更新投票次数
+            } else {
+                if(o.data==1) {
+                    if (confirm("请登录后再投票(如果没有帐号请注册！),确认登录吗?")) {
+                        window.location.href = o.url;
+                    }
+                }else if(o.data==2){
+                    Message.showNotify('今天已经你对该商家投过票了，请选择其它或明天再来吧！', 2000);
+                }else if(o.data==4){
+                    Message.showNotify('投票失败！', 1000);
+                }
+            }
+        })
+        .fail(function () {
+        })
+        .always(function () {
+            $('#showLoading').hide();
+        });
+    }
+</script>
+<script type="text/javascript" src="/style/js/public.js"></script>
+</html>

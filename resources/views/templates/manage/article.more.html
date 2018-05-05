@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>文章列表</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green"})
+        });
+    </script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>文章管理</h3>
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>文章管理</li>
+            <li><strong>文章列表</strong></li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <p><a href="index.php?a=add&c=article" class="btn btn-primary">添加文章</a></p>
+
+    <div class="float-e-margins">
+        <div class="ibox-title"><b>文章列表</b>
+        </div>
+    </div>
+
+    <form method="post" action="" name="FORM" class="form-inline">
+        <div class="ibox-content">
+            <div class="table-responsive">
+                <table class="table table-hover m-b-none">
+                    <thead>
+                    <tr>
+                        <th width="50"><span onclick="CheckAll(document.FORM,'')">全选</span></th>
+                        <th width="60" align="cenrter">图片</th>
+                        <th width="50">序号</th>
+                        <th>文章名称</th>
+                        <th>文章编号</th>
+                        <th>分类</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {#foreach from=$list item=item#}
+                    <tr>
+                        <td><input type="checkbox" value="{#$item.id#}" name="goodsID[]" class="i-checks"></td>
+                        <td>{#if $item.small#}<img src="/{#$item.small#}">{#/if#}</td>
+                        <td><input type="text" value="{#$item.view_order#}" name="view_order[{#$item.id#}]"
+                                   class="form-control" style="width:60px"></td>
+                        <td>{#$item.name#}</td>
+                        <td>{#$item.number#}</td>
+                        <td>{#$item.cat_name#}</td>
+                        <td>{#if $item.goodsstatus eq 0#}上架{#else#}下架{#/if#}</td>
+                        <td><a href="index.php?a=edit&c=article&id={#$item.id#}&p={#$page#}">[编辑]</a> <a
+                                href="index.php?a=del&c=article&id={#$item.id#}&p={#$page#}" onclick="return delnav()">[删除]</a>
+                        </td>
+                    </tr>
+                    {#/foreach#}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="text-center m-t-sm">
+            {#$strPages#}
+        </div>
+
+        <div class="text-center m-t-sm">
+            <span>勾选操作</span> <input type="radio" value="sort" name="job" class="i-checks" checked>排序
+            <input type="radio" value="open" name="job" class="i-checks">批量上架
+            <input type="radio" value="close" name="job" class="i-checks">批量下架
+            <input type="radio" value="del" name="job" class="i-checks">批量删除
+        </div>
+        <div class="text-center m-t-sm">
+            <button type="submit" class="btn btn-primary" onclick="delnav()">提 交</button>
+        </div>
+    </form>
+</div>
+</div>
+<script type="text/javascript" language="JavaScript">
+    function delnav() {
+        return confirm("您确认进行此操作码？");
+    }
+</script>
+</body>
+</html>

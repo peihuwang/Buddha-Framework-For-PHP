@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>商品分类</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="style/js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+    </script>
+    <style type="text/css">
+    #Album>#buttonss{display: block; margin: 0; width: 80px; height: 80px; border: 2px solid #ccc; float: left; position: relative; overflow: hidden;}
+    #Album>#buttonss::after {content: '';position: absolute;height: 2px;background: #ccc;left: 5px;right: 5px;top: 38px;}
+    #Album>#buttonss::before {content: '';position: absolute;width: 2px;background: #ccc;top: 5px;bottom: 5px;left: 38px;}
+    #Album>.photo{display: block;width: 80px;height: 80px;overflow: hidden;float: left;margin: 0 5px 2px; border: 2px solid #ccc;text-align: center;line-height: 80px;position: relative;}
+    #Album>.photo>input[type="file"]{font-size: 55px;position: absolute;left: 0;top: 0;opacity: 0;}
+    #Album>.photo>span {display: block;position: absolute;background: rgba(0,0,0,.5);border-radius: 50%;width: 20px;height: 20px;    color: #fff;line-height: 20px;text-align: center;}
+    </style>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>商城设置</h3><ol class="breadcrumb"><li>当前位置</li><li>商城设置</li><li> <strong>编辑分类</strong></li></ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <p><a href="index.php?a=cat&c=goods" class="btn btn-primary">返回上一步</a></p>
+    <form method="post" action="" onsubmit="return checkpost(document.checkform);" name="checkform" enctype="multipart/form-data">
+    <div class="ibox-content ">
+        <div class="table-responsive">
+            <table class="table table-hover m-b-none">
+                <tr>
+                    <td width="120">上级分类</td>
+                    <td width="300"><select name="sub" id="shop_sub" class="form-control" onchange="vchange();">
+                        <option value="0">顶级分类</option>
+                        {#$shopoption#}
+                    </select></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>分类名称 <span class="text-danger">*</span></td>
+                    <td><input type="text" value="{#$shopcat.cat_name#}" name="cat_name" id="cat_name" class="form-control"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>分类排序</td>
+                    <td><input type="text" value="{#$shopcat.view_order#}" name="sort" class="form-control"></td>
+                    <td></td>
+                </tr>
+                <tr id="imgs" style="display: none;">
+                    <td>代表图片</td>
+                    <td>
+                        <div id="Album">
+                            {#if $shopcat.class_img#}
+                            <div class="photo" id="photo" onclick="delimg({#$shopcat.id#})">
+                                <span>X</span>
+                                <img src="/{#$shopcat.class_img#}" width="80" height="80" alt="">
+                            </div>
+                            {#/if#}
+                            <div id="buttonss"></div>
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>是否显示</td>
+                    <td><input type="checkbox" value="0" name="ifopen" class="i-checks" {#if $shopcat.ifopen eq 0#}checked{#/if#}></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+        <div class="text-center m-t-sm">
+            <button type="submit" class="btn btn-primary">提 交</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    function delimg(id){
+        $('#showLoading').show();
+        $.ajax({
+            url: 'index.php?a=delimage&c=goods',
+            type: 'POST',
+            dataType: 'json',
+            data:{id:id},
+        })
+        .done(function(o) {
+            if(o.isok==1){
+                $('#showLoading').hide();
+                alert(o.data);
+                $('#photo').remove();
+            }else{
+                alert(o.data);
+            }
+        })
+        .fail(function() {
+        })
+        .always(function() {
+            $('#showLoading').hide();
+        });
+    }
+</script>
+<script type="application/javascript">
+    var classa = $("#shop_sub option:selected").val();
+    if(classa != 0){
+        $('#imgs').css('display','table-row');
+    }else{
+        $('#imgs').css('display','none');
+    }
+
+    function checkpost(obj){
+        if($("#cat_name").val()==''){
+            alert('名称不能为空!')
+            $('#cat_name').focus();
+            return false
+        }
+        if($("#unit").val()==''){
+            alert('计量单位不能为空!')
+            $('#unit').focus();
+            return false
+        }
+    }
+    function vchange(){
+        var classa = $("#shop_sub option:selected").val();
+        if(classa != 0){
+            $('#imgs').css('display','table-row');
+        }else{
+            $('#imgs').css('display','none');
+        }
+    }
+    /*
+    *  #button   上传图片按钮
+    */
+    //var Num=0;
+    function getElementsByClassName(n) {//获取class个数的方法
+        var classElements = [],allElements = document.getElementsByTagName('div');//所有li
+        for (var i=0; i< allElements.length; i++ ){
+            if (allElements[i].className == n ) {
+               classElements[classElements.length] = allElements[i];
+            }
+        }
+        //alert(classElements.length);
+        return classElements.length;
+    }
+
+    var Num = getElementsByClassName("photo");
+    $(function(){
+        $('#buttonss').on('click',function(){//点击一次就将Num的值加一次
+            Num++;
+            if(Num>1){
+                Num=6;
+                Message.showMessage("图片只能上传一张");
+                return false;
+            }
+            //before    在 当点击 #button 按钮时在 #button 按钮 的前面加入 加入代码
+            //before 在每个匹配的元素之前插入内容。
+            $(this).before('<div class="photo"><div class="img">点击上传</div><input type="file" name="Image[]" accept="image/gif,image/jpeg,image/png,image/jpg"></div>');
+            upload();
+
+        });
+        $(document).on('click', '.del_temp', function(){
+            $(this).parent('div').parent('div').remove();
+            Num--;
+        });
+    })
+
+    function upload(){
+        $('input[type="file"]').on("change",function() {
+            var file = this.files[0];
+            if(!/image\/\w+/.test(file.type)){
+                Message.showMessage("请确保文件为图像类型");
+                return false;
+            }
+            var size=this.files[0].size;
+            if(size>1024*1024*5){
+                Message.showMessage("图片不能大于5M");
+                return false;
+            }
+            var aa= $(this).siblings('.img');
+            srcs = new FileReader();
+            srcs.readAsDataURL(file);//返回Base64 编码
+            srcs.onload = function(e) { // console.log(file);
+            aa.html('<span class="del_temp" style="display:block;position:absolute;background:rgba(0,0,0,.5); border-radius:50%; width:20px; height:20px; color:#fff; line-height:20px; text-align: center;z-index:999;">X</span><img style="width:80px;height: 80px;" src="' + srcs.result+ '"/>');
+               //$(".photo").find("input").remove();
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

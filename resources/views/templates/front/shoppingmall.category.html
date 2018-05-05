@@ -1,0 +1,61 @@
+{#include file='public.headernew.html'#}
+<link rel="stylesheet" type="text/css" href="style/css/style.css">
+<link rel="stylesheet" type="text/css" href="/style/css/font_403143_nbpgsnnn79tqpvi.css">
+<link rel="stylesheet" type="text/css" href="style/css/swiper-3.4.2.min.css">
+<script src="style/js/jquery-1.12.1.min.js"></script>
+<script src="style/js/swiper-3.4.2.jquery.min.js"></script>
+<script src="style/js/jquery.lazyload.min.js"></script>
+</head>
+
+<body>
+<div class="width100 hidden" id="f_box">
+	<!--top-->
+    <div class="top w by pf" style="display: block; clear: both;margin-bottom: 3px;">
+        <a class="back pa" href="index.php?a=index&c=shoppingmall">
+            <img src="/style/img_two/back.png"/>
+        </a>
+        <p class="f18 cw w tc"><span id="title">分 类</span></p>
+    </div>
+	<!--center-->
+    <div class="width100 hidden fl_cont" style="margin-top: 45px;">
+    	<!--left-->
+        <div class="left bj_fff" style="width:30%;height:100%;overflow:scroll;overflow-X:hidden;background:#ececec;">
+        	{#foreach from=$category item=item#}
+        	<div class="nav_left"><a href="#{#$item.id#}" style="color:#333;">{#$item.cat_name#}</a></div>
+        	{#/foreach#}
+        </div>
+        <!--right-->
+        <div class="right bj_fff" style="width:70%;height:100%;overflow:scroll;overflow-X:hidden;">
+        	<div id="plea_ec" class="width100 hidden">
+                <!--一条-->
+                <div class="nav_right">
+                	{#foreach from=$category item=item#}
+                    <h3><a name="{#$item.id#}">{#$item.cat_name#}</a></h3>
+                    <div class="on_in">
+                    	{#foreach from=$item.sub item=items#}
+                        <a href="index.php?a=lists&c=shoppingmall&act=list&cid={#$items.id#}">
+                        	<img src="/{#$items.class_img#}">
+	                        <span>{#$items.cat_name#}<span>
+	                    </a>
+                        {#/foreach#}
+                    </div>
+                    <div style="border-bottom: 1px solid #ccc;"></div>
+                    {#/foreach#}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--bottom-->
+    {#include file='public.bottomnav.html'#}
+</div>
+<script>
+$("html").css({height:100+'%'});
+$("body").css({height:100+'%'});
+var ht=document.documentElement.clientHeight-98+'px';
+$(".fl_cont").css({height:ht});
+$(".nav_left").click(function(){
+	$(this).addClass("on").siblings(".nav_left").removeClass("on")
+	});
+</script>
+</body>
+</html>

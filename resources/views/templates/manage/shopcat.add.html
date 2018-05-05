@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>添加分类</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+    </script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>店铺设置</h3><ol class="breadcrumb"><li>当前位置</li><li>店铺设置</li><li> <strong>添加分类</strong></li></ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <p><a href="index.php?a=more&c=shopcat" class="btn btn-primary">返回上一步</a></p>
+    <form method="post" action="" onsubmit="return checkpost(document.checkform);" name="checkform">
+    <div class="ibox-content ">
+        <div class="table-responsive">
+            <table class="table table-hover m-b-none">
+                <tr>
+                    <td width="120">上级分类</td>
+                    <td width="300"><select name="sub" id="shop_sub" class="form-control">
+                        <option value="0">顶级分类</option>
+                        {#$shopoption#}
+                    </select></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td>分类名称</td>
+                    <td><input type="text" value="" name="cat_name" id="cat_name" class="form-control"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>分类排序</td>
+                    <td><input type="text" value="" name="sort" class="form-control"></td>
+                    <td></td>
+                </tr>
+
+                <tr id="ad_local">
+                    <td width="120">手机本地信息<br/>对应的广告位</td>
+                    <td width="300"><select name="ad_id" class="form-control">
+                        <option value="0">请选择广告位</option>
+                        {#foreach from=$mobile_local item=item#}
+                            <option value="{#$item.id#}" data-sub="{#$item.sub#}">{#$item.name#}</option>
+                        {#/foreach#}
+                        </select><input type="hidden" name="ad_name"/></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td>是否显示</td>
+                    <td><input type="checkbox" value="0" name="ifopen" class="i-checks" checked></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+        <div class="text-center m-t-sm">
+            <button type="submit" class="btn btn-primary">提 交</button>
+        </div>
+        </form>
+</div>
+<script type="application/javascript">
+    $("select[name='sub']").change(function(){
+        if($(this).val()==0){
+            $('#ad_local').css({'display':'table-row'});
+        }else{
+            $('#ad_local').css({'display':'none'});
+        }
+    });
+
+   $("select[name='ad_id']").change(function(){
+       var id=  $("select[name='ad_id'] option:selected").val();
+       var sub=  $("select[name='sub'] option:selected").val();
+       if(id==0&&sub==0){
+           alert('请选择广告位！');
+            return false;
+       }
+       ajax_list(id);
+   });
+
+
+    function checkpost(obj){
+        var ok = true;
+        if($("#cat_name").val()==''){
+            alert('名称不能为空!');
+            $('#cat_name').focus();
+                ok = false;
+        }
+        var id= $("select[name='ad_id'] option:selected").val();
+        var sub=  $("select[name='sub'] option:selected").val();
+        if(id==0&&sub==0){
+            alert('请选择广告位!');
+            $("select[name='ad_id']").focus();
+            return false;
+        }else{
+            var sub=  $("select[name='sub'] option:selected").val();
+            if(sub==0){
+                var url='index.php?a=ajax_shopcat&c=shopcat';
+                $.ajax({
+                    type:'get',
+                    url:url,
+                    async: false,
+                    data:{id:id},
+                    dataType:'json',
+                    //cache:false,
+                    success:function(o){
+                        if(o>0){
+                            alert('该手机本地信息对应的广告位已经绑定了其它分类了，请选择其它广告位吧！');
+                            ok= false;
+                        }
+                    }
+                })
+            }
+        }
+        if(ok==true){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    function ajax_list(id){
+        var url='index.php?a=ajax_shopcat&c=shopcat';
+        $.ajax({
+            type:'get',
+            url:url,
+            data:{id:id},
+            dataType:'json',
+            //cache:false,
+            success:function(o){
+                if(o==0){
+                    $("input[name='ad_name']").val($("select[name='ad_id'] option:selected").text());
+                }else{
+                    alert('该手机本地信息对应的广告位已经绑定了其它分类了，请选择其它广告位吧！');
+                    return false;
+                }
+                return false;
+            },
+            beforeSend:function(){},
+            error: function(){}
+        })
+    }
+
+</script>
+</body>
+</html>

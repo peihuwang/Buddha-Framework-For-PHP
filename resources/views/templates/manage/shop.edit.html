@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>店铺审核</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+    </script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>店铺管理</h3><ol class="breadcrumb"><li>当前位置</li><li>店铺管理</li><li> <strong>店铺审核</strong></li></ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <p><a href="index.php?a=more&c=shop" class="btn btn-primary">返回上一步</a></p>
+    <div class="float-e-margins">
+        <div class="ibox-title"><b>店铺信息</b>
+        </div>
+    </div>
+    <div class="ibox-content ">
+        <div class="table-responsive">
+            <table class="table table-hover m-b-none">
+                <tr>
+                    <td width="120">店铺名称</td>
+                    <td>{#$shopinfo.name#}</td>
+                </tr>
+                <tr>
+                    <td width="120">认证服务</td>
+                    <td>{#if $shopinfo.is_verify eq 0#}未认证{#else#}已认证{#/if#}</td>
+                </tr>
+                <tr>
+                    <td width="120">店铺分类</td>
+                    <td>{#$shopinfo.cat_name#}</td>
+                </tr>
+                <tr>
+                    <td width="120">开业时间</td>
+                    <td>{#$shopinfo.createtimestr#}</td>
+                </tr>
+                <tr>
+                    <td width="120">联系人</td>
+                    <td>{#$shopinfo.realname#}</td>
+                </tr>
+                <tr>
+                    <td width="120">联系电话</td>
+                    <td>{#$shopinfo.mobile#}</td>
+                </tr>
+                <tr>
+                    <td width="120">联系电话</td>
+                    <td>{#$shopinfo.tel#}</td>
+                </tr>
+                <tr>
+                    <td width="120">省市区</td>
+                    <td>{#$shopinfo.region#}</td>
+                </tr>
+                <tr>
+                    <td width="120">详细地址</td>
+                    <td>{#$shopinfo.specticloc#}</td>
+                </tr>
+                <tr>
+                    <td width="120">店铺性质</td>
+                    <td>{#$getNatureOption#}</td>
+                </tr>
+                <tr>
+                    <td width="120">物业名称</td>
+                    <td>{#$shopinfo.property#}</td>
+                </tr>
+                <tr>
+                <td width="120">营业时间</td>
+                <td>{#$shopinfo.bushour#}</td>
+            </tr>
+                <tr>
+                <td width="120">送货范围</td>
+                <td>{#$shopinfo.myrange#}</td>
+            </tr>
+                <tr>
+                <td width="120">店铺介绍</td>
+                <td>{#$shopinfo.brief#}</td>
+            </tr>
+                <tr>
+                <td width="120">店铺详情</td>
+                <td>{#$shopinfo.shopdesc#}</td>
+            </tr>
+                <tr>
+                    <td width="120">店招</td>
+                    <td>{#if $shopinfo.small#}<img src="/{#$shopinfo.small#}" height="150">{#/if#}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="float-e-margins m-t-sm">
+        <div class="ibox-title"><b>店铺审核</b>
+        </div>
+    </div>
+    <form  method="post" action="" onsubmit="return checkpost(document.checkform);"  name="checkform" >
+        <div class="ibox-content ">
+            <div class="table-responsive">
+                <table class="table table-hover m-b-none">
+                    {#if $referral neq '0'#}
+                    <tr>
+                        <td width="120">合伙人</td>
+                        <td width="300">{#$referral.realname#}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>提成比例</td>
+                        <td><input type="text" name="partnerrate"  class="form-control" value="{#if $shopinfo.partnerrate#}{#$shopinfo.partnerrate#}{#else#}0{#/if#}"></td>
+                        <td></td>
+                    </tr>
+                    {#/if#}
+                    <tr>
+                        <td width="120">审核</td>
+                        <td width="300"><input type="radio" value="1" name="is_sure" class="i-checks" {#if $shopinfo.is_sure eq 1#}checked{#/if#}>审核通过
+                            <input type="radio" value="4" name="is_sure" class="i-checks" {#if $shopinfo.is_sure eq 4 or $shopinfo.is_sure eq 0#} checked{#/if#}>审核不通过</td>
+                        <td></td>
+                    </tr>
+                    <tr id="remarks" {#if $shopinfo.is_sure eq 1#}style="display: none"{#/if#}>
+                        <td>备注</td>
+                        <td><textarea name="remarks" id="remarksval" class="form-control" style="height: 100px;">{#$shopinfo.remarks#}</textarea></td>
+                        <td></td>
+                    </tr>
+                    </table>
+                </div>
+            </div>
+       <div class="text-center m-t-sm"><button type="submit" class="btn btn-primary">审 核</button></div>
+    </form>
+    </div>
+<script>
+    $(function(){
+    $('.iCheck-helper').click(function(){
+        var is_sure=$(this).siblings('input[type="radio"]:checked ').val();
+       if(is_sure!=4){
+         $('#remarks').hide()
+       }else {
+           $('#remarks').show()
+       }
+    })
+    });
+function checkpost(){
+   var is_sure=$('.iradio_square-green').find('input[type="radio"]:checked ').val(),
+           remarksval=$('#remarksval').val();
+    if(is_sure!=1){
+      if(remarksval==''){
+          alert('填写不通过原因！')
+          return false;
+      }
+    }
+}
+</script>
+</body>
+</html>

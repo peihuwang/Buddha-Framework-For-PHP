@@ -1,0 +1,285 @@
+{#include file='public.headernew.html'#}
+<link rel="stylesheet" type="text/css" href="style/css/style.css">
+<link rel="stylesheet" type="text/css" href="/style/css/font_403143_nbpgsnnn79tqpvi.css">
+<link rel="stylesheet" type="text/css" href="style/css/swiper-3.4.2.min.css">
+<script src="style/js/jquery-1.12.1.min.js"></script>
+<script src="style/js/swiper-3.4.2.jquery.min.js"></script>
+<script src="/style/js/shoppingmall.js"></script>
+<style type="text/css">
+  input::-webkit-input-placeholder {
+         /* placeholder字体大小  */
+         font-size: 10px;
+     }
+</style>
+</head>
+<!--该盒子一直包括到店长推荐-->
+<script>
+$("body").css({background:"#f4f4f4"})
+</script>
+<!--头部 start-->
+<div style="position: absolute;">
+    <div class="top w by pf" style="display: block; clear: both;margin-bottom: 3px;">
+        <a class="back pa" href="index.php?a=index&c=index">
+            <img src="/style/img_two/back.png"/>
+        </a>
+        <p class="f18 cw w tc"><span id="title">本地商城</span></p>
+    </div>
+    <!--头部 end-->
+
+    <!--分类 start-->
+    <div class="wrapper" id="retr" style="top:44px;">
+        <div class="scroller w bw brb">
+            <ul class="tab clearfloat" id="cat_id">
+                {#foreach from=$goodscatinfo item=item key=key#}
+                    <li class="f16 cb fl tc {#if $key eq 0#}cur{#else#}{#/if#} " data-id="{#$item.id#}" data-index="{#$key+1#}">
+                        <p onclick="Headerclick({#$item.id#},{#$key+1#})">{#$item.cat_name#}</p>
+                    </li>
+                {#/foreach#}
+            </ul>
+         </div>
+        <a style="position:fixed; right:0; top:44px;" href="index.php?a=category&c=shoppingmall" ><img style="height:48px;" src="/style/img_two/classify_new.png"></a>
+    </div>
+</div>
+<div class="width100 hidden bj_fff" style="margin-top: 95px;">
+<!--banner-->
+<div class="width100 hidden swiper-container" id="swiper1" style="height:163px;display: block;">
+    <div id="box" class="swiper-wrapper">
+        <img src="style/image/sp3.jpg" class="swiper-slide">
+        <img src="style/image/sp4.jpg" class="swiper-slide">
+        <img src="style/image/sp2.jpg" class="swiper-slide">
+    </div>
+    <div class="swiper-pagination"></div>
+</div>
+<script>
+$(function(){
+$("#box img").css({opacity:1})
+var mySwiper = new Swiper('#swiper1', {
+    pagination:'.swiper-pagination',
+    autoplay : 2000,
+    })
+})
+</script>
+<!--搜索框-->
+<div class="width100 hidden bj_fff" style="height:40px;">
+    <div class="center width96 border font14 c_66 hidden" style="height:30px;margin-top:5px;border-radius:15px;line-height:30px;text-indent:10px;">
+        <input id="keyword" type="text" name="keyword" value="" placeholder="请输入要搜索的关键字" style="width: 70%;font-size: 12px;">
+        <img src="style/images/fdj.jpg" width="20" height="20" class="right" style="margin-top:5px;margin-right:10px;" onClick="dw()">
+    </div>
+</div>
+<script>
+function dw(){
+    var keyword = $('#keyword').val();
+    var url=window.location.href+'&act=list' +'&keyword=' + keyword;
+    $('#new_xz').shoppingmalllist(url);
+}
+</script>
+<!--分类-->
+<div class="width100 hidden" style="padding-top:4px;padding-bottom:4px;">
+    <div class="width96 center" id="fenlei">
+        <a href="index.php?a=lists&c=shoppingmall&act=list&type=self">
+            <b><img src="style/images/fenlei.jpg"></b>
+            <p class="tcenter font12 c_33" style="margin-top:4px">自营</p>
+        </a>
+        <a href="index.php?a=lists&c=shoppingmall&act=list&type=new">
+            <b><img src="style/images/fenlei.jpg"></b>
+            <p class="tcenter font12 c_33" style="margin-top:4px">新品</p>
+        </a>
+        <a href="index.php?a=lists&c=shoppingmall&act=list&type=integral">
+            <b><img src="style/images/fenlei.jpg"></b>
+            <p class="tcenter font12 c_33" style="margin-top:4px">积分购</p>
+        </a>
+        <a href="javascript:void(0)" onclick="tangkuang();">
+            <b><img src="style/images/fenlei.jpg"></b>
+            <p class="tcenter font12 c_33" style="margin-top:4px">收藏</p>
+        </a>
+    </div>
+</div>
+<!--标题-->
+<div class="width100 tcenter c_33 font16" style="margin-top:16px;">商城推荐</div>
+<!--推荐块-->
+<div class="width100 hidden" style="margin-top:12px;padding-bottom:8px;" id="box_show">
+    <!--按照最多3个的进行布局-->
+    <div class="width96 center hidden">
+
+        <a href="javascript:void(0)" class="ts">
+            <img src="style/image/sp1.jpg">
+        </a>
+        <a href="javascript:void(0)" class="ts">
+            <img src="style/image/sp2.jpg">
+        </a>
+        <a href="javascript:void(0)" class="ts">
+            <img src="style/image/sp5.jpg">
+        </a>
+    </div>
+    <!--按照最多2个的进行布局-->
+    <!--按照最多1个的进行布局-->
+    <script>
+    var a=$(".ts").length;
+    if(a===0){
+        $("#box_show").css({display:"none"})
+        }else if(a===1){
+            /*一张的时候图片要宽的*/
+            $("head").eq(0).append("<link rel=\"stylesheet\" type=\"text/css\" href=\"style/css/one.css\">")
+        }else if(a===2){
+            /*二张的时候图片要宽的*/
+            $("head").eq(0).append("<link rel=\"stylesheet\" type=\"text/css\" href=\"style/css/two.css\">")
+        }else if(a===3){
+            /*三张的时候图片要2个宽的,一个方的*/
+            $("head").eq(0).append("<link rel=\"stylesheet\" type=\"text/css\" href=\"style/css/three.css\">")
+        }else{
+            alert("最多支持三个")
+        }
+    </script>
+</div>
+</div>
+<!--大盒子结束-->
+<!--标题-->
+<div class="width100 tcenter c_33 font16" style="margin-top:16px;">人气商品</div>
+<div class="width100 hidden" style="margin-top:12px;">
+    <div class="width96 center hidden" style="overflow:scroll;overflow-Y:hidden;">
+        <div class="hidden" id="hot_sp">
+            {#foreach from=$sales item=item key=key#}
+            <a href="/index.php?a=detil&c=shoppingmall&id={#$item.id#}" class="bj_fff">
+                <img src="{#$item.goods_thumb#}">
+                <p class="yihang block center font12 c33 width96">{#$item.goods_name#}</p>
+                <p class="yihang block center font12 c33 width96 hidden">
+                    <span class="left c_33">
+                        商城价:<font class="red">{#$item.market_price#}</font>
+                        <font class="font12 red">元</font>
+                    </span>
+                </p>
+            </a>
+            {#/foreach#}
+        </div>
+    </div>
+</div>
+<script>
+var m=$("#hot_sp a").length;
+$("#hot_sp").css({width:m*(188+16)-16+'px'})
+</script>
+<!--标题-->
+<div class="width100 tcenter c_33 font16" style="margin-top:16px;">新品鲜知</div>
+<div class="width100 hidden" style="margin-top:12px;margin-bottom:60px;">
+    <div class="width96 center hidden" id="new_xz">
+    </div>
+    <div class="loadtip w tc cg f16" id="more"></div>
+    <div class="swiper-scrollbar03"></div>
+</div>
+{#include file='public.bottomnav.html'#}
+<!--列表 start-->
+<div class="swiper-container03" >
+    <div class="swiper-wrapper swiper-wrapper03">
+        <div class="swiper-slide swiper-slide03 main_list w">
+            <div class="swiper-container01" >
+                <div class="swiper-wrapper swiper-wrapper01">
+                    <div class="swiper-slide swiper-slide01 w"  id="content_list"></div>
+                </div>
+                <div class="swiper-scrollbar01"></div>
+            </div>
+        </div>
+    </div>
+    <div class="loadtip w tc cg f16" id="more"></div>
+    <div class="swiper-scrollbar03"></div>
+</div>
+<!--列表 end-->
+<div id="classify" class="w pf bw" style="top:0; left:0; z-index:10000; display:none;">
+    <!--头部 start-->
+    <div class="top w by pf">
+        <a class="back pa" href="javascript:void(0);" onclick="hideClassify();">
+            <img src="/style/img_two/back.png"/>
+        </a>
+        <p class="f18 cw w tc">本地商城类目</p>
+    </div>
+    <!--头部 end-->
+
+    <!--类目 start-->
+    <div class="classify_list clearfloat">
+        {#foreach from=$goodscatinfo item=item key=key#}
+        <a class="fl w25 tc" href="javascript:void(0);" data-id="{#$item.id#}" data-index="{#$key+1#}" onclick="Headerclick_1({#$item.id#},{#$key+1#})">
+            <p class="f14 cb br3 b">{#$item.cat_name#}</p></a>
+        {#/foreach#}
+    </div>
+    <!--类目 end-->
+</div>
+<script type="text/javascript">
+    $(function(){
+        var url=window.location.href+'&act=list';
+        $('#new_xz').shoppingmalllist(url);
+    })
+</script>
+<script type="text/javascript">
+    //限制字符个数
+    $(".shop_name").each(function(){
+        var maxwidth=12;
+        if($(this).text().length>maxwidth){
+            $(this).text($(this).text().substring(0,maxwidth));
+            $(this).html($(this).html()+"...");
+        }
+    });
+    $(".location p").each(function(){
+        var maxwidth=6;
+        if($(this).text().length>maxwidth){
+            $(this).text($(this).text().substring(0,maxwidth));
+            $(this).html($(this).html()+"...");
+        }
+    });
+    //    页面tab切换
+    $(".tab_list ul li span").click(function(){
+        $(this).addClass("active");
+        $(this).parent("li").siblings("li").children("span").removeClass("active");
+    });
+    //    显示分类菜单
+    function showClassify(){
+        $("#classify").show();
+    }
+    //    隐藏分类菜单
+    function hideClassify(){
+        $("#classify").hide();
+    }
+    //    在分类菜单里面选中相应分类
+    $("#classify .classify_list a").click(function(){
+        hideClassify();
+    });
+
+</script>
+<!-- Swiper JS -->
+<script>
+   function tangkuang(){
+        Message.showMessage('功能正在审核中，敬请期待！');
+    }
+</script>
+<!--左右滚动导航栏-->
+<script type="text/javascript" src="/style/js_two/iscroll.js"></script>
+<script type="text/javascript" src="/style/js_two/navbarscroll.js"></script>
+<script type="text/javascript">
+    $(function(){
+        //demo示例一到四 通过lass调取，一句可以搞定，用于页面中可能有多个导航的情况
+        $('.wrapper').navbarscroll();
+    });
+
+    $(function() {
+        var $this = $(".scroller");
+        var scrollTimer;
+        $this.hover(function() {
+            clearInterval(scrollTimer);
+        }, function() {
+            scrollTimer = setInterval(function() {
+                scrollTab($this);
+            }, 2000);
+        }).trigger("touchleave");
+
+        function scrollTab(obj) {
+            var $self = obj.find("ul");
+            var lineWidth = $self.find("li:first").width();
+            $self.animate({
+                "marginLeft": -lineWidth + "px"
+            }, 600, function() {
+                $self.css({
+                    marginLeft: 0
+                }).find("li:first").appendTo($self);
+            })
+        }
+    })
+</script>
+</body>
+</html>

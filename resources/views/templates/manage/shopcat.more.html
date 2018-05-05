@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>店铺分类</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+    </script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>店铺设置</h3><ol class="breadcrumb"><li>当前位置</li><li>店铺设置</li><li><strong>添加分类</strong></li></ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <p><a href="index.php?a=add&c=shopcat" class="btn btn-primary">添加分类</a></p>
+    <form method="post" action="" name="FORM" class="form-inline">
+    <div class="ibox-content">
+        <div class="table-responsive" style="width: 1000px;margin: 0 auto;">
+            <table class="table table-hover m-b-none" id="cat_tree">
+                <thead>
+                <tr>
+                    <th onclick="CheckAll(document.FORM,'')" width="60">全选</th>
+                    <th>[顺序]菜单名称</th>
+                    <th width="100">序号</th>
+                    <th width="150">广告位</th>
+                    <th width="100">是否显示</th>
+                    <th width="160">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {#$getcatTable#}
+                </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="text-center m-t-sm">
+            <button type="button" class="btn btn-primary" onclick="CheckAll(document.FORM,'')">全 选</button>
+            <button type="submit" class="btn btn-primary">提 交</button>
+        </div>
+    </form>
+    </div>
+<script type="text/javascript" language="JavaScript">
+
+
+    function delnav(){
+        return confirm("确定要删除文章类别吗？");
+    }
+    function goods_cateopen(id){
+        try{
+            var o = $("#cat_tree [pid='"+id+"']");
+            var display='';
+            if (o == null) return;
+            if (o.css('display') == 'none') {
+                o.css('display','');
+                $('#bt_' + id).attr('class', 'fa fa-chevron-down');
+            } else {
+                o.css('display','none');
+                display='none';
+                $('#bt_' + id).attr('class','fa fa-chevron-up');
+            }
+            flode(o,display);
+        } catch(e){}
+    }
+    function flode(o,display){
+        if(o == null) return;
+        o.each(function(){
+            var cid = $(this).attr('cid');
+            var pid = $(this).attr('pid');
+            var sub = $("#cat_tree [pid='"+cid+"']");
+            sub.css('display',display);
+            flode(sub,display);
+        });
+    }
+</script>
+</body>
+</html>

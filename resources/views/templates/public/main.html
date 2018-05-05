@@ -1,0 +1,42 @@
+<div class="sidebar-help">
+    <div class="help-btn btn-question">
+        <div class="popover question">
+            <div class="arrow"></div>
+            <h3 class="popover-title">常见问题</h3>
+            <div class="content">
+                <ul>
+                    <li>· <a href="/home/index.php?a=index&c=tutorial&number=applyinvoice" target="_blank">如何申请开具发票</a></li>
+                    <li>· <a href="/home/index.php?a=index&c=tutorial&number=termsofservice" target="_blank">VeryCEO服务条款</a></li>
+                    <li>· <a href="/home/index.php?a=index&c=tutorial&number=privacyprotocol" target="_blank">VeryCEO隐私协议</a></li>
+                </ul>
+                <a class="right more" href="/home/index.php?a=helpcenter&c=home" target="_blank">查看更多></a>
+            </div>
+        </div>
+    </div>
+    <div class="help-btn btn-suggest">
+        <div class="popover suggest">
+            <div class="arrow"></div>
+            <div class="submit-ui">
+                <h3 class="popover-title">意见&建议</h3>
+                <div class="content">
+                    <form id="helper_form" data-ajax="" method="post" action="index.php?a=submit&c=feedback&email={#$UserInfo.email#}">
+                        <textarea placeholder="帮助我们优化VeryCEO   还有什么可以改善的呢?" name="Message"></textarea>
+                        <button class="right ui-btn submit">提交</button>
+                    </form>
+                </div>
+            </div>
+            <div class="confirm-ui text-center" style="display:none">
+                <h3 class="popover-title">感谢您的反馈</h3>
+                <div class="content">
+                    <button class="ui-btn confirm">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="help-btn btn-rechange" href="index.php?a=buy&c=credit"></a>
+</div>
+<div class="alert" data-scroll-spy="true"
+     style="display:none">
+    <div class="msg-display"></div>
+    <div class="close-btn">×</div>
+</div>

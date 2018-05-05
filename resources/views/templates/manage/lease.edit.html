@@ -1,0 +1,183 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>租赁审核</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+    </script>
+    {#$editorjs#}
+    {#$editorjstxt#}
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>租赁管理</h3><ol class="breadcrumb"><li>当前位置</li><li>租赁管理</li><li> <strong>租赁审核</strong></li></ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <p class="m-t-sm" id="goods_tabs">
+        <span class="btn btn-primary">基本信息</span>
+        <span class="btn btn-danger">租赁详情</span>
+        <span class="btn btn-danger">租赁图片</span>
+        <a href="index.php?a=more&c=lease" class="btn btn-danger">返回上一步</a></p>
+
+    <div id="goods_main">
+        <div class="goods_tab">
+        <div class="float-e-margins">
+            <div class="ibox-title"><b>基本信息</b></div>
+        </div>
+    <div class="ibox-content  ">
+        <div class="table-responsive">
+            <table class="table table-hover m-b-none">
+                <tr>
+                    <td width="120">租赁名称</td>
+                    <td>{#$lease.lease_name#}</td>
+                </tr>
+                <tr>
+                    <td width="120">供应分类</td>
+                    <td>{#$lease.cat_name#}</td>
+                </tr>
+                <tr>
+                    <td width="120">发布店铺</td>
+                    <td>{#$lease.shop_name#}</td>
+                </tr>
+                <tr>
+                    <td width="120">租金</td>
+                    <td>{#$lease.rent#}</td>
+                </tr>
+                <tr>
+                    <td width="120">有效时间</td>
+                    <td>{#$lease.lease_start_time|date_format:"%Y-%m-%d"#}至{#$lease.lease_end_time|date_format:"%Y-%m-%d"#}</td>
+                </tr>
+
+                <tr>
+                    <td width="120">关键词</td>
+                    <td>{#$lease.keywords#}</td>
+                </tr>
+                <tr>
+                    <td width="120">添加时间</td>
+                    <td>{#$lease.add_time|date_format:"%Y-%m-%d"#}</td>
+                </tr>
+                <tr>
+                    <td width="120">租赁描述</td>
+                    <td>{#$lease.lease_brief#}</td>
+                </tr>
+                <tr>
+                    <td width="120">租赁详情</td>
+                    <td>{#$lease.lease_desc#}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+        </div>
+        <div class=" goods_tab" style="display: none">
+            <div class="float-e-margins">
+                <div class="ibox-title"><b>租赁详情</b></div>
+            </div>
+          <div class="ibox-content">
+              <div class="table-responsive">
+                  <table class="table table-hover m-b-none">
+                      <tr>
+                          <td width="120">描述</td>
+                          <td width="300"><textarea class="form-control" style="height:100px">{#$lease.goods_brief#}</textarea></td>
+                          <td></td>
+                      </tr>
+                      <tr>
+                          <td>详情</td>
+                          <td colspan="2">{#$editor.content#}</td>
+                      </tr>
+                      </table>
+                  </div>
+          </div>
+        </div>
+        <div class=" goods_tab"  style="display: none">
+            <div class="float-e-margins">
+                <div class="ibox-title"><b>租赁图片</b></div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+
+                    <div class="col-sm-3 col-md-3 col-lg-2 text-center">
+                        <div class="img-thumbnail">
+                            <img border="0" src="/{#$lease.lease_thumb#}">
+                            </div>
+                        </div>
+
+                </div>
+
+            </div>
+        </div>
+        </div>
+    <div class="float-e-margins m-t-sm">
+        <div class="ibox-title"><b>租赁信息审核</b>
+        </div>
+    </div>
+    <form  method="post" action="" onsubmit="return checkpost(document.checkform);"  name="checkform" >
+        <div class="ibox-content ">
+            <div class="table-responsive">
+                <table class="table table-hover m-b-none">
+                    {#if $lease.is_sure eq 1#}
+                    <tr>
+                        <td width="120">上架/下架</td>
+                        <td width="300"><label><input type="checkbox" value="0" name="buddhastatus" class="i-checks" {#if $lease.buddhastatus eq 0#}checked{#/if#}>上架</label></td>
+                        <td></td>
+                    </tr>
+                    {#/if#}
+                    <tr>
+                        <td width="120">审核</td>
+                        <td width="300"><input type="radio" value="1" name="is_sure" class="i-checks" {#if $lease.is_sure eq 1#}checked{#/if#}>审核通过
+                            <input type="radio" value="4" name="is_sure" class="i-checks" {#if $lease.is_sure eq 4 or $lease.is_sure eq 0#} checked{#/if#}>审核不通过</td>
+                        <td></td>
+                    </tr>
+                    <tr id="remarks" {#if $lease.is_sure eq 1#} style="display: none"{#/if#}>
+                        <td>备注</td>
+                        <td><textarea name="remarks" id="remarksval" class="form-control" style="height: 100px;">{#$lease.remarks#}</textarea></td>
+                        <td></td>
+                    </tr>
+                    </table>
+                </div>
+            </div>
+       <div class="text-center m-t-sm"><button type="submit" class="btn btn-primary">审 核</button></div>
+    </form>
+    </div>
+<script>
+    $(function(){
+        var main=$('#goods_main > .goods_tab');
+        $('#goods_tabs span').bind('click', function() {
+            var index=$(this).index();
+            $(this).attr('class','btn btn-primary').siblings('span').attr('class','btn btn-danger');
+            main.eq(index).show().siblings('.goods_tab').hide();
+        });
+
+    $('.iCheck-helper').click(function(){
+        var is_sure=$(this).siblings('input[type="radio"]:checked ').val();
+       if(is_sure!=4){
+         $('#remarks').hide()
+       }else {
+           $('#remarks').show()
+       }
+    })
+    });
+function checkpost(){
+   var is_sure=$('.iradio_square-green').find('input[type="radio"]:checked ').val(),
+           remarksval=$('#remarksval').val();
+    if(is_sure!=1){
+      if(remarksval==''){
+          alert('填写不通过原因！');
+          return false;
+      }
+    }
+}
+</script>
+</body>
+</html>

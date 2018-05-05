@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>代理商申请列表</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<script src="js/jquery.js"></script> 
+<script src="js/main.js?v=1.0"></script>
+<script type="text/javascript" src="js/jquery.form.js"></script>
+<script src="/style/js/jquery/jquery.min.js"></script>
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+<script>
+$(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+</script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+<div class="col-sm-12">
+<h3>代理商申请列表</h3><ol class="breadcrumb"><li>当前位置</li><li>代理商申请列表</li></ol>
+</div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+
+<p>
+	<a href="index.php?a=more&c=user&view=1" class="btn btn-primary">返回上一步</a>
+</p>
+	<!-- <div class="panel panel-danger">
+		<div class="panel-heading"><b>搜索</b></div>
+		<form method="post" action="" class="form-inline">
+			<div class="panel-body">
+				<div class="form-group">
+					<select id="option" name="option" class="form-control">
+						{#foreach from=$searchType item=item key=key#}
+						<option value="{#$key#}"  {#if $params.option eq $key#} selected{#/if#}>{#$item#}</option>
+						{#/foreach#}
+					</select>
+
+				</div>
+				<div class="form-group"><input type="text" value="{#$keyword#}" name="keyword" id="keyword" class="form-control" style="width: 300px;"></div>
+				<button value="搜 索" type="submit" class="btn btn-danger">搜 索</button>
+			</div>
+		</form>
+	</div> -->
+<form method="post" action="" onsubmit="return checkpost(document.checkform);"  name="FORM" >
+<div class="float-e-margins">
+<div class="ibox-title"><b>代理商申请列表</b>
+</div>
+</div>
+<div class="ibox-content ">
+<div class="table-responsive">
+<table class="table table-hover m-b-none">
+
+<thead>
+<tr>
+     <th><span onclick="CheckAll(document.FORM,'')">全选</span></th>
+	<th>公司名称</th>
+	<th>代理区域</th>
+	<th>乙方姓名</th>
+	<th>身份证号</th>
+	<th>手机号</th>
+	<th>地址</th>
+	<th>邮箱</th>
+	<th>推荐人</th>
+	<th>填写时间</th>
+	<th>是否审核</th>
+	<th>是否支付</th>
+	<th>操作</th>
+</tr>
+<tbody>
+{#if $list#}
+{#foreach name=list from=$list item=item#}
+<tr>
+	<td><input type="checkbox" value="{#$item.id#}" name="ids[{#$item.id#}]" class="i-checks"/></td>
+	<td>{#$item.party_b#}</td>
+	<td>{#$item.level1#}{#if $item.level2#} - {#$item.level2#}{#/if#} {#if $item.level3#} - {#$item.level3#}{#/if#}</td>
+	<td>{#$item.signature#}</td>
+	<td>{#$item.id_card#}</td>
+	<td>{#$item.mobile#}</td>
+	<td>{#$item.address#}</td>
+	<td>{#$item.email#}</td>
+	<td>{#$item.referees#}</td>
+	<td>{#$item.dates#}</td>
+	<td>{#if $item.isok eq 0#}否{#elseif $item.isok eq 1#}是{#/if#}</td>
+	<td>{#if $item.ispay eq 0#}否{#elseif $item.ispay eq 1#}是{#/if#}</td>
+	<td>
+		<a href="index.php?a=applyedit&c=user&id={#$item.id#}&p={#$page#}">[审核]</a>
+		<a onclick="applydel({#$item.id#},{#$page#})">[删除]</a>
+	</td>
+</tr>
+{#/foreach#}
+{#else#}
+<tr>
+	<td class="text-center" colspan="11">暂无数据</td>
+</tr>
+{#/if#}
+</tbody>
+
+</table>
+</div>
+</div>
+<div class="text-center m-t-sm">
+{#$strPages#}
+</div>
+</form>
+</div>
+
+<script>
+	function applydel(id,p){
+		if(confirm("确认要删除此电子合同吗？")){
+			$.ajax({
+				type:'POST',
+				url:'index.php?a=applydel&c=user',
+				data:{id:id,p:p},
+				dataType:'json',
+				success: function(o) {
+	                if(o.isok=='true'){
+	                    Message.showMessage(o.info);
+	                    window.location.reload();
+	                }else{
+	                	Message.showMessage(o.info);
+	                }
+	            },
+			});
+		}
+	}
+</script>
+
+
+<link rel="stylesheet" href="js/datetimepicke/datetimepicker.css">
+<script type="text/javascript" src="js/datetimepicke/datetimepicker.full.min.js"></script>
+<script type="text/javascript">
+</script>
+</body>
+</html>

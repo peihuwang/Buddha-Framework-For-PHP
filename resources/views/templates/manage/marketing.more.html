@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<script src="js/jquery.js"></script> 
+<script src="js/main.js?v=1.0"></script>
+<script type="text/javascript" src="js/jquery.form.js"></script>
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+<script>
+$(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+</script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+<div class="col-sm-12">
+<h3>会员管理</h3><ol class="breadcrumb"><li>当前位置</li><li>会员管理</li><li> <strong>会员营销</strong></li></ol>
+</div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+<div class="float-e-margins">
+<div class="ibox-title"><b>会员营销列表</b></div>
+</div>
+<form method="post" action=""  name="FORM" >
+<div class="ibox-content">
+<table class="table table-hover m-b-none">
+<thead>
+	<tr>
+		<td><span onclick="CheckAll(document.FORM,'')">全选</span></td>
+		<td>手机号</td>
+		<td>邮箱</td>
+		<td>用户名</td>
+		<td>姓名</td>
+		<td>性别</td>
+		<td>身份证</td>
+	</tr>
+</thead>
+<tbody>
+{#foreach from=$list item=item#}
+<tr>
+	<td><input type="checkbox" value="{#$item.id#}" name="ids[{#$item.id#}]" class="i-checks"></td>
+	<td>{#$item.mobile#}</td>
+	<td>{#$item.email#}</td>
+	<td>{#$item.username#}</td>
+	<td>{#$item.realname#}</td>
+	<td>{#if $item.gender eq 1#}男{#else#}女{#/if#}</td>
+	<td>{#if $item.idcard#}{#$item.idcard#}{#else#}无{#/if#}</td>
+</tr>
+{#/foreach#}
+</tbody>
+</table>
+</div>
+<div class="text-center m-t-sm">
+	{#$strPages#}
+</div>
+<div class="text-center m-t-sm">
+<span>选中操作</span>
+	<input type="radio" value="sms" name="operotor" class="i-checks" checked> 短信营销
+<input type="radio" value="edm" name="operotor" class="i-checks" > 邮件营销
+</div>
+<div class="text-center m-t-sm">
+	<input type="hidden" name="c" value="marketing">
+<button type="button" class="btn btn-primary" onclick="CheckAll(document.FORM,'')">全 选</button>
+<button type="submit" class="btn btn-primary">提 交</button></div>
+</form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>后台权限编辑</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green"})
+        });
+    </script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>菜单管理</h3>
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>菜单管理</li>
+            <li><strong>添加菜单</strong></li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <p><a href="index.php?a=more&c=menu" class="btn btn-primary">返回上一步</a></p>
+
+    <div class="float-e-margins">
+        <div class="ibox-title"><b>添加菜单</b>
+
+        </div>
+    </div>
+    <form method="post" action="" onsubmit="return checkpost(document.checkform);" name="checkform"
+          enctype="multipart/form-data">
+        <div class="ibox-content">
+            <table class="table table-hover m-b-none">
+                <tbody>
+                <tr>
+                    <td width="120">上级菜单 <span class="text-danger">*</span></td>
+                    <td width="300"><select class="form-control" name="sub">
+                        <option value="">顶级菜单</option>
+                        {#$menuoption#}
+                    </select></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>菜单名称 <span class="text-danger">*</span></td>
+                    <td><input type="text" value="{#$meun.name#}" name="name" id="name" class="form-control"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>页面参数 <span class="text-danger">*</span></td>
+                    <td><input type="text" value="{#$meun.services#}" name="services" id="services"
+                               class="form-control"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>标示</td>
+                    <td><input type="text" value="{#$meun.operator#}" name="operator" id="operator"
+                               class="form-control"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>位置序号</td>
+                    <td><input type="text" value="{#$meun.sort#}" name="sort" class="form-control"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>是否启用</td>
+                    <td><input type="checkbox" value="1" name="isopen" class="i-checks" {#if $meun.isopen eq 1#}
+                               checked{#/if#}>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>是否左侧列表显示</td>
+                    <td><input type="checkbox" value="1" name="isdisplay" class="i-checks" {#if $meun.isdisplay eq 1#}
+                               checked{#/if#}>
+                    </td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center m-t-sm">
+            <button type="submit" class="btn btn-primary">添加</button>
+        </div>
+    </form>
+</div>
+</div>
+<script>
+    function checkpost(obj) {
+
+        if ($('#name').val() == '') {
+            alert("输入分类名称");
+            $("#name").focus();
+            return false;
+        }
+        if ($('#services').val() == '') {
+            alert("输入页面参数");
+            $("#services").focus();
+            return false;
+        }
+        if ($('#operator') == '') {
+            alert('标示不能为空')
+            $('#operator').focus();
+            return false;
+        }
+
+    }
+</script>
+</body>
+</html>

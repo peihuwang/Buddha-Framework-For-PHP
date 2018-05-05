@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>招聘分类</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+    </script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>招聘设置</h3><ol class="breadcrumb"><li>当前位置</li><li>招聘设置</li><li> <strong>编辑分类</strong></li></ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <p><a href="index.php?a=more&c=recruitcat" class="btn btn-primary">返回上一步</a></p>
+    <form method="post" action="" onsubmit="return checkpost(document.checkform);" name="checkform">
+    <div class="ibox-content ">
+        <div class="table-responsive">
+            <table class="table table-hover m-b-none">
+                <tr>
+                    <td width="120">上级分类</td>
+                    <td width="300"><select name="sub" id="shop_sub" class="form-control">
+                        <option value="0">顶级分类</option>
+                        {#$shopoption#}
+                    </select></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>分类名称</td>
+                    <td><input type="text" value="{#$shopcat.cat_name#}" name="cat_name" id="cat_name" class="form-control"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>分类排序</td>
+                    <td><input type="text" value="{#$shopcat.view_order#}" name="sort" class="form-control"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>是否显示</td>
+                    <td><input type="checkbox" value="0" name="ifopen" class="i-checks" {#if $shopcat.ifopen eq 0#}checked{#/if#}></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+        <div class="text-center m-t-sm">
+            <button type="submit" class="btn btn-primary">提 交</button>
+        </div>
+        </form>
+</div>
+<script type="application/javascript">
+    function checkpost(obj){
+        if($("#cat_name").val()==''){
+            alert('名称不能为空!')
+            $('#cat_name').focus();
+            return false
+        }
+    }
+</script>
+</body>
+</html>

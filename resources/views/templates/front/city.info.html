@@ -1,0 +1,30 @@
+{#include file='public.header.html'#}
+<div id="list">
+
+    <div class="city">
+        <ul>
+            {#foreach from=$myzeoregion item=item name=test#}
+            {#if $smarty.foreach.test.iteration eq 1#}
+            <h4>{#$item.first#}</h4>
+            {#else#}
+            <li onclick="city('{#$item.number#}')">{#$item.namer#}</li>
+            {#/if#}
+            {#/foreach#}
+        </ul>
+    </div>
+
+</div>
+<script src="/style/js/jquery/jquery.min.js"></script>
+<script src="/style/js/template.js"></script>
+<script >
+    function city(number) {
+    $.get('index.php?a=getnumber&c=city',{number:number},function (re){
+    delCookie('sName');
+    var str = JSON.stringify(re);
+    setCookie('sName',str);
+    window.location.href='/';
+    });
+    }
+</script>
+
+{#include file='public.footer.html'#}

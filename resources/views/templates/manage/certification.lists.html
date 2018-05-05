@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>认证码列表</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+<div class="col-sm-12">
+<h3>认证码列表</h3><ol class="breadcrumb"><li>当前位置</li><li>认证码列表</li><p style="float: right;margin-right: 100px;"><a href="" onclick="javascript:history.go(-1);" class="btn btn-primary">返回上一页</a></p></ol>
+</div>
+<div class="float-e-margins">
+<div class="ibox-title"><b>会员列表</b>
+</div>
+</div>
+<div class="ibox-content ">
+<p><a href="index.php?a=lists&c=certification">共 {#$rcount#} 条； 已使用 {#$synum#} 条； 已过期 {#$wnum#} 条；</a></p>
+<div class="table-responsive">
+<table class="table table-hover m-b-none">
+<thead>
+<tr>
+	<th>编号</th>
+	<th>认证码</th>
+	<th>生成时间</th>
+	<th>有效期</th>
+	<th>有效截止日期</th>
+	<th>认证店铺</th>
+	<th>操作者</th>
+	<th>使用时间</th>
+	<th>备注</th>
+	<th>状态</th>
+</tr>
+<tbody>
+{#if $list#}
+{#foreach name=list from=$list item=item#}
+<tr>
+	<td>{#$item.id#}</td>
+	<td>{#$item.code#}</td>
+	<td>{#$item.createtime|date_format:'%Y-%m-%d %H:%M'#}</td>
+	<td>{#$item.valids#} 个月</td>
+	<td>{#$item.overdue_time|date_format:'%Y-%m-%d %H:%M'#}</td>
+	<td>{#$item.shopname#}</td>
+	<td>{#$item.operator#}</td>
+	{#if $item.usetime neq 0#}
+	<td>{#$item.usetime|date_format:'%Y-%m-%d %H:%M'#}</td>
+	{#else#}
+	<td></td>
+	{#/if#}
+	<td>{#$item.remarks#}</td>
+	<td>{#if $item.is_use eq 0#}未使用{#elseif $item.is_use eq 1#}已使用{#else#}已过期{#/if#}</td>
+</tr>
+{#/foreach#}
+{#else#}
+<tr>
+	<td class="text-center" colspan="11">暂无数据</td>
+</tr>
+{#/if#}
+</tbody>
+
+</table>
+</div>
+</div>
+	<div class="text-center m-t-sm">
+	{#$strPages#}
+	</div>
+</div>
+</div>
+</body>
+</html>

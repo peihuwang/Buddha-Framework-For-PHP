@@ -1,0 +1,18 @@
+{#include file='public.headernew.html'#}
+<div id="main">
+    <!--头部 start-->
+    <div class="top w by pf">
+        <a class="back pa" href="index.php?a=info&c=local">
+            <img src="/style/img_two/back.png"/>
+        </a>
+        <p class="f18 cw w tc">本地信息类目</p>
+    </div>
+    <!--类目 start-->
+    <div class="classify_list clearfloat">
+        {#foreach from=$shopcat item=item#}
+            <a class="fl w25 tc" href="index.php?a=more&c=local&cid={#$item.id#}"><p class="f14 cb br3 b">{#$item.cat_name#}</p></a>
+        {#/foreach#}
+    </div>
+    <!--类目 end-->
+
+    {#include file='public.footernew.html'#}

@@ -1,0 +1,138 @@
+{#include file='public.headernew.html'#}
+<div id="main">
+    <!--头部 start-->
+    <div class="top w by pf">
+        <a class="back pa" href="javascript:history.go(-1);">
+            <img src="/style/img_two/back.png"/>
+        </a>
+        <p class="f18 cw w tc">{#$title#}活动</p>
+        <a id="go_search" class="search pa" href="javascript:void(0);">
+            <img src="/style/img_two/search.png"/>
+        </a>
+        <!--<a class="add pa" href="javascript:void(0);">-->
+            <!--&lt;!&ndash;<img src="/style/img_two/add.png"/>&ndash;&gt;-->
+        <!--</a>-->
+    </div>
+    <!--头部 end-->
+
+    <!--分类 start-->
+    <!--<div class="tab_list pf w bw brb">-->
+        <!--<ul class="w">-->
+            <!--<li class="fl tc w20">-->
+                <!--<a class="f16 cb active" href="javascript:void(0);" data-view=0>全部</a>-->
+            <!--</li>-->
+            <!--<li class="fl tc w20">-->
+                <!--<a class="f16 cb" href="javascript:void(0);"  data-view=1>单家</a>-->
+            <!--</li>-->
+            <!--<li class="fl tc w20">-->
+                <!--<a class="f16 cb" href="javascript:void(0);"  data-view=2>多家</a>-->
+            <!--</li>-->
+            <!--<li class="fl tc w20">-->
+                <!--<a class="f16 cb" href="javascript:void(0);"  data-view=3>信息</a>-->
+            <!--</li>-->
+            <!--<li class="fl tc w20">-->
+                <!--<a class="f16 cb" href="javascript:void(0);"  data-view=4>投票</a>-->
+            <!--</li>-->
+        <!--</ul>-->
+    <!--</div>-->
+    <!--分类 end-->
+
+    <!--列表 start-->
+    <div></div>
+    <div class="main_list w main_list_supply"  id="list" style="padding-top: 55px;"></div>
+    <div  id="nomore" class="mc tc f14 cg" style="line-height: 30px;margin-top: 10px;"></div>
+    <!--列表 end-->
+</div>
+<div id="search_page" style="display:none;">
+    <!--头部 start-->
+    <div class="search_top w bw pr">
+        <a id="back_main" class="back pa" href="javascript:void(0);">
+            <img src="/style/img_two/back_grey.png"/>
+        </a>
+        <input class="search_text pa bg pl10" id="keyword" name="keyword" type="search" placeholder="请输入活动编号">
+        <a class="search_btn pa f16 cb" href="javascript:void(0);"  id="retrie">搜索</a>
+    </div>
+    <!--头部 end-->
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+<script type="text/javascript">
+    $(function(){
+        var url=window.location.href;
+
+        $('#list').ajaxshiolist(url);
+    })
+</script>
+<script src="/style/js/template.js"></script>
+<script src="/style/js/ajaxlist_active.js"></script>
+<!--底部导航 start-->
+{#include file='public.footernew.html'#}
+<!--底部导航 end-->
+</body>
+<script type="text/javascript">
+    //限制字符个数
+    $(".product_name").each(function(){
+        var maxwidth=25;
+        if($(this).text().length>maxwidth){
+            $(this).text($(this).text().substring(0,maxwidth));
+            $(this).html($(this).html()+"...");
+        }
+    });
+    //    页面tab切换
+    $(".tab_list ul li>a").click(function(){
+        $(this).addClass("active");
+        $(this).parent("li").siblings("li").children("a").removeClass("active");
+    });
+    //    搜索跳转
+    $("#go_search").click(function(){
+        $("body").scrollTop(0);
+        $("#main").css("display","none");
+        $("#search_page").css("display","block");
+    });
+    $("#back_main").click(function(){
+        $("#search_page").css("display","none");
+        $("#search_page .search_text").val("");
+        $("#main").css("display","block");
+    });
+
+    $('.tab_list ul li a').click(function(){
+        $('#list').empty();
+        $('#keyword').val('');
+        ajaxlist(1);
+    })
+    $('#retrie').click(function(){
+        $('#search_page').hide();
+        $('#list').empty();
+        $('.tab_list ul li a').remove('active');
+        ajaxlist(1);
+        $('#main').show();
+
+    })
+
+</script>
+
+<script id="demo" type="text/html">
+    {{each list as value i}}
+        <div class="list_item pr brb clearfloat"  data-href="index.php?a={{value.a}}&c={{value.c}}&id={{value.id}}">
+            <div class="content fl">
+                <div class="bw pr product">
+                    <a class="img_box pa" href="javascript:void(0);">
+                        <img src="{{value.demand_thumb}}"/>
+                    </a>
+                    <div class="text pr">
+                        <h3 class="product_name f15 cb fn pr10">{{value.name}}</h3>
+                        <p class="price pa"><span class="f14 cg">{{value.brief}}</span></p>
+                        <p class="second number f14 cg pa"><i></i>{{value.shop_name}} &nbsp;&nbsp;{{value.roadfullname}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+</script>

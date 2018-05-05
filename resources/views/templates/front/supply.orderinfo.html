@@ -1,0 +1,181 @@
+{#include file='../front/public.headernew.html'#}
+<style type="text/css">
+#goodcover {display: none;position: absolute;top: 0%;left: 0%;width: 100%;height: 200%;background-color: black;z-index: 1001;-moz-opacity: 0.8;opacity: 0.70;filter: alpha(opacity=80);}
+#code {background-color: #fff;position: absolute;display: none;left: 45%;z-index:99999;}
+.code-img {width: 250px;margin:0 auto;}
+.code-img img {width: 50px; margin: 5px 0 5px 10px;}
+</style>
+<link href="/style/css/web.style.css" rel="stylesheet" type="text/css">
+<body class="bg">
+<!--头部 start-->
+<div class="address_list" style="margin-top:45px;">
+  <div class="top w by pf">
+      <a class="back pa"  onclick="javascript:history.go(-1);">
+          <img src="/style/img_two/back.png"/>
+      </a>
+      <p class="f18 cw w tc">确认订单</p>
+  </div>
+  <div>
+  {#if $addressinfo#}
+    <div class=" bw">
+    <a href="user/index.php?a=index&c=address">
+      <div class="pl10 pr10 brb pt10">
+            <p class="clearfloat f15 cb">
+                <span class="fl">收货人：{#$addressinfo.name#}</span>
+                <span class="fr">电话：{#$addressinfo.mobile#}</span>
+            </p>
+            <p class="f15 cb mt10 mb10">详细地址：{#$addressinfo.addre#} {#$addressinfo.address#}</p>
+        </div>
+    </div>
+    </a>
+  </div>
+  <input type="hidden" name="addressinfo" id="addressinfo" value="{#$addressinfo.id#}">
+  {#else#}
+    <div style="width: 80%;background-color: #f60;color: #fff;margin: 0 auto;border-radius: 3px;height: 40px;">
+      <a style="color: #fff;font-size: 16px;text-align: center;line-height: 40px;" href="user/index.php?a=add&c=address">✚ 添加收货地址</a>
+    </div>
+  {#/if#}
+  <div class="bord bg"></div>
+  <div style="background-color: #fff;height: 40px;line-height: 40px;">订单号：{#$orderinfo.order_sn#}</div>
+  <div style="background-color: #fff;">
+    <div class="sup_item" data-href="index.php?a=info&c=supply&id={#$goodsinfo.id#}">
+        <div class="pic_img"><img src="{#$goodsinfo.goods_thumb#}"></div>
+        <div class="nearby_con">
+            <div class="title">{#$goodsinfo.goods_name#}</div>
+            <div class="price">价格：<em>￥<b>{#if $goodsinfo.promote_price neq '0.00'#}{#$goodsinfo.promote_price#}{#else#}{#$goodsinfo.market_price#}{#/if#}</b></em>
+              <span style="float: right;">共 {#$orderinfo.order_total#} 件</span>
+            </div>
+        </div>
+    </div>
+  </div>
+  <input type="hidden" name="orderid" id="orderid" value="{#$orderinfo.id#}">
+  <div class="bord bg"></div>
+  <div style="background-color: #fff;">
+    <div>
+      <p style="text-align: right;">订单总额：<span style="color: red">￥ {#$orderinfo.goods_amt#}</span></p>
+      <p style="text-align: right;">应付金额：<span style="color: red">￥ {#$orderinfo.final_amt#}</span></p>
+    </div>
+  </div>
+  <div style="width: 80%;background-color: #f60;color: #fff;margin: 0 auto;margin-top:40px;border-radius: 3px;height: 40px;">
+      <p style="color: #fff;font-size: 16px;text-align: center;line-height: 40px;" id="ClickMe">立即支付</p>
+    </div>
+</div>
+<div id="goodcover"></div>
+<div id="code">
+    <div style="margin: 10px auto;text-align: center;">请选择交易方式</div>
+    <div class="code-img">
+        <div onclick="pay_ment('{#$url#}',1);"><img src="style/images/cart/weixin.png"/><input type="hidden" name="" value="1"><span style="line-height: 50px; margin-left: 20px;">微信支付</span></div>
+        <div onclick="remarks()"><img src="style/images/cart/jiaoyi.png"/><input type="hidden" name="" value="2"><span style="line-height: 50px; margin-left: 20px;">货到付款</span></div>
+        <div id="remarks" style="display: none;">
+          <p style="margin-left: 10px;">备注：</p>
+          <textarea id="textareas" style="width:200px;height:80px;margin: 10px;left: 20px;"></textarea>
+          <p style="margin:0 0 10px 10px;"><input style="color: #fff;background: #f60;padding: 5px;margin:; border-radius: 5px;" onclick="pay_ment('{#$url#}',2);" type="button" value="确认" /></p>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+  function remarks(){
+    $('#remarks').show();
+  }
+  function pay_ment(urls,pay_type){
+    var addressinfo = $('#addressinfo').val();
+    var textareas = $('#textareas').val();
+    if(pay_type == 2 && !textareas){
+      Message.showMessage('选择自行交易后请填写备注信息');
+      return false;
+    }
+    var orderid = $('#orderid').val();
+    if(addressinfo){
+      $.ajax({
+          type:'post',
+          url:'index.php?a=updateaddress&c=supply',
+          data:{addressinfo:addressinfo,orderid:orderid,pay_type:pay_type,textareas:textareas},
+          dataType:'json',
+          success:function(o){
+            if(o.isok == 'true'){
+              if(pay_type == 1){
+                Message.showMessage(o.data,3000);
+                window.location.href=o.url;
+              }else{
+                window.location.href=o.url;
+              }
+            }else{
+                Message.showMessage(o.data,3000);
+                window.history.go(-1);
+            }
+          }
+      });
+    }else{
+      Message.showMessage('请您先完善收货地址');
+    }
+    //
+  }
+</script>
+<script type="text/javascript">
+    function tangkuang(){
+        Message.showMessage('功能正在审核中，敬请期待！');
+    }
+    $(function() {
+    //alert($(window).height());
+    $('#ClickMe').click(function(){
+        $('#code').center();
+        $('#goodcover').show();
+        $('#code').fadeIn();
+    });
+    $('#closebt').click(function(){
+        $('#code').hide();
+        $('#goodcover').hide();
+    });
+    $('#goodcover').click(function(){
+        $('#code').hide();
+        $('#goodcover').hide();
+        $('#remarks').hide();
+    });
+    jQuery.fn.center = function(loaded) {
+        var obj = this;
+        body_width = parseInt($(window).width());
+        body_height = parseInt($(window).height());
+        block_width = parseInt(obj.width());
+        block_height = parseInt(obj.height());
+
+        left_position = parseInt((body_width / 2) - (block_width / 2) + $(window).scrollLeft());
+        if (body_width < block_width) {
+            left_position = 0 + $(window).scrollLeft();
+        };
+
+        top_position = parseInt((body_height / 2) - (block_height / 2) + $(window).scrollTop());
+        if (body_height < block_height) {
+            top_position = 0 + $(window).scrollTop();
+        };
+
+        if (!loaded) {
+
+            obj.css({
+                'position': 'absolute'
+            });
+            obj.css({
+                'top': ($(window).height() - $('#code').height()) * 0.5,
+                'left': left_position
+            });
+            $(window).bind('resize', function() {
+                obj.center(!loaded);
+            });
+            $(window).bind('scroll', function() {
+                obj.center(!loaded);
+            });
+
+        } else {
+            obj.stop();
+            obj.css({
+                'position': 'absolute'
+            });
+            obj.animate({
+                'top': top_position
+            }, 200, 'linear');
+        }
+    }
+})
+
+</script>
+</body>
+</html>

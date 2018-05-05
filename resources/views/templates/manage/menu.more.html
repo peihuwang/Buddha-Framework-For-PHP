@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>后台权限列表</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green"})
+        });
+    </script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>菜单管理</h3>
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>菜单管理</li>
+            <li><strong>菜单列表</strong></li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <p><a href="index.php?a=add&c=menu" class="btn btn-primary">添加菜单</a></p>
+
+    <div class="float-e-margins">
+        <div class="ibox-title"><b>商品分类</b>
+        </div>
+    </div>
+
+    <form method="post" action="" name="FORM" class="form-inline">
+        <div class="ibox-content">
+            <table class="table table-hover m-b-none" id="cat_tree">
+                <thead>
+                <tr>
+                    <th width="60"><span onclick="CheckAll(document.FORM,'')">全选</span></th>
+                    <th>菜单名称</th>
+                    <th width="150">标示</th>
+                    <th>地址</th>
+                    <th width="100">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {#$menucatTable#}
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" language="JavaScript">
+    function delnav() {
+        return confirm("确实要删除商品类别吗？");
+    }
+    function goods_cateopen(id) {
+        try {
+            var o = $("#cat_tree [pid='" + id + "']");
+            var display = '';
+            if (o == null) return;
+            if (o.css('display') == 'none') {
+                o.css('display', '');
+                $('#bt_' + id).attr('class', 'fa fa-chevron-down');
+            } else {
+                o.css('display', 'none');
+                display = 'none';
+                $('#bt_' + id).attr('class', 'fa fa-chevron-up');
+            }
+            flode(o, display);
+        } catch (e) {
+        }
+    }
+    function flode(o, display) {
+        if (o == null) return;
+        o.each(function () {
+            var cid = $(this).attr('cid');
+            var pid = $(this).attr('pid');
+            var sub = $("#cat_tree [pid='" + cid + "']");
+            sub.css('display', display);
+            flode(sub, display);
+        });
+    }
+</script>
+</body>
+</html>

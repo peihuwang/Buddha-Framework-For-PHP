@@ -1,0 +1,67 @@
+
+<style type="text/css">
+	#headimg{width: 12rem;height: 12rem;border: 2px solid #ffffff;border-radius:100% ;margin: auto;margin-bottom: 1.7rem;		background-size:100% 100% !important;background-repeat:no-repeat;background-position: center center;}
+	.btn{position: relative;z-index: 10;padding: 0.5rem;height: 1.6rem;line-height: 1.6rem;margin: auto;font-size: 0.8rem;color: #fd1142!important;	border:1px solid  #fd1142;border-radius:0.2rem ;}
+	.btn img{display: inline-block;	width: 0.75rem;	margin-left: 0.1rem;}		
+	/*截图上传页面*/
+	.clipbg{position: fixed;background: black;top: 0;z-index: 900;width: 100%;height: 100%;	left: 0;}
+	.loading{position: absolute;top: 40%;width: 38%;left: 31%;height: 1.6rem;line-height: 1.6rem;z-index: 99999;text-align: center;color: #ffffff;border-radius:0.2rem ;background: #9f9f9f;}
+	.clipbg #clipArea{width: 100%;height: 80%;margin: auto;}
+	.clipbg .footer{width: 90%;position: fixed;left: 5%;bottom: 0px;text-align: center;}
+	.clipbg dl{background: #ffffff;border-radius: 0.4rem;overflow: hidden;margin-bottom: 0.6rem;}
+	.clipbg dd{position: relative;height: 40px;line-height: 40px;border-bottom:1px solid #999999 ;}
+	.clipbg .back{height: 40px;line-height:40px;border-radius: 0.4rem;background: #ffffff;margin-bottom: 10px;}
+	.clipbg dd input{position: absolute;width: 100%;height: 100%;top: 0;left: 0;z-index: 11;filter:alpha(opacity=0);-moz-opacity:0;-khtml-opacity: 0;opacity: 0; }
+	.inputimg{font-size: 55px;position: absolute; left: 0;top: 0;opacity: 0;z-index: -999}
+</style>
+
+<!--图片裁剪-->
+<div class="clipbg displaynone" style="display: none;margin-bottom: 100px;">
+	<div id="clipArea"></div>
+	<div class="loading displaynone" style="display: none">正在载入图片...</div>
+	<div class="footer">
+	<dl>
+		<dd style="background: #fe1041; color: #ffffff;border: none;">打开相册<input type="file" id="file" name="Image[]" accept="image/gif,image/jpeg,image/png,image/jpg"></dd>
+	<dd id="clipBtn">完成裁剪</dd>
+	</dl>
+	<div class="back">取消</div>
+	</div>
+</div>
+<script type="text/javascript" src="/style/photoclip/js/jquery.min.js"></script>
+<script type="text/javascript" src="/style/photoclip/js/camera.js/hammer.min.js" ></script>
+<script type="text/javascript" src="/style/photoclip/js/camera.js/lrz.all.bundle.js" ></script>
+<script type="text/javascript" src="/style/photoclip/js/camera.js/iscroll-zoom-min.js" ></script>
+<script type="text/javascript" src="/style/photoclip/js/camera.js/PhotoClip.js" ></script>
+<script>
+	function bstsn(){
+		$(".clipbg").fadeIn();
+		$('.meun').css('display','none');
+	}
+	var clipArea = new  PhotoClip("#clipArea", {
+			size: [400, 300],//裁剪框大小
+			outputSize:[0,0],//打开图片大小，[0,0]表示原图大小
+			file: "#file",
+			ok: "#clipBtn",
+			loadStart: function() { //图片开始加载的回调函数。this 指向当前 PhotoClip 的实例对象，并将正在加载的 file 对象作为参数传入。（如果是使用非 file 的方式加载图片，则该参数为图片的 url）
+				$(".loading").removeClass("displaynone");
+			},
+			loadComplete: function() {//图片加载完成的回调函数。this 指向当前 PhotoClip 的实例对象，并将图片的 <img> 对象作为参数传入。
+				$(".loading").addClass("displaynone");
+			},
+			done: function(dataURL) { //裁剪完成的回调函数。this 指向当前 PhotoClip 的实例对象，会将裁剪出的图像数据DataURL作为参数传入。
+				$(".clipbg").fadeOut()
+				$('.meun').css('display','block');
+				var aa= $(".img");
+				aa.html('<span class="del_temp" style="display:block;position:absolute;background:rgba(0,0,0,.5); border-radius:50%; width:20px; height:20px; color:#fff; line-height:20px; text-align: center;z-index:888;">X</span><img style="width:80px;height: 80px;" src="' +dataURL+ '"/><input type="hidden" name="Image[]" value="' +dataURL+ '">');
+				$('.photo-clip-rotation-layer img').remove();
+				aa.removeAttr("onclick");
+				aa.attr("class","");
+				//$(".photo").find("input").remove();
+				//$('#button').append('<img src="'+dataURL+'">');			
+				//console.log(dataURL);//dataURL裁剪后图片地址base64格式提交给后台处理
+			}
+		});
+		$(".back").click(function(){
+			$(".clipbg").fadeOut()
+		})
+</script>

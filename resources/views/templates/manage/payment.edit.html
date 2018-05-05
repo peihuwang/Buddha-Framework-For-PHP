@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>支付方式配置</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green"})
+        });
+    </script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>支付方式配置</h3>
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>支付方式管理</li>
+            <li><strong>支付方式配置</strong></li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <p class="m-t-sm">
+        <a href="index.php?a=more&c=payment" class="btn btn-primary">返回上一步</a>
+    </p>
+
+    <form method="post" action="" onsubmit="return checkpost(document.checkform);" name="checkform"
+          enctype="multipart/form-data">
+
+        <div class="float-e-margins">
+            <div class="ibox-title"><b>基本属性</b></div>
+        </div>
+        <div class="ibox-content">
+            <table class="table table-hover m-b-none">
+                <tbody>
+
+                <tr>
+                    <td width="120">名称</td>
+                    <td width="300">{#$payInfo.name#}
+                        <input type="hidden" value="{#$payInfo.code#}" name="code"/>
+                        <input type="hidden" value="{#$payInfo.name#}" name="name"/></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>状态</td>
+                    <td>
+                        <input type="radio" value="1" {#$ifopen_1#} name="ifopen" class="i-checks">开启<input type="radio"
+                                                                                                            value="0"
+                                                                                                            {#$ifopen_0#}
+                                                                                                            name="ifopen"
+                                                                                                            class="i-checks">关闭>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+
+                    {#if $payInfo.config#}
+                    {#foreach from=$payInfo.config item=item key=key#}
+
+
+                    <td>{#$item.text#}</td>
+                    <td>{#if $item.type eq 'text'#}
+                        <input type="text" class="form-control" name="config[{#$key#}]" id="txt_title"
+                               value="{#$info[$key]#}">
+                        {#elseif $item.type eq 'select'#}
+                        <select name="config[{#$key#}]" class="form-control">
+                            {#html_options options=$item.items selected=$info[$key]#}
+                        </select>
+                        {#/if#}
+                    </td>
+                    <td>{#$item.desc#}</td>
+                </tr>
+                {#/foreach#}
+                {#/if#}
+
+
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="text-center m-t-sm">
+            <input type="hidden" name="pid" value="{#$info.payment_id#}"/>
+            <button type="submit" class="btn btn-primary">提 交</button>
+        </div>
+    </form>
+</div>
+</div>
+
+
+</body>
+</html>

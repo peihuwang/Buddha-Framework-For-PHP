@@ -1,0 +1,114 @@
+{#include file='../front/public.headernew.html'#}
+<style type="text/css">
+	.address_lists{display: block;padding:5px;line-height: 30px;position: relative;}
+</style>
+<link href="/style/css/web.style.css" rel="stylesheet" type="text/css">
+<body class="bg">
+<!--头部 start-->
+<div class="address_lists" style="margin-top:45px;">
+  <div class="top w by pf">
+      <a class="back pa"  onclick="javascript:history.go(-1);">
+          <img src="/style/img_two/back.png"/>
+      </a>
+      <p class="f18 cw w tc">确认订单</p>
+  </div>
+  <div>
+  {#if $addressinfo#}
+    <div class=" bw">
+    <a href="user/index.php?a=index&c=address">
+      	<div class="pl10 pr10 brb pt10">
+            <p class="clearfloat f15 cb">
+                <span class="fl">收货人：{#$addressinfo.name#}</span>
+                <span class="fr">电话：{#$addressinfo.mobile#}</span>
+            </p>
+            <p class="f15 cb mt10 mb10">详细地址：{#$addressinfo.addre#} {#$addressinfo.address#}</p>
+        </div>
+    </div>
+    </a>
+  </div>
+  <input type="hidden" name="addressinfo" id="addressinfo" value="{#$addressinfo.id#}">
+  {#else#}
+    <div style="width: 80%;background-color: #f60;color: #fff;margin: 0 auto;border-radius: 3px;height: 40px;">
+      <a style="color: #fff;font-size: 16px;text-align: center;line-height: 40px;" href="user/index.php?a=add&c=address">✚ 添加收货地址</a>
+    </div>
+  {#/if#}
+  <div class="bord bg"></div>
+  <div style="background-color: #fff;height: 40px;line-height: 40px;">订单号：{#$orderinfo.order_sn#}</div>
+  {#if $goods_id#}
+  {#foreach from=$goodsinfo item=item key=key#}
+  <div style="background-color: #fff;">
+    <div class="sup_item" data-href="index.php?a=info&c=supply&id={#$item.id#}">
+        <div class="pic_img"><img src="{#$item.goods_thumb#}"></div>
+        <div class="nearby_con">
+            <div class="title">{#$item.goods_name#}</div>
+            <div class="price">价格：<em>￥<b>{#$orderinfo.goods_amt#}</b></em>
+              <span style="float: right;">共 {#$orderinfo.order_total#} 件</span>
+            </div>
+        </div>
+    </div>
+  </div>
+  <input type="hidden" name="orderid" id="orderid" value="{#$orderinfo.id#}">
+  <div class="bord bg"></div>
+  <div style="background-color: #fff;">
+    <div>
+      <p style="text-align: right;margin-right:10px;">订单总额：<span style="color: red">￥ {#$orderinfo.goods_amt*$orderinfo.order_total#}</span></p>
+      <p style="text-align: right;margin-right:10px;">应付金额：<span style="color: red">￥ {#$orderinfo.final_amt*$orderinfo.order_total#}</span></p>
+    </div>
+  </div>
+  {#/foreach#}
+  {#else#}
+  {#foreach from=$goodsinfo item=item key=key#}
+  <div style="background-color: #fff;">
+    <div class="sup_item" data-href="index.php?a=info&c=supply&id={#$item.id#}">
+        <div class="pic_img"><img src="{#$item.goods_thumb#}"></div>
+        <div class="nearby_con">
+            <div class="title">{#$item.goods_name#}</div>
+            <div class="price">价格：<em>￥<b>{#$Db_cart.$key.goods_price#}</b></em>
+              <span style="float: right;">共 {#$Db_cart.$key.goods_number#} 件</span>
+            </div>
+        </div>
+    </div>
+  </div>
+  {#/foreach#}
+  <input type="hidden" name="orderid" id="orderid" value="{#$orderinfo.id#}">
+  <div class="bord bg"></div>
+  <div style="background-color: #fff;">
+    <div>
+      <p style="text-align: right;margin-right:10px;">订单总额：<span style="color: red">￥ {#$Db_cart.money#}</span></p>
+      <p style="text-align: right;margin-right:10px;">应付金额：<span style="color: red">￥ {#$Db_cart.money#}</span></p>
+    </div>
+  </div>
+  {#/if#}
+  <div style="width: 80%;background-color: #f60;color: #fff;margin: 0 auto;margin-top:40px;border-radius: 3px;height: 40px;">
+      <p style="color: #fff;font-size: 16px;text-align: center;line-height: 40px;" onclick="pay_ment('{#$url#}');">立即支付</p>
+    </div>
+</div>
+<script type="text/javascript">
+  function pay_ment(urls){
+    var addressinfo = $('#addressinfo').val();
+    var orderid = $('#orderid').val();
+    if(addressinfo){
+      $.ajax({
+          type:'post',
+          url:'index.php?a=updateaddress&c=supply',
+          data:{addressinfo:addressinfo,orderid:orderid},
+          dataType:'json',
+          success:function(o){
+            if(o.isok == 'true'){
+                 Message.showMessage(o.data,3000);
+                 window.location.href=urls;
+            }else{
+                Message.showMessage(o.data,3000);
+                window.history.go(-1);
+            }
+          }
+      });
+      
+    }else{
+      Message.showMessage('请您先完善收货地址');
+    }
+    //
+  }
+</script>
+</body>
+</html>

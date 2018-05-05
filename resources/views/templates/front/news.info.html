@@ -1,0 +1,69 @@
+{#include file='../front/public.header.html'#}
+<div id="user-basic"><div class="return" data-href="index.php?a=index&c={#$c#}"><i></i></div><h1>{#$article.name#}</h1></div>
+<h1 style="text-align: center; padding:10px 5px;">信息发送时间：{#$article.addtime#}</h1>
+<div style="display: block; padding: 10px; line-height: 200%">
+    {#if $article.is_act gt 0#}<h3>{#$article.ushopname#} 店老板你好！</h3>{#/if#}
+    <span>&nbsp; &nbsp; &nbsp; &nbsp;   {#$article.content#}</span> {#if $article.is_act gt 0#}<span style="margin-left: 20px;"><a href="{#$article.ck_url#}{#$article.is_act#}">点击查看活动</a></span>{#/if#}<br/>
+    {#if $article.is_act gt 0#}
+        {#if $article.is_sure eq 0#}
+            <div style="width: 100%;margin:5% 10%;" id="is_sure" data-cid="{#$article.u_shopid#}"  data-act="{#$article.is_act#}">
+                 <a href="javascript:void(0)" style="width: 10%;margin-left: 5%;" data-err="1">确认</a><a href="javascript:void(0)" style="width: 10%;margin-left: 15%;" data-err="0">取消</a>
+            </div>
+    {#elseif $article.is_sure eq 1#}
+        <div style="width: 100%;margin:5% 10%;color:red;" > 你自己已经确认参加活动！</div>
+    {#elseif $article.is_sure eq 4#}
+        <div style="width: 100%;margin:5% 10%;">你自己已经拒绝参加活动！</div>
+    {#/if#}
+
+    {#/if#}
+
+    {#if $article.soure_username#}
+     <span>信息发送者：</span>{#$article.soure_username#}<br/>
+    {#/if#}
+
+
+    {#if $article.soure_shopname#}
+     <span>信息发送店铺： </span><a href="index.php?a=mylist&c=shop&id={#$article.shop_id#}">{#$article.soure_shopname#}</a><br/>
+    {#/if#}
+
+</div>
+<style> a{ color:#f60}</style>
+<script src="/style/js/jquery/jquery.min.js"></script>
+{#include file='../front/public.footer.html'#}
+<script>
+
+var url='index.php?a=ajaxinfo&c=news';
+
+$('#is_sure a').click(function(){
+    var err=$(this).data('err');
+    var cid= $(this).parent().data('cid');
+    var act= $(this).parent().data('act');
+    $.ajax({
+                url:url,
+                type:'POST',
+                dataTpe:'json',
+                data:{err:err,cid:cid,act:act},
+            })
+            .done(function(o){
+                console.log(o);
+                if(o.isok=='true'){
+                    alert('确认成功！');
+                    var msg = "确认成功！\n\n 是否前往查看该活动！";
+                    if (confirm(msg)==true){
+                        window.location.href= o.url;
+                        return true;
+                    }else{
+                        return false;  }
+
+                }else{
+                   alert('确认失败！');
+                }
+            })
+            .fail(function() {
+            })
+            .always(function() {
+                $('#showLoading').hide();
+            });
+})
+
+</script>

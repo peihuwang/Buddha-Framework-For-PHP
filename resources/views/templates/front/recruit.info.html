@@ -1,0 +1,148 @@
+{#include file='public.header.html'#}
+
+<link href="style/css_two/switch.css" rel="stylesheet" type="text/css" />
+<link href="style/css_two/swiper.min.css" rel="stylesheet" type="text/css" />
+
+<div id="gallery">
+    <div id="goods_gallery" class="goods_gallery ">
+        <div class="hd"><ul></ul></div>
+        <div class="bd">
+            <ul>
+                {#foreach from=$gallery item=item#}
+                <li><img src="{#$item.img#}"></li>
+                {#/foreach#}
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="goods_info">
+    <!--<div style="width: 100%;"><img src="{#$goods.small#}" alt="" style="height: 300px;width: 100%;"></div>-->
+    <div class="title" style="margin-top: 15px;margin-bottom: 5px;text-align: center;font-size: 20px;">{#$goods.recruit_name#}</div>
+    {#if $uid eq $goods.user_id#}<div id="top_up" onclick="Top('{#$goods.id#}','info.top','recruit','0.2')">置  顶</div>{#/if#}
+
+    <!--<div class="price">{#$title#}名称：<em style="color: #0a0a0a;">{#$goods.recruit_name #}</em></div>-->
+    <div class="price">{#$title#}类别：<em style="color: #0a0a0a;">{#$goods.cat_name #}</em></div>
+    <div class="price">{#$title#}学历：<em style="color: #0a0a0a;">{#$goods.education_name #}</em></div>
+    <div class="price">{#$title#}经验：<em style="color: #0a0a0a;">{#$goods.work_name #}</em></div>
+    <div class="price">福利待遇：<em style="color: #0a0a0a;">{#$goods.treatment #}</em></div>
+    <div class="price">{#$title#}人数：<em style="color: #0a0a0a;">{#$goods.number #}</em></div>
+    <div class="price">薪酬：<em >{#if $goods.pay eq '0'#}面议{#else#}<b>{#$goods.pay#}</b>元/月{#/if#}</em></div>
+    <div class="tiem"><span class="update_time">有效时间：{#if $goods.recruit_start_time#}{#$goods.recruit_start_time|date_format:"%Y-%m-%d "#}—{#$goods.recruit_end_time|date_format:"%Y-%m-%d "#}{#else#}长期有效{#/if#}</span><span class="number">浏览：{#$goods.click_count#}人</span></div>
+</div>
+
+<div class="shop_info_supply">
+    <div class="shop_title" data-href="{#$shop_url#}{#$goods.shop_id#}">
+        <div class="shop_img"><img src="{#if $shopinfo.small#}{#$shopinfo.small#}{#else#}/style/images/buslogo.png{#/if#}" alt=""></div>
+        <div class="shop_name" style="color: red;font-size: 14px;margin-left: 15%;"> [进入店铺]
+            {#if $info#}
+            <div style="float: right;color: #666;font-size: 12px;width: 80px; height: 50px;display:inline;text-align: center;}">
+                <img src="style/images/zhuanfayoushang.png" style="width: 40px;height: 40px;" />
+            </div>
+            {#/if#}
+        </div>
+    </div>
+    <!--<div class="steat">-->
+        <!--<div class="renzheng">{#if $shopinfo.is_verify eq 1#}认证店铺 <em><b>V</b>1</em>{#else#}店铺未认证{#/if#} </div>-->
+        <!--<div class="renzheng" style="margin-left: 5%">联系人：<em>{#$goods.contacts #}</b></em></div>-->
+        <!--{#if $shopinfo.is_verify eq 1#}-->
+            <!--<div class="tel">电话：{#$shopinfo.mobile#}</div>-->
+        <!--{#elseif $shopinfo.is_verify eq 0 &&  $shopinfo.verify eq 1#}-->
+            <!--<div class="tel">电话：<a href="tel:{#$shop.mobile#}">{#$shopinfo.mobile#}</a></div>-->
+        <!--{#else#}-->
+            <!--{#if $see eq 1#}-->
+            <!--<div class="tel">电话：<a href="tel:{#$shop.mobile#}">{#$shopinfo.mobile#}</a></div>-->
+            <!--{#else#}-->
+            <!--<div class="tel" onclick="see({#$goods.id#})"><i></i>电话</div>-->
+            <!--{#/if#}-->
+        <!--{#/if#}-->
+    <!--</div>-->
+
+
+    <div class="steat">
+        <div class="renzheng">{#if $shopinfo.is_verify eq 1#}认证店铺 <em><b>V</b>1</em>{#else#}店铺未认证{#/if#} </div>
+        <div class="renzheng" style="margin-left: 5%">联系人：<em>{#$goods.contacts #}</b></em></div>
+        {#if $showphone.isshowphone eq 1#}
+            <div class="tel" style="width: 130px;">电话：<a style="float: right;margin-right: 2px;" href="tel:{#$showphone.mobile#}">{#$showphone.phone#}</a></div>
+        {#else#}
+            <div class="tel" onclick="see({#$goods.id#})"><i></i>电话</div>
+        {#/if#}
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="address">
+        <div><span data-href="http://apis.map.qq.com/tools/routeplan/eword={#$shopinfo.specticloc#}&epointx={#$shopinfo.lng#}&epointy={#$shopinfo.lat#}&policy=1?referer=myapp&key=HM5BZ-ICHKU-VDNVI-27RMJ-YZRCQ-P5BTP"><i></i>{#$shopinfo.distance#}</span> {#$shopinfo.level2#}{#$shopinfo.level3#}{#$shopinfo.specticloc#}</div>
+    </div>
+</div>
+
+<div class="detailed">
+    <h2>详细描述</h2>
+    <div id="content" style="white-space: pre-wrap;word-wrap: break-word;">{#$goods.recruit_desc#}</div>
+</div>
+<div class="goodsad"></div>
+
+{#include file='public.recommend.html'#}
+
+
+<br/><br/>
+
+<script src="/style/js/jquery/jquery.min.js"></script>
+<script src="/style/js/TouchSlide/TouchSlide.1.1.js"></script>
+<script>
+
+    TouchSlide({
+        slideCell :"#goods_gallery",
+        titCell : ".hd ul", // 开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+        mainCell : ".bd ul",
+        effect : "leftLoop",
+        autoPlay : true, // 自动播放
+        autoPage : true, // 自动分页
+        delayTime: 200, // 毫秒；切换效果持续时间（执行一次效果用多少毫秒）
+        interTime: 2500, // 毫秒；自动运行间隔（隔多少毫秒后执行下一个效果
+
+    });
+    function see(id){
+        Message.showConfirm("店铺未认证,支付0.2元查看联系方式", "确定", "取消", function () {
+            $.post('/pay/?a=index&c=index',{id:id,good_table:'recrruit',payment_code:'wxpay',order_type:'info.see',final_amt:0.2},function(re){
+                if(re.errcode==0){
+                    window.location.href=''+re.url+'';
+                }else{
+                    Message.showNotify(""+re.errmsg+"", 1200);
+                }
+            })
+        });
+    }
+</script>
+<script>
+    function Top(id, order_type, good_table, final_amt) {
+        Message.showConfirm("信息置顶,0.2元每次", "确定", "取消", function () {
+            $.post('/pay/index.php?a=index&c=index',
+                {id: id, order_type: order_type, good_table: good_table, final_amt: final_amt,pc:1},
+                function (re) {
+                    if (re.errcode == 0) {
+                        window.location.href = '' + re.url + '';
+                    } else {
+                        Message.showNotify("" + re.errmsg + "", 1200);
+                    };
+                });
+        });
+    };
+</script>
+{#include file='public.footer.html'#}

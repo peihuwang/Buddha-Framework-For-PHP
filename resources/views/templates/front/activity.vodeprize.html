@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>本地商家</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"  />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="applicable-device" content="mobile"/>
+    <link href="/style/css_two/reset.css" rel="stylesheet" type="text/css" />
+    <link href="/style/css_two/style.css" rel="stylesheet" type="text/css" />
+    <link href="/style/css_two/swiper.min.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/style/js_two/jquery-3.1.1.min.js"></script>
+</head>
+<body>
+
+<img class="w" src=" {#$Act.activity_img#}" alt="">
+<!--活动简述-->
+<div class="pl10 pr10 pt10 pb10">
+    <h4 class="cy f16 mb10">活动简述</h4>
+    <div class="brt pl10 pr10 pb10 pt10" >
+        {#$Act.brief#}
+
+    </div>
+</div>
+<!--活动介绍-->
+<div class="pl10 pr10 pt10 pb10">
+    <h4 class="cy f16 mb10">活动介绍</h4>
+    <div class="brt pl10 pr10 pb10 pt10 content">
+        {#$Act.desc#}
+
+    </div>
+</div>
+
+<!--奖品设置-->
+<div class="pl10 pr10 pt10 pb10">
+    <h4 class="cy f16 mb10">奖品设置</h4>
+    <div class="brt pl10 pr10 pb10 pt10 content">
+        {#$Act.prize#}
+    </div>
+</div>
+<br/><br/><br/><br/><br/><br/>
+
+<!--奖品设置-->
+</body>
+{#include file='../front/public.footernew.html'#}
+
+
+<script>
+    //给富文本框的图片添加样式
+    $('.content img').each(function(){
+        $(this).addClass('w');
+    });
+</script>
+</html>

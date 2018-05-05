@@ -1,0 +1,20 @@
+{#include file='public.header.html'#}
+<div id="user-basic">
+    <div class="return" data-href="index.php?a=index&c=supply"><i></i></div>
+    <h1>供应类别</h1>
+</div>
+<div id="category">
+{#$category#}
+</div>
+<script src="/style/js/jquery/jquery.min.js"></script>
+<script>
+    $(function(){
+        $('#category li').each(function(){
+            var aa=$(this).find('ul').length;
+            if(aa==0){
+                $(this).parent().addClass('yes');
+            }
+        })
+    })
+</script>
+{#include file='public.footer.html'#}

@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>财富管理</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<script src="js/jquery.js"></script> 
+<script src="js/main.js?v=1.0"></script>
+<script type="text/javascript" src="js/jquery.form.js"></script>
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+<script>
+$(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+</script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+<div class="col-sm-12">
+<h3>财富管理</h3><ol class="breadcrumb"><li>当前位置</li><li>财富管理</li><li> <strong>
+	{#if $view eq 1#}
+	会员提现
+    {#/if#}
+</strong></li></ol>
+</div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+<p><a href="index.php?a=more&c=order&view={#$view#}&p={#$page#}" class="btn btn-primary">返回上一步</a></p>
+<div class="float-e-margins">
+<div class="ibox-title"><b>基本信息</b></div>
+</div>
+<div class="ibox-content">
+<table class="table table-hover m-b-none">
+<tbody>
+<tr>
+	<td width="120">订单号</td>
+	<td width="300">{#$order.order_sn#}</td>
+	<td></td>
+</tr>
+<tr>
+	<td width="120">订单日期 </td>
+	<td width="300">{#$order.createtime|date_format:"%Y-%m-%d"#}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>订单类型</td>
+	<td>
+		{#if $order.order_type eq 'money.out'#}
+		会员提现
+		{#elseif $order.order_type eq 'shop.v'#}
+		店铺认证
+		{#elseif $order.order_type eq 'info.top'#}
+		信息置顶
+		{#elseif $order.order_type eq 'info.market'#}
+		跨区域信息推广
+		{#elseif $order.order_type eq 'info.see'#}
+		信息查看
+		{#/if#}
+
+	</td>
+	<td></td>
+</tr>
+
+
+</tbody>
+</table>
+</div>
+
+
+<div class="float-e-margins m-t-sm">
+<div class="ibox-title"><b>收货人信息</b></div>
+</div>
+<div class="ibox-content">
+<table class="table table-hover m-b-none">
+<tbody>
+<tr>
+	<td width="120">姓名 </td>
+	<td width="300">{#$user.realname#}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>手机号</td>
+	<td>{#$user.mobile#}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>用户名</td>
+	<td>{#$user.username#}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>账号</td>
+	<td>{#$bankinfo.carenum#}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>开户行</td>
+	<td>{#$bankinfo.bankname#}{#$bankinfo.openbank#}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>姓名、名称</td>
+	<td>{#$bankinfo.name#}</td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- 付款信息 -->
+<div class="float-e-margins m-t-sm">
+<div class="ibox-title"><b>付款信息</b></div>
+</div>
+<form method="POST" action="">
+	<div class="ibox-content">
+		<table class="table table-hover m-b-none">
+			<tbody>
+				<tr>
+					<td width="120">	{#if $view eq 1#}会员提现{#else#}付款{#/if#}状态</td>
+					<td width="300">{#if $order.pay_status eq 1#}已付款{#else#}未付款{#/if#}</td>
+					<td></td>
+				</tr>
+
+				<tr>
+					<td>{#if $view eq 1#}会员提现{#else#}付款{#/if#}金额</td>
+					<td>{#$order.final_amt#}元</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>备注</td>
+					<td><textarea name="remark" id="remark" style="width: 200px;height: 80px;"></textarea></td>
+
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="ibox-content">
+		<table class="table table-hover m-b-none">
+			<tbody>
+			{#if $order.pay_status eq 0#}
+			<tr>
+				<td colspan="3" class="text-center">
+					<button><a href="index.php?a=edit&c=order&id={#$order.id#}&view={#$view#}&p={#$page#}&pay_status=1" class="btn btn-primary">请谨慎操作：此操作不可逆转 设置{#if $view eq 1#}会员提现{#else#}付款{#/if#}成功</a></button>
+				</td>
+			</tr>
+			{#/if#}
+			</tbody>
+		</table>
+	</div>
+</form>
+</div>
+
+</body>
+</html>

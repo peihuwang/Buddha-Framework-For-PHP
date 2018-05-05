@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>e网通审核</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+    </script>
+    {#$editorjs#}
+    {#$editorjstxt#}
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>注册会员</h3><ol class="breadcrumb"><li>当前位置</li><li>注册会员</li><li> <strong>e网通审核</strong></li></ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div id="goods_main">
+        <div class="goods_tab">
+    <div class="ibox-content  ">
+        <div class="table-responsive">
+            <table class="table table-hover m-b-none">
+                <tr>
+                    <td width="120">用户名</td>
+                    <td>{#$Shopdatum.user_name#}</td>
+                </tr>
+                <tr>
+                    <td width="120">支付状态</td>
+                    <td style="color: red;">{#if $Shopdatum.ispay eq 1#}已支付{#else#}未支付{#/if#}</td>
+                </tr>
+                <tr>
+                    <td width="120">身份证号</td>
+                    <td>{#$Shopdatum.number#}</td>
+                </tr>
+                <tr>
+                    <td width="120">身份证正面照</td>
+                    <td><img src="{#$Shopdatum.idpos_img#}" style="width: 200px;height: 150px;"></td>
+                </tr>
+                <tr>
+                    <td width="120">身份证反面照</td>
+                    <td><img src="{#$Shopdatum.idback_img#}" style="width: 200px;height: 150px;"></td>
+                </tr>
+                <tr>
+                    <td width="120">营业执照</td>
+                    <td><img src="{#$Shopdatum.license_img#}" style="width: 200px;height: 150px;"></td>
+                </tr>
+                <tr>
+                    <td width="120">添加时间</td>
+                    <td>{#$Shopdatum.createtimestr#}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+        </div>
+       
+        
+    <div class="float-e-margins m-t-sm">
+        <div class="ibox-title"><b>供应信息审核</b>
+        </div>
+    </div>
+    <form  method="post" action="" onsubmit="return checkpost(document.checkform);"  name="checkform" >
+        <div class="ibox-content ">
+            <div class="table-responsive">
+                <table class="table table-hover m-b-none">
+                    {#if $Supply.is_sure eq 1#}
+                    <tr>
+                        <td width="120">上架/下架</td>
+                        <td width="300"><label><input type="checkbox" value="0" name="buddhastatus" class="i-checks" {#if $Supply.buddhastatus eq 0#}checked{#/if#}>上架</label></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width="120">设置供应为热门</td>
+                        <td width="300"><label><input type="checkbox" value="1" name="is_hot" class="i-checks" {#if $Supply.buddhastatus eq 1#}checked{#/if#}>是否设置为热门供应</label></td>
+                        <td></td>
+                    </tr>
+                    {#/if#}
+                    <tr>
+                        <td width="120">审核</td>
+                        <td width="300"><input type="radio" value="1" name="is_sure" class="i-checks" {#if $Supply.is_sure eq 1#}checked{#/if#}>审核通过
+                            <input type="radio" value="4" name="is_sure" class="i-checks" {#if $Supply.is_sure eq 4 or $Supply.is_sure eq 0#} checked{#/if#}>审核不通过</td>
+                        <td></td>
+                    </tr>
+                    <tr id="remarks" {#if $Supply.is_sure eq 1#} style="display: none"{#/if#}>
+                        <td>备注</td>
+                        <td><textarea name="remarks" id="remarksval" class="form-control" style="height: 100px;">{#$shopinfo.remarks#}</textarea></td>
+                        <td></td>
+                    </tr>
+                    </table>
+                </div>
+            </div>
+       <div class="text-center m-t-sm"><button type="submit" class="btn btn-primary">审 核</button></div>
+    </form>
+    </div>
+<script>
+    $(function(){
+        var main=$('#goods_main > .goods_tab');
+        $('#goods_tabs span').bind('click', function() {
+            var index=$(this).index();
+            $(this).attr('class','btn btn-primary').siblings('span').attr('class','btn btn-danger');
+            main.eq(index).show().siblings('.goods_tab').hide();
+        });
+
+    $('.iCheck-helper').click(function(){
+        var is_sure=$(this).siblings('input[type="radio"]:checked ').val();
+       if(is_sure!=4){
+         $('#remarks').hide()
+       }else {
+           $('#remarks').show()
+       }
+    })
+    });
+function checkpost(){
+   var is_sure=$('.iradio_square-green').find('input[type="radio"]:checked ').val(),
+           remarksval=$('#remarksval').val();
+    if(is_sure!=1){
+      if(remarksval==''){
+          alert('填写不通过原因！');
+          return false;
+      }
+    }
+}
+</script>
+</body>
+</html>

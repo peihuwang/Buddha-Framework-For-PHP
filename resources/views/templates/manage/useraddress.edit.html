@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<script src="js/jquery.js"></script> 
+<script src="js/main.js?v=1.0"></script>
+<script type="text/javascript" src="js/jquery.form.js"></script>
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+<script>
+$(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+</script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+<div class="col-sm-12">
+<h3>会员管理</h3><ol class="breadcrumb"><li>当前位置</li><li>收货地址管理</li><li> <strong>编辑收货地址</strong></li></ol>
+</div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+<p>
+<a href="index.php?a=more&c=useraddress&id={#$id#}&user_id={#$user_id#}&p={#$page#}" class="btn btn-primary">返回上一步</a>
+</p>
+<form method="post" action="" onsubmit="return checkpost(document.checkform);"  name="checkform" enctype="multipart/form-data">
+<div class="float-e-margins">
+<div class="ibox-title"><b>编辑收货地址</b></div>
+</div>
+<div class="ibox-content">
+<table class="table table-hover m-b-none">
+<tbody>
+<tr>
+<td width="120">收货人  <span class="text-danger">*</span></td>
+<td width="300"><input type="text" value="{#$useraddress.name#}" name="name" id="name"  class="form-control"></td>
+<td></td>
+</tr>
+<tr>
+<td>联系电话  <span class="text-danger">*</span></td>
+<td><input type="text" name="mobile" id="mobile" value="{#$useraddress.mobile#}" class="form-control"></td>
+<td></td>
+</tr>
+<tr>
+	<td>邮编 </td>
+	<td><input type="text" name="zip" id="zip" value="{#$useraddress.zip#}"  class="form-control"></td>
+	<td></td>
+</tr>
+<tr>
+<td>收货区域 <span class="text-danger">*</span></td>
+<td colspan="2" id="province" class="form-inline">
+	<div class="form-group">
+    <select class="province form-control" name="province" data-value="{#$useraddress.province#}"   data-first-title="选择省/市" disabled></select>
+    </div>
+    <div class="form-group">
+     <select class="city form-control" name="city" data-value="{#$useraddress.city#}"   data-first-title="选择市/区" disabled></select>
+    </div>
+    <div class="form-group">
+     <select class="area form-control" name="area" data-value="{#$useraddress.area#}"   data-first-title="选择区" disabled></select>
+    </div></td>
+</tr>
+<tr>
+<td>详细地址 <span class="text-danger">*</span></td>
+<td><input type="text"  name="addr"  id="addr"  value="{#$useraddress.addr#}" class="form-control"></td>
+<td></td>
+</tr>
+<tr>
+<td>设为默认地址</td>
+<td><input type="checkbox" value="1" name="def_addr" class="i-checks" {#if $useraddress.def_addr eq 1#}checked {#/if#} />默认收货地址</td>
+<td></td>
+</tr>
+<tr>
+<td>地址状态</td>
+<td><input type="checkbox" value="1" name="isdel" class="i-checks" {#if $useraddress.isdel eq 0#}checked {#/if#}/>{#if $useraddress.isdel eq 0#}启用{#else#}禁用{#/if#}</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class=" text-center m-t-sm">
+<button  type="submit" class="btn btn-primary">提 交</button>
+</div>
+</form>
+
+</div>
+<script type="text/javascript">
+function checkpost(obj){
+	if($('#name').val()==''){
+		alert('输入联系人');
+		$('#name').focus();
+		return false;
+	}
+	if($('#mobile').val()==''){
+		alert('输入联系电话');
+		$('#mobile').focus();
+		return false;
+	}
+	if (!$("#mobile").val().match(/^1[34578]\d{9}$/)) {
+		alert("手机号码格式不正确！");
+		$('.mobile').focus();
+		return false;
+	}
+	if($('.province').val()=='0'){
+		alert('选择区域')
+		$('.province').focus();
+		return false;
+	}
+	if($('.city').val()=='0'){
+		alert('选择市')
+		$('.city').focus();
+		return false;
+	}
+	if($('.area').val()=='0'){
+		alert('选择区')
+		$('.area').focus();
+		return false;
+	}
+	if($('.addr').val()=='0'){
+		alert('输入详细地址')
+		$('.addr').focus();
+		return false;
+	}
+}
+</script>
+<script src="js/city/jquery.cxselect.min.js"></script>
+<script type="text/javascript">
+	$('#province').cxSelect({
+	url: 'js/city/cityData.min.json',
+	selects:['province', 'city', 'area'],
+});
+</script> 
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>系统欢迎页</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green"})
+        });
+    </script>
+</head>
+<body>
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>系统首页</h3>
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li><strong>系统首页</strong></li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+
+
+            <!-- 安全提示 -->
+            <div class="panel panel-primary">
+                <div class="panel-heading">安全提示</div>
+                <div class="panel-body">
+                    <p>强烈建议您将(bootstrap/Buddha/config/config.ini.php)文件属性设置为644（linux/unix）或只读（NT） </p>
+
+                    <p>强烈建议您使用 data目录隐藏功能，此功能可大大提高网站安全性，设置方法请参照相关帮助文档或联系官方寻求帮助 </p></div>
+            </div>
+            <!-- 您的资料 -->
+            <div class="panel panel-success">
+                <div class="panel-heading">您的资料</div>
+                <div class="panel-body">
+                    <p>用户名：{#$member.username#}</p>
+
+                    <p>级别：{#if $member.id eq 1#}超级管理员{#else#}{#/if#}</p>
+
+                    <p>上次登录时间：{#$member.lasttime|date_format:'%Y-%m-%d %H:%M:%S'#}</p>
+
+                    <p>上次登录IP：{#$member.loginip#}</p>
+                </div>
+            </div>
+            <!-- 系统信息 -->
+            <div class="panel panel-info">
+                <div class="panel-heading">系统信息</div>
+                <div class="panel-body">
+                    <p>服务器软件：{#$sys.serverSoft#}</p>
+
+                    <p>PHP版本：{#$sys.PHPVersion#}</p>
+
+                    <p>PHP内存限制: {#$sys.php_memory_limit#}</p>
+
+                    <p>域名地址：{#$sys.domain#}</p>
+                </div>
+            </div>
+            <!-- 系统配置 -->
+            <div class="panel panel-warning">
+                <div class="panel-heading">系统配置</div>
+                <div class="panel-body">
+                    <p>操作系统：{#$sys.serverOS#}</p>
+
+                    <p>MySQL版本：5.5.40</p>
+
+                    <p>上传文件：{#$sys.uploadFile#}</p>
+
+                    <p>最大执行时间:{#$sys.max_execution_time#}</p>
+
+                    <p>当前脚本占用内存:{#$sys.current_memory#}</p>
+
+                    <p>服务器时间:{#$sys.serverTime#}</p>
+                </div>
+            </div>
+            <!--  -->
+
+            <!-- end -->
+        </div>
+
+    </div>
+</body>
+</html>

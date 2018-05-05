@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>财富管理</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/font-awesome.min.css" rel="stylesheet">
+	<link href="css/animate.min.css" rel="stylesheet">
+	<link href="css/style.min.css" rel="stylesheet">
+	<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+	<script src="js/jquery.js"></script>
+	<script src="js/main.js?v=1.0"></script>
+	<script type="text/javascript" src="js/jquery.form.js"></script>
+	<script src="js/plugins/iCheck/icheck.min.js"></script>
+	<script>
+		$(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+	</script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div class="col-sm-12">
+		<h3>财富管理</h3><ol class="breadcrumb"><li>当前位置</li><li>财富管理</li><li> <strong>账单列表</strong></li></ol>
+	</div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+	<p>
+		{#foreach from=$searchType item=item key=key#}
+		<a href="index.php?a=more&c=bill&view={#$key#}" class="btn{#if $params.view eq $key#} btn-primary{#else#} btn-danger{#/if#}">{#$item#}</a>
+		{#/foreach#}
+	</p>
+	<div class="panel panel-danger">
+		<div class="panel-heading"><b>搜索</b></div>
+		<form method="post" action="" class="form-inline">
+			<div class="panel-body">
+				<div class="form-group">
+					<select id="option" name="view" class="form-control">
+						{#foreach from=$searchType item=item key=key#}
+						<option value="{#$key#}"  {#if $params.view eq $key#} selected{#/if#}>{#$item#}</option>
+						{#/foreach#}
+					</select>
+
+				</div>
+				<div class="form-group"><input type="text" value="{#$keyword#}" name="keyword" id="keyword" class="form-control" placeholder="请选择方式后输入搜索内容"></div>
+				<button value="搜 索" type="submit" class="btn btn-danger" >搜 索</button>
+			</div>
+		</form>
+	</div>
+	<div class="float-e-margins">
+		<div class="ibox-title"><b><span >收入:{#$moneyin|string_format:"%.2f"#}</span><span style="padding-left: 20px">支出:{#$moneyout|string_format:"%.2f"#}</span></b></div>
+	</div>
+	<div class="float-e-margins">
+		<div class="ibox-title"><b>账单列表</b></div>
+	</div>
+
+	<form method="post" action="" onsubmit="return checkpost(document.checkform);"  name="FORM" >
+		<div class="ibox-content">
+			<div class="table-responsive">
+				<table class="table table-hover m-b-none">
+					<thead>
+	<tr>
+		<th><span onclick="CheckAll(document.FORM,'')">全选</span></th>
+		<th>订单号</th>
+		<th>订单类型</th>
+		{#if $view neq 99#}
+		<th>用户名</th>
+		<th>收货人</th>
+		<th>手机号</th>
+		{#/if#}
+		<th>区域</th>
+		<th>金额</th>
+		<th>订单日期</th>
+
+	</tr>
+</thead>
+<tbody>
+{#if $list|@count neq 0 #}
+{#foreach from=$list item=item#}
+	<tr>
+		<td><input type="checkbox" value="{#$item.id#}" name="ids[{#$item.id#}]" class="i-checks"/></td>
+		<td>{#$item.order_sn#}</td>
+		<td>
+
+			{#if $item.order_type eq 'money.out'#}
+			会员提现
+			{#elseif $item.order_type eq 'shop.v'#}
+			店铺认证
+			{#elseif $item.order_type eq 'info.top'#}
+			信息置顶
+			{#elseif $item.order_type eq 'info.market'#}
+			跨区域信息推广
+			{#elseif $item.order_type eq 'info.see'#}
+			信息查看
+			{#/if#}
+
+
+		</td>
+		{#if $view neq 99#}
+		<td>{#$item.username#}</td>
+		<td>{#$item.realname#}</td>
+		<td>{#$item.mobile#}</td>
+		{#/if#}
+		<td>{#$item.level1_name#}(
+
+			<a href="index.php?a=more&c=bill&view={#$view#}&level={#$item.level1#}">{#$item.level1#}</a>
+
+			) - {#$item.level2_name#}(
+			<a href="index.php?a=more&c=bill&view={#$view#}&level={#$item.level2#}">{#$item.level2#}</a>
+			)- {#$item.level3_name#}(
+			<a href="index.php?a=more&c=bill&view={#$view#}&level={#$item.level3#}">{#$item.level3#}</a>
+			)
+
+		</td>
+		<td>{#$item.billamt#}</td>
+
+		<td>{#$item.createtime|date_format:"%Y-%m-%d"#}</td>
+
+	</tr>
+{#/foreach#}
+{#else#}
+<tr><td colspan="10">你所查询的数据不存在！<td></td>
+{#/if#}
+</tbody>
+</table>
+</div>
+</div>
+<div class="text-center m-t-sm">
+	{#$strPages#}
+</div>
+
+
+<div class="text-center m-t-sm">
+
+</div>
+</form>
+
+</div>
+<script type="text/javascript" language="JavaScript">
+function delnav(){
+	return confirm("确实要删除商品类别吗？");
+}
+</script>
+</body>
+</html>

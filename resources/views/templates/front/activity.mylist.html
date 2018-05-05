@@ -1,0 +1,260 @@
+{#include file='public.headernew.html'#}
+<!--编辑器皮肤-->
+<link href="/style/css_two/quill.snow.css" rel="stylesheet">
+<script type="text/javascript" src="/style/js/jquery.form.js"></script>
+<link rel="stylesheet" type="text/css" href="/style/css_two/release.css"/>
+<link rel="stylesheet" type="text/css" href="/style/css_two/countdown.css" />
+<link rel="stylesheet" href="/style/css_two/jquery.countdown.css" />
+<script type="text/javascript" src="/style/js/activity.js"></script>
+
+<!--倒计时-->
+<script src="/style/js_two/jquery.countdown.js"></script>
+<div id="Div_main" style="width: 94%;margin:0 auto;">
+<!--头部 start-->
+    <div class="top w by pf">
+        <a class="back pa" href="index.php?a=index&c=activity"><img src="/style/img_two/back.png"/></a>
+        <p class="f18 cw w tc">活动详情</p>
+    </div>
+<!--头部 end-->
+
+<!--活动详情页 start-->
+    <p class="huodong_detail_title f18 cb pl10 pr10" style="margin-top:44px;">{#$act.name#}</p>
+
+<!--活动商家-->
+    <div class="huodong_detail_logo bw pr">
+        <img class="huodong_img pa" src="{#$act.activity_thumb#}"/>
+        <div class="huodong_text">
+            <p class="f14 cb">{#$act.shop_name#}</p>
+            <p class="f12 cg">添加日期：{#$act.add_time|date_format:"%Y-%m-%d"#}</p>
+        </div>
+    </div>
+<!--活动详情页 end-->
+
+    <p class="huodong_detail_time f12 cw pl10 pr10 pr" style="margin-top:12px;">活动时间：{#$act.start_date_ns#} 时 至 {#$act.end_date_ns#} 时<span class="pa"><i></i>{#$act.click_count#}</span></p>
+
+    <p class="huodong_detail_time f12 cw pl10 pr10 pr" style="margin-top:12px;">报名时间：{#$act.sign_start_time#} 时 至 {#$act.sign_end_time#} 时<span class="pa"></span></p>
+
+    <form action="index.php?a={#if $act.type eq 1#}ajaxmylist{#elseif $act.type eq 2#}ajaxmylist_coo{#/if#}&c=activity" method="post" id="questionnaireForm" class="w">
+        <input type="hidden" value="" name="cooid"><input type="hidden" value="" name="shop_id"/>
+    <!--内容部分 start-->
+        <div class="w clearfloat">
+            <div id="contentlist" class="w" style="text-overflow:ellipsis; white-space:pre-wrap; word-wrap:break-word; word-break:normal;">
+                {#$act.desc#}
+            </div>
+            {#if $act.brief#}
+            <p class="f14 cb pl10 pr10 ">活动简述：{#$act.brief#}</p>
+            {#/if#}
+            {#if  $act.time_c eq 0 #}
+            <label class="pl10 tr f14 cb mt10" style="display:inline-block; width:70px;"><span style="color: red;font-size: 20px;">*</span>姓名：</label>
+            <input type="text" class="brt brb brl brr mt10 pl10" style="height:30px; width:210px;"   id="user" name="user"/><br>
+            <label class="pl10 tr f14 cb mt10" style="display:inline-block; width:70px;"><span style="color: red;font-size: 20px;">*</span>手机号：</label>
+            <input type="text" class="brt brb brl brr mt10 pl10" style="height:30px; width:210px;"  id="phone"  name="phone" /> <br>
+
+            <label class="pl10 tr f14 cb mt10" style="display:inline-block; width:70px; vertical-align:top;">留言：</label>
+            <textarea class="brt brb brl brr mt10 pl10" name="message"  cols="30" rows="10" style="width:210px;"></textarea>
+
+        </div>
+    <!--内容部分 end-->
+
+
+    <!--自定义表单部分 start-->
+        <div class="clearfloat pl10 pr10">
+            <input type="hidden" class="brt brb brl brr"  name="id" id="a_id" value="{#$act.id#}"/>
+            {#if $act['form_desc'].desc#}
+            <div class="w" id="zdytable">
+                <!--单行-->
+                {#foreach from=$act['form_desc']['desc'].txt  item=item key=key#}
+                <p class="w f14 cb mt20">{#$item.val#}：</p>
+                <input type="text" class="w bg mt10" name="txt[{#$key#}]" value=""  class="txt" style="height: 40px;"/><br>
+                {#/foreach#}
+
+                <!--多行-->
+                {#foreach from=$act['form_desc']['desc'].text  item=item key=key#}
+                <p class="w f14 cb mt20">{#$item.val#}：</p>
+                <textarea  class="w bg mt10" rows="3" name="text[{#$key#}]" required  class="text" style="height: 80px;"></textarea>
+                {#/foreach#}
+                <!--单选-->
+
+                {#foreach from=$act['form_desc']['desc'].radioname item=item key=key#}
+                <div class="mt20">
+                    <label class="w f14 cb ">{#$item.val#}：</label>
+                    {#foreach from=$item.son  item=item_son key=key_son#}
+                    <input class="f14 cb " type="radio" name="radioname[{#$key#}]" value="{#$item_son.sub3#}"  name="radioname[{#$key_son#}]" required/><span>{#$item_son.val#}</span>
+                    {#/foreach#}
+                </div>
+                {#/foreach#}
+
+                <p></p>
+                <!--多选-->
+                {#foreach from=$act['form_desc']['desc'].checkname  item=item key=key#}
+                <div class="mt20">
+                    <label class="w f14 cb ">{#$item.val#}：</label>
+                    {#foreach from=$item.son  item=item_son key=key_son#}
+                    <input class="f14 cb " type="checkbox" name="checkname[{#$key_son#}]" value="{#$item_son.sub3#}" required/><span>{#$item_son.val#}</span>
+                    {#/foreach#}
+                </div>
+                {#/foreach#}
+            </div>
+        {#/if#}
+        </div>
+    </form>
+    {#/if#}
+<!--自定义表单部分 end-->
+<!--活动倒计时 start-->
+    {#if $act.time_e eq 1#}
+        <p class="countdown_txt w f22 tc" style="color:#e50446;">活动已结束</p>
+    {#else#}
+        <input type="hidden" id="timeb" value="{#$act.time_b#}"/>
+        <input type="hidden" id="starttime" value="{#$act.start_date_s#}"/><br/>
+        <input type="hidden" id="endtime"   value="{#$act.end_date_s#}"/><br/>
+        <p id="note" class="tc f22 cb mt20 mb10"></p>
+        <div id="countdown" class="mt10"></div>
+    {#/if#}
+<!--活动倒计时 end-->
+
+    <br/><br/>
+<!--参加报名的人 start-->
+    <div class="clearfloat" style="margin:20px auto 0; width:90%;" id="setup" >
+        <p class="f16 cb1">参与报名的人数</p>
+        <div class=" bor br3 mt10"  style="height:250px;">
+            <div class="huodong_banner swiper-container w pr bw" style="height:240px;">
+                <i></i>
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide f14 cb clearfloat w" id="signlist"></div>
+                </div>
+                <a class="more" href="javascript:void(0);"></a>
+            </div>
+        </div>
+    </div>
+<!--参加报名的人 end-->
+
+    {#if $aco#}
+<!--合作商家 start-->
+    <div class="saller_box clearfloat w"  style="display:block;">
+        <p class="f16 cb1" style="margin:10px auto; width:90%;">合作商家</p>
+        <div class="bg clearfloat">
+            {#foreach from=$aco.aco item=item#}
+                <a class="wrap fl bg w333 tc" style="display:block; height:110px;" href="javascript:void(0);" onclick="jump_url('{#$aco.surl#}{#$item.act_id#}')">
+                    <img class="ma pt10" src="{#$item.shop_logo#}" style="width:60px; height:60px; border-radius:100%;
+"/>
+                    <p class="fl12 cb tc mt10">{#$item.shop_name#}</p>
+                </a>
+            {#/foreach#}
+        </div>
+    </div>
+    {#/if#}
+<!--合作商家 end-->
+
+    <input type="hidden" value="{#$act.id#}" id="aid">
+    <br>
+    <br>
+    <br>
+    <br>
+    <!--报名按钮 start-->
+    {#if $act.time_c eq 0#}
+    <div class="huodong_btn w  clearfloat">
+        <div class="wrap">
+            <a class="f18 cw tc by br3" href="javascript:void(0);" onclick="Applicationform()">我要报名</a>
+        </div>
+        <br/><br/>
+        {#if $act.type eq 2#}
+            <div class="wrap">
+                <a class="f18 cw tc by br3" href="javascript:void(0);"  id="coosop">申请成为合作商家</a>
+            </div>
+            <br><br><br><br><br><br/><br/>
+        {#/if#}
+    </div>
+    {#/if#}
+
+    <!--报名按钮 end-->
+    <br><br><br><br/><br/>
+</div>
+<div id="search_page" style="display:none;" style="width: 100%;margin-left:0px;">
+    <!--头部搜索 start-->
+    <div style="width: 100%;padding:10px" id="search_page_li">
+        <h2 style="width: 100%;line-height: 50px;background-color: #00DDDD"><span style="font-size: 20px;" id="back_search"> < </span><span style="margin-left: 20%">请选择参与活动的店铺 </span></h2>
+        <ul style="width: 95%;"></ul>
+    </div>
+    <!--头部搜索 end-->
+</div>
+
+
+
+
+
+{#include file='public.recommend.html'#}
+
+
+
+
+
+<!-- Swiper JS -->
+<script src="/style/js_two/swiper.min.js"></script>
+
+<!-- Initialize Swiper -->
+<script>
+    function  Swiper_Swiper(){
+        var swiper1 = new Swiper('.huodong_banner', {
+            autoplay: 3000,
+            direction: 'vertical',
+            slidesPerView: 1,
+            loop:true
+        });
+    }
+
+    $('#contentlist img').each(function(){
+        $(this).addClass('w');
+    });
+</script>
+<script>
+    $(function(){
+        sign_a();
+        $("#zdytable input[type='radio']").each(function(){
+            $(this).first().attr('checked', 'checked');
+        });
+    })
+
+    //    搜索跳转
+
+$('#coosop').click(function(){
+    var user= $('#user').val();
+    var phone= $('#phone').val();
+    var aa=true;
+    $("#zdytable input[type='text']").each(function(){
+        if($(this).val()==''){
+            $(this).focus();
+            alert('为了更好的为你服务，请填写完所有的调查内容后再报名吧！');
+            aa =false;
+            return false;
+        }
+    });
+    $("#zdytable input[type='checkbox']").each(function(){
+
+        var len=$("#zdytable input[type='checkbox']:checked").length;
+        if(len==0){
+            $(this).focus();
+            alert('为了更好的为你服务，请至少选择一项后再报名吧！');
+            aa =false;
+            return false;
+        }
+    });
+    if(phone!=''){
+        if(isPhoneNo(phone)==false) {
+            alert('手机号格式不正确!');
+            aa=false;
+            return false;
+        }
+    }
+    if(aa){
+
+        Verification_coo();
+    }
+})
+
+$('#back_search').click(function(){
+    $('#search_page').hide();
+    $('#Div_main').show();
+})
+</script>
+
+{#include file='public.footernew.html'#}

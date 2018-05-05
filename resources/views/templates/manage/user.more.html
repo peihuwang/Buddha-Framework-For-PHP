@@ -1,0 +1,188 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>会员列表</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green"})
+        });
+    </script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>会员管理</h3>
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>会员管理</li>
+            <li><strong>
+                普通会员 列表</strong></li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <p>
+        {#foreach from=$usertype item=item key=key#}
+        <a href="index.php?a=more&c=user&view={#$key#}"
+           class="btn{#if $params.view eq $key#} btn-primary{#else#} btn-danger{#/if#}">{#$item#}</a>
+        {#/foreach#}
+        <a href="index.php?a=add&c=user" class="btn btn-danger">添加会员</a>
+
+    </p>
+
+    <div class="panel panel-danger">
+        <div class="panel-heading"><b>搜索</b></div>
+        <form method="post" action="" class="form-inline">
+            <div class="panel-body">
+                <div class="form-group">
+                    <select id="option" name="option" class="form-control">
+                        {#foreach from=$searchType item=item key=key#}
+                        <option value="{#$key#}" {#if $params.option eq $key#} selected{#
+                        /if#}>{#$item#}</option>
+                        {#/foreach#}
+                    </select>
+
+                </div>
+                <div class="form-group"><input type="text" value="{#$keyword#}" name="keyword" id="keyword"
+                                               class="form-control" style="width: 300px;"></div>
+
+                录入店铺数检索条件：
+                <div class="form-group">
+                    <input type="text" name="start" id="start" value="{#$start#}" class="form-control some_class"
+                           placeholder="起始时间" readonly style="cursor:pointer; background: none">
+                </div>
+                —
+                <div class="form-group"><input type="text" name="end" id="end" value="{#$end#}"
+                                               class="form-control some_class" placeholder="结束时间" readonly
+                                               style="cursor:pointer; background: none"></div>
+
+                <button value="搜 索" type="submit" class="btn btn-danger">搜 索</button>
+            </div>
+        </form>
+    </div>
+    <form method="post" action="" onsubmit="return checkpost(document.checkform);" name="FORM">
+        <div class="float-e-margins">
+            <div class="ibox-title"><b>会员列表</b>
+            </div>
+        </div>
+        <div class="ibox-content ">
+            <div class="table-responsive">
+                <table class="table table-hover m-b-none">
+
+                    <thead>
+                    <tr>
+                        <th><span onclick="CheckAll(document.FORM,'')">全选</span></th>
+                        <th>用户名</th>
+                        <th>会员级别</th>
+                        <th>会员姓名</th>
+
+                        <th>手机号</th>
+                        <th>会员状态</th>
+
+                        <th>注册时间</th>
+                        {#if $utype eq 1#}
+                        <th>操作</th>
+                        {#/if#}
+                    </tr>
+                    <tbody>
+                    {#if $list#}
+                    {#foreach name=list from=$list item=item#}
+                    <tr>
+                        <td><input type="checkbox" value="{#$item.id#}" name="ids[{#$item.id#}]" class="i-checks"/></td>
+                        <td>{#$item.username#}</td>
+                        <td>{#if $item.groupid eq 1#}商家{#elseif $item.groupid eq 2#}代理商{#elseif $item.groupid eq
+                            3#}合伙人{#else#}普通会员{#/if#}
+                        </td>
+                        <td>{#$item.realname#}</td>
+                        <td>{#$item.mobile#}</td>
+                        <td>{#if $item.state eq 1#}正常{#elseif $item.state eq 0#}停用{#else#}注销{#/if#}</td>
+
+                        <td>{#$item.onlineregtime|date_format:'%Y-%m-%d'#}</td>
+                        {#if $utype eq 1#}
+                        <td>
+                            <a href="index.php?a=edit&c=user&id={#$item.id#}&p={#$page#}&view={#$item.groupid#}">[编辑]</a>
+                            {#if $dels eq 1#}<a
+                                href="index.php?a=del&c=user&id={#$item.id#}&p={#$page#}&view={#$item.groupid#}"
+                                onclick="delnav()">[删除]</a>{#/if#}
+                        </td>
+                        {#/if#}
+                    </tr>
+                    {#/foreach#}
+                    {#else#}
+                    <tr>
+                        <td class="text-center" colspan="11">暂无数据</td>
+                    </tr>
+                    {#/if#}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+        <div class="text-center m-t-sm">
+            {#$strPages#}
+        </div>
+        <div class="text-center m-t-sm"><span>选中操作：</span>
+            <input type="radio" value="" name="job" class="i-checks">停用
+            <input type="radio" name="jb" value="{#$groupid#}" class="btn btn-primary i-checks">导出
+        </div>
+        <div class="text-center m-t-sm">
+            <button type="button" onclick="CheckAll(document.FORM,'')" class="btn btn-primary">全 选</button>
+            <button type="submit" class="btn btn-primary">提 交</button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" language="JavaScript">
+    function delnav() {
+        return confirm("确认要删除此会员吗？");
+    }
+</script>
+
+
+<link rel="stylesheet" href="js/datetimepicke/datetimepicker.css">
+<script type="text/javascript" src="js/datetimepicke/datetimepicker.full.min.js"></script>
+<script type="text/javascript">
+    //日期时间
+    $('.some_class').datetimepicker({
+        lang: 'ch',
+        timepicker: false,
+        format: 'Y-m-d',
+        //minDate: '-1970/01/02',
+    });
+
+    function abcv() {
+
+        var start = $("#start").val();
+        var end = $("#end").val();
+        var url = 'index.php?a=exporta&c=statistics&t=' + Math.random();
+        alert(url)
+        $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {start: start, end: end},
+                })
+                .done(function (o) {
+                })
+                .fail(function () {
+                })
+                .always(function () {
+
+                });
+
+    }
+
+</script>
+</body>
+</html>

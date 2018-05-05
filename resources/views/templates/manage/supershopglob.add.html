@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无敌软件全局添加</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<script src="js/jquery.js"></script> 
+<script src="js/main.js?v=1.0"></script>
+<script src="js/jquery.form.js"></script>
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+<script>
+$(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+</script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+<div class="col-sm-12">
+<h3>无敌软件全局添加</h3><ol class="breadcrumb"><li>当前位置</li><li>无敌软件管理</li><li> <strong>无敌软件全局添加</strong></li></ol>
+</div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+<p>
+<a href="index.php?a=more&c=supershopconf" class="btn btn-primary">返回上一步</a>
+</p>
+
+<form method="post" action="" onsubmit="return checkpost(document.checkform);" enctype="multipart/form-data">
+<div class="float-e-margins">
+<div class="ibox-title"><b>无敌软件全局添加</b></div>
+</div>
+<div class="ibox-content">
+<table class="table table-hover m-b-none">
+<tbody>
+
+<tr>
+	<td width="120">所属无敌店铺 <span class="text-danger">*</span></td>
+	<td width="360">
+		<select class="form-control" name="supershopconf_id" id="supershopconf_id">
+			<option value="0">请选择无敌店铺</option>
+			{#$optionList#}
+		</select></td>
+	<td></td>
+</tr>
+
+<tr>
+	<td>名称 <span class="text-danger">*</span></td>
+	<td><input type="text" value="" name="name" id="name"  class="form-control"></td>
+	<td></td>
+</tr>
+
+
+<tr>
+	<td>图片上传</td>
+	<td>
+		<div class="btn btn-danger btn-file">
+			<i class="glyphicon">点击上传</i>
+			<input type="file" name="Image" class="file">
+		</div>
+	</td>
+	<td></td>
+</tr>
+
+
+
+</tbody>
+</table>
+</div>
+<div class="text-center m-t-sm">
+<button type="submit" class="btn btn-primary">提 交</button>
+</div>
+</form>
+</div>
+</div>
+
+<link rel="stylesheet" href="js/datetimepicke/datetimepicker.css">
+<script src="js/datetimepicke/datetimepicker.full.min.js"></script>
+<script>
+
+
+	$(function() {
+         //日期时间
+		$('.some_class').datetimepicker({
+			lang: 'ch',
+			timepicker: false,
+			format: 'Y-m-d',
+			minDate: '-1970/01/02',
+		});
+
+
+	})
+</script>
+</body>
+</html>

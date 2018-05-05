@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>留言详情</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+    </script>
+    {#$editorjs#}
+    {#$editorjstxt#}
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>文章管理</h3><ol class="breadcrumb"><li>当前位置</li><li>文章管理</li><li> <strong>留言详情</strong></li></ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <p class="m-t-sm" id="goods_tabs">
+        <a href="index.php?a=message&c=article" class="btn btn-primary">返回上一步</a>
+    </p>
+        <div id="goods_main">
+            <div class="goods_tab">
+                <div class="ibox-content">
+                    <table class="table table-hover m-b-none">
+                        <tbody>
+                        <tr>
+                            <td width="120">姓名：</span></td>
+                            <td>{#$messageInfo.username#}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td width="120">电话：</span></td>
+                            <td>{#$messageInfo.mobile#}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>留言详情：</td>
+                            <td height="200" vertical-align="top">{#$messageInfo.question#}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td width="120">所属分类：</span></td>
+                            <td width="800">{#if $messageInfo.type eq '1'#}建议{#elseif $messageInfo.type eq '2'#}技术{#else#}其他{#/if#}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>留言时间：</td>
+                            <td>{#$messageInfo.createtimestr#}</td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

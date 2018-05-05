@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<script src="js/jquery.js"></script> 
+<script src="js/main.js?v=1.0"></script>
+<script type="text/javascript" src="js/jquery.form.js"></script>
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+<script>
+$(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+</script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+<div class="col-sm-12">
+<h3>系统配置</h3><ol class="breadcrumb"><li>当前位置</li><li>系统配置</li><li> <strong>修改密码</strong></li></ol>
+</div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+<div class="ibox-title"><b>修改密码</b></div>
+<form method="post" action="index.php?a=edit&c=member" onsubmit="return checkpost(document.checkform);" name="checkform" enctype="multipart/form-data">
+
+<div class="ibox-content">
+<table class="table table-hover m-b-none">
+<tbody>
+<tr>
+    <td width="120">用户名</td>
+    <td width="200">{#$username#}</td>
+    <td></td>
+</tr>
+<tr>
+    <td>原始密码<span class="text-danger">*</span></td>
+    <td><input type="hidden" value="{#$username#}" class="form-control" name="member[olduser]" >
+        <input type="password" value="" class="form-control" id="pwd" name="member[oldpwd]"></td>
+    <td></td>
+</tr>	
+<tr>
+    <td>新密码<span class="text-danger">*</span></td>
+    <td><input type="password" value="" class="form-control" id="pwd1" name="member[pwd]"></td>
+    <td></td>
+</tr>
+<tr>
+    <td>新密码<span class="text-danger">*</span></td>
+    <td>
+        <input type="password" value="" class="form-control" id="pwd2" name="member[pwd2]">
+        </td>
+    <td></td>
+</tr>	
+</tbody>
+</table>
+</div>
+<div class="text-center m-t-sm">  
+<input type="hidden" value="16" name="id">
+<input type="hidden" value="save" id="action" name="submitted">
+<button type="submit" class="btn btn-primary">提 交</button>
+</div>
+</form>
+</div>
+<script>
+function checkpost(){
+    var pwd=$('#pwd').val();
+    var pwd1=$('#pwd1').val();
+    var pwd2=$('#pwd2').val();
+if(!pwd){
+    alert("输入原始密码")
+$('#pwd').focus();
+return false;
+}
+if(!pwd1 || pwd1.length<6){
+    alert("输入新密码，密码不能少于6位")
+$('#pwd1').focus();
+return false;
+}
+if(!pwd2){
+    alert("再次输入新密码")
+$('#pwd2').focus();
+return false;
+}
+if(pwd1!=pwd2){
+alert("两次密码不一致")
+return false;
+}
+}
+</script>
+</body>
+</html>

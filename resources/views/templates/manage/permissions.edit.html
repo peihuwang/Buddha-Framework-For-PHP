@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>权限赋予</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green"})
+        });
+    </script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>系统配置</h3>
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>系统配置</li>
+            <li><strong>权限管理</strong></li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="float-e-margins">
+        <div class="ibox-title"><h5>权限管理</h5>
+        </div>
+        <p>
+            <a href="index.php?a=more&c=manager" class="btn btn-primary">返回上一步</a>
+        </p>
+    </div>
+    <form name="FORM" method="post" action="">
+        <div class="ibox-content">
+            <table class="table table-hover m-b-none">
+                <tbody>
+                <!--<input type="hidden" name="id" value="{#$id#}">
+                <input type="hidden" name="page" value="{#$page#}">-->
+                {#foreach from=$list item=item#}
+                <tr>
+                    <td width="150">
+                        <label><span class="checkbox">
+<input type="checkbox" name="action_code[{#$item.id#}]" value="{#$item.id#}" class="c-checked checkedone"
+       {#if $item.state eq 1#} checked {#/if#}
+       /><b></b></span>{#$item.name#}</label>
+                    </td>
+                    <td>
+                        {#foreach from=$item.child key=key item=val#}
+                        <label>
+             <span class="checkbox">
+             <input type="checkbox" name="action_code[{#$item.id#}][{#$val.id#}]" value="{#$val.id#}"
+                    class="c-checked child"
+                    {#if $val.state eq 1#} checked {#/if#}
+         /><b></b></span> {#$val.name#} </label>
+                        {#/foreach#}
+                    </td>
+                </tr>
+                {#/foreach#}
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center m-t-sm">
+            <button type="button" onclick="CheckAll(document.FORM,'')" class="btn btn-primary">全 选</button>
+            <button type="submit" class="btn btn-success">提 交</button>
+        </div>
+        </from>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('.checkedone').on('click', function () {
+            var isChecked = $(this).prop('checked');
+            if (isChecked == true) {
+                $(this).parent().parent().parent().siblings().find('input[type="checkbox"]').attr('checked', 'checked')
+            } else {
+                $(this).parent().parent().parent().siblings().find('input[type="checkbox"]').prop('checked', false)
+            }
+        })
+        $('.child').on('click', function () {
+            var isChecked = $(this).parent().parent().parent().siblings().find('.checkedone').prop('checked');
+
+            if (isChecked == false) {
+                $(this).parent().parent().parent().siblings().find('input[type="checkbox"]').prop('checked', 'checked')
+            }
+
+        })
+
+    })
+
+
+</script>
+</body>
+</html>

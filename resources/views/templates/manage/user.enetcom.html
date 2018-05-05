@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>e网通列表</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+    </script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>注册会员</h3><ol class="breadcrumb"><li>当前位置</li><li>注册会员</li><li> <strong>e网通列表</strong></li></ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <p>
+        {#foreach from=$searchType item=item key=key#}
+        <a href="index.php?a=milist&c=supply&view={#$key#}" class="btn{#if $params.view eq $key#} btn-primary{#else#} btn-danger{#/if#}">{#$item#}</a>
+        {#/foreach#}
+    </p>
+
+    <div class="panel panel-danger">
+        <div class="panel-heading"><b>搜索</b></div>
+        <form method="post" action="" class="form-inline">
+            <div class="panel-body">
+                <div class="form-group">
+                    <select id="option" name="view" class="form-control">
+                        {#foreach from=$searchType item=item key=key#}
+                        <option value="{#$key#}"  {#if $params.view eq $key#} selected{#/if#}>{#$item#}</option>
+                        {#/foreach#}
+                    </select>
+                    </select>
+                </div>
+                <div class="form-group"><input type="text" value="{#$keyword#}" name="keyword" id="keyword" class="form-control" placeholder="输入名称" style="width: 300px;"></div>
+                <button value="搜 索" type="submit" class="btn btn-danger">搜 索</button>
+
+            </div>
+        </form>
+    </div>
+
+    <form method="post" action="" onsubmit="return checkpost(document.checkform);"  name="FORM" >
+        <div class="float-e-margins">
+            <div class="ibox-title"><b>e网通列表</b>
+            </div>
+        </div>
+        <div class="ibox-content ">
+            <div class="table-responsive">
+                <table class="table table-hover m-b-none">
+                    <thead>
+                    <tr>
+                        <th><span onclick="CheckAll(document.FORM,'')">全选</span></th>
+                        <th>用户名</th>
+                        <th>付费金额</th>
+                        <th>是否支付</th>
+                        <th>申请时间</th>
+                        <th>到期时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    <tbody>
+                    {#foreach from=$list item=item#}
+                    <tr>
+                        <td><input type="checkbox" value="{#$item.id#}" name="ids[{#$item.id#}]" class="i-checks"/></td>
+                        <td>{#$item.username#}</td>
+                        <td>{#$item.money#}</td>
+                        <td>{#if $item.ispay eq 0#}<span class="text-info">未支付</span>{#else#}<span
+                                class="text-success">已支付</span>{#/if#}
+                        </td>
+                        <td>{#$item.createtime|date_format:'%Y-%m-%d %H:%M'#}</td>
+                        <td>{#$item.endtimestr#}</td>
+                        <td>{#if $item.is_sure eq 0#}未审核{#elseif $item.is_sure eq 1#}已审核{#else#}审核未通过{#/if#}</td>
+                        <td><a href="index.php?a=enetcomedit&c=user&id={#$item.id#}&p={#$page#}&view={#$params.view#}">[审核]</a>
+                            <!-- |<a href="index.php?a=enetcomdel&c=user&id={#$item.id#}&p={#$page#}&view={#$params.view#}">[删除]</a> -->
+                        </td>
+                    </tr>
+                    {#/foreach#}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+</form>
+    <div class="text-center m-t-sm">
+        {#$strPages#}
+    </div>
+</div>
+<script type="text/javascript" language="JavaScript">
+    function delnav() {
+        return confirm("确认要删除此数据吗？");
+    }
+</script>
+</body>
+</html>

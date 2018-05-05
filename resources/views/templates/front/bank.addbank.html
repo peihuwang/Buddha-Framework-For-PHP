@@ -1,0 +1,87 @@
+{#include file='../front/public.header.html'#}
+<div id="user-basic">
+    <div class="return" onclick="javascript:history.go(-1);"><i></i></div>
+    <h1>✚ 添加银行卡</h1>
+</div>
+<form action="" method="post" id="shopForm">
+    <div class="addshop">
+        <ul>
+            <li><span><i>*</i>卡号：</span><div><input type="tel" value="" name="number" id="number" onblur="getbankname();"></div></li>
+            <li><span><i>*</i>开户行：</span><div><input type="text" value="" name="openbank" id="openbank" placeholder="如：嘉善支行"></div></li>
+            <li><span><i>*</i>银行名称：</span><div><input type="text" value="" name="bankname" id="bankname" readonly="readonly"></div></li>
+            <li><span><i>*</i>姓名、名称：</span><div><input type="text" name="username" id="username" placeholder="姓名或者企业名称"></div></li>
+        </ul>
+    </div>
+    <div class="submitbtn"><button type="button" onclick="addbank()">添加</button></div>
+</form>
+
+<script src="/style/js/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+    function getbankname(){
+        var number = $('#number').val();
+      　 if(number == "") {
+        　　  alert("请先填写银行卡号");
+            return false;
+        }
+        if(number.length < 16 || number.length > 19) {
+            alert("银行卡号长度必须在16到19之间");
+            return false;
+        }
+        var num = /^\d*$/; //全数字
+        if(!num.exec(number)) {
+            alert("银行卡号必须全为数字");
+            return false;
+        }
+        //开头6位
+        var strBin = "10,18,30,35,37,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,58,60,62,65,68,69,84,87,88,94,95,98,99";
+        if(strBin.indexOf(number.substring(0, 2)) == -1) {
+            alert("银行卡号开头6位不符合规范");
+            return false;
+        }
+
+        $.ajax({
+            type:'POST',
+            url:'/index.php?a=getbankname&c=bank',
+            data:{number:number},
+            datatype:'json',
+            success:function(o){
+                if(o.isok == 'true'){
+                    $('#bankname').val(o.info);
+                }else{
+                    alert(o.info);
+                }
+            }
+        });
+    }
+    function addbank(){
+        var username = $('#username').val();
+        var bankname = $('#bankname').val();
+        var number   = $('#number').val();
+        var openbank = $('#openbank').val();
+        var act = 'add';
+        if(!openbank){
+            alert('开户行不能为空！');
+            return false;
+        }
+        if(!username){
+            alert('请填写您的真实姓名！');
+            return false;
+        }
+        $.ajax({
+            type:'POST',
+            url:'/index.php?a=addbank&c=bank',
+            data:{number:number,username:username,bankname:bankname,openbank:openbank,act:act},
+            datatype:'json',
+            success:function(o){
+                if(o.isok == 'true'){
+                    alert(o.info);
+                    setTimeout(window.history.go(-1),2000);
+                }else{
+                    alert(o.info);
+                    setTimeout(window.history.go(-1),2000);
+                }
+            }
+        });
+    }
+</script>
+{#include file='../front/public.footer.html'#}

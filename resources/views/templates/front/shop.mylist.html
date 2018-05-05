@@ -1,0 +1,133 @@
+{#include file='public.headernew.html'#}
+<link href="/style/css/web.style.css" rel="stylesheet" type="text/css">
+
+<style type="text/css">
+    /*滚动选项卡样式*/
+    .swiper-container{width:100%; height:auto;background-color: #ffffff;}
+    .swiper-slide{text-align:center; font-size:18px; background:#fff; display:-webkit-box;
+        display:-ms-flexbox; display:-webkit-flex; display:flex;  -webkit-box-pack:center; -ms-flex-
+    pack:center; -webkit-justify-content:center; justify-content:center; -webkit-box-align:center; -
+    ms-flex-align:center; -webkit-align-items:center; align-items:center; height:100%; opacity:0.8; -
+    webkit-transition:300ms; -moz-transition:300ms; -ms-transition:300ms; -o-transition:300ms;
+        transition:300ms; -webkit-transform:scale(0.6,0.6)!important; -moz-transform:scale(0.6,0.6)!
+important; -ms-transform:scale(0.6,0.6)!important; -o-transform:scale(0.6,0.6)!important;
+        transform:scale(0.6,0.6)!important;}
+    .swiper-slide-prev,
+    .swiper-slide-next{opacity:0.8; -webkit-transform:scale(0.8,0.8)!important; -moz-
+    transform:scale(0.8,0.8)!important; -ms-transform:scale(0.8,0.8)!important; -o-transform:scale
+    (0.8,0.8)!important; transform:scale(0.8,0.8)!important;}
+    .swiper-slide-active{top:0; opacity:1; -webkit-transform:scale(1,1)!important; -moz-
+    transform:scale(1,1)!important; -ms-transform:scale(1,1)!important; -o-transform:scale(1,1)!
+important; transform:scale(1,1)!important;}
+    .swiper-slide img{width:50px;}
+    #myshop_content .box img{width:100%;}
+</style>
+<div class="myshop">
+    <div class="myshop_head brb pf w">
+        <p class="shop_name f18 cw pl20 pr20">{#$shopinfo.name#} {#$info#}<span><a class="address
+fr" href="http://apis.map.qq.com/tools/routeplan/eword={#$shopinfo.specticloc#}&epointx={#
+$shopinfo.lng#}&epointy={#$shopinfo.lat#}&policy=1?referer=myapp&key=HM5BZ-ICHKU-VDNVI-27RMJ-
+YZRCQ-P5BTP""><img src="/style/img_two/myshop_nav.png"/></a></span></p>
+        <div class="content pl20 pr20 clearfloat">
+            <div class="attestation fr">
+                <i></i>&nbsp;<span class="f16 cw">{#if $shopinfo.is_verify eq 1#}<em>已认证</em>
+{#else#}未认证 {#/if#}</span>
+            </div>
+
+            <div class="phonenumber fl">
+                <i></i>&nbsp;
+                {#if $showphone.isshowphone eq 1#}
+                <a  class="f16 cw"  href="tel:{#$shopinfo.mobile#}"  style="display: inline-
+block ;">{#$showphone.phone#}</a>
+                {#else#}
+                <a  class="f16 cw" href="javascript:void(0);" onclick="see({#$shopinfo.id#})"
+                    style="display: inline-block ;">{#$showphone.phone#}</a>
+                {#/if#}
+                <!--<a class="f16 cw" href="javaScript:viod(0);" style="display:inline-block;">查看
+</a>-->
+            </div>
+        </div>
+        <div class="pr">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    {#foreach from = $header_category item=item key=key#}
+                        {#if $item.is_show eq 1#}
+                            <div class="swiper-slide  {#if $item.select eq 1#}swiper-slide-
+active{#/if#}" data-id="{#$item.type#}" data-err="{#$item.pageflag#}"> <img src="{#$item.icon_promote#}" alt="{#$item.name#}"></div>
+                        {#/if#}
+                    {#/foreach#}
+                </div>
+                <input type="hidden" id="s_id" value="{#$shopinfo.id#}">
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </div>
+    <div id="myshop_content" style="padding-top:200px;">
+
+    </div>
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<input type="hidden" id="userid" name="userid" value="{#$user_id#}"/>
+{#include file='public.footernew.html'#}
+<script src="/style/js/template.js"></script>
+<script src="/style/js/ajaxlist.js"></script>
+<script src="/style/js_two/swiper.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+//        var url=window.location.href;
+        $('#myshop_content').ajaxshiolist();
+    })
+</script>
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.pagination',
+        slidesPerView: 5,
+        paginationClickable: true,
+        spaceBetween: 30,
+        centeredSlides: true,
+        loop:true,
+        slideToClickedSlide:true,
+        onSlideChangeEnd: function(swiper, event){
+            var data_active_index = $(".swiper-slide-active").attr("data-swiper-slide-index");
+            var data_e = $(".swiper-slide-active").data();
+            var view=data_e.err;
+            var s_id=$('#s_id').val();
+//            alert(data_active_index);
+//            console.log(data);
+            $('#myshop_content').empty();
+            ajaxlist(1);
+//            $("#myshop_content").html('我是加载出来的...');
+        }
+    });
+</script>
+
+
+
+
+
+<script>
+    $('.tab').on('click','li',function(){
+        var num=$(this).index();
+        $(this).addClass('cur').siblings().removeClass('cur');
+        $('.shop_menu li').removeClass('scurs');
+        $('#list').remove();
+        $('#box_con').find('.box').eq(num).show().siblings().hide();
+    });
+    function see(id){
+        Message.showConfirm("店铺未认证,支付0.2元查看联系方式", "确定", "取消", function () {
+            $.post('/pay/index.php?a=index&c=index',
+                {id:id,good_table:'shop',payment_code:'wxpay',order_type:'info.see',final_amt:0.01},function(re){
+                    if(re.errcode==0){
+                        window.location.href=''+re.url+'';
+                    }else{
+                        Message.showNotify(""+re.errmsg+"", 1200);
+                        setTimeout("window.location.href='"+re.url+"'",1300);
+                    }
+                })
+        });
+    }
+</script>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>购物车</title>
+<link rel="stylesheet" type="text/css" href="style/css/style.css">
+<link rel="stylesheet" type="text/css" href="style/css/quanxuan.css">
+<link rel="stylesheet" type="text/css" href="style/css/swiper-3.4.2.min.css">
+<script src="style/js/jquery/jquery.min.js"></script>
+<script src="style/js/swiper-3.4.2.jquery.min.js"></script>
+<script src="style/js/shoppingmall.js"></script>
+</head>
+
+<body>
+<script>
+$("body").css({background:"#f4f4f4"})
+</script>
+<div class="width100 font16 tcenter" style="height:44px;background:#f60;line-height:44px;color:#fff;position:fixed;top:0;left:0;">
+	购物车
+    <a href="javascript:history.go(-1)" id="return"></a>
+</div>
+<div class="width100 hidden bj_fff" style="margin-top:50px;margin-bottom:50px;">
+	<div class="width96 center hidden">
+        {#foreach from=$DB_Cart item=item key=key#}
+        <div class="width100 hidden m_16" id="this_{#$item.cart_id#}" style="padding-top:10px;padding-bottom:10px;border-bottom:1px dashed #e3e5e9">
+        	<b class="ak_47" id="{#$item.cart_id#}"></b>
+        	<img src="{#$item.img#}" style="width:78px;height:78px;border:1px solid #e3e5e9;border-radius:3px;float:left;margin-right:6px;">
+            <div class="font14 c33">{#$item.goods_name#} <span style="font-size: 12px; margin-left: 5px;">{#$item.goods_brief#}</span></div>
+            <div class="font13 c33">×<font id="ano">{#$item.goods_number#}</font><font class="red right">￥<i id="bno_{#$item.cart_id#}" style="font-style:normal;">{#$item.goods_price * $item.goods_number#}</i></font></div>
+            <div class="right hidden" style="margin-top:6px;">
+                <a href="javascript:void(0)" id="min_s">-</a>
+                <input type="text" value="{#$item.goods_number#}" readonly id="t_a">
+                <a href="javascript:void(0)" id="add_s">+</a>
+            </div>
+            <div class="hidden width100 remo" style="margin-top:42px;height:20px;line-height:20px;">
+                <span class="right font14 red block" onclick="delcart({#$item.cart_id#});">删除</span>
+            </div>
+        </div>
+        {#/foreach#}
+    </div>
+</div>
+<div class="width100 hidden bj_fff" id="an_js">
+	<span onClick="alls(this)"><i class="iconfont icon-quanxuan"></i>&nbsp;全选</span>
+    <span>总价: <em class="red" id="total ">110</em> 元</span>
+    <a href="buy_now_next.html">去结算</a>
+</div>
+<script>
+$(".ak_47").click(function (){
+    var id = $(this).attr("id");
+    var aa = $("#bno_"+id).text();
+    var total = $("#total").text();
+    var bb = aa + total
+    //$("#total").text()
+    alert(total);
+})
+$(".m_16").click(function(){
+	//$(this).addClass("on")
+	$(this).hasClass("on")?$(this).removeClass("on"):$(this).addClass("on")
+	})
+$(".remo").click(function(){
+	$(this).parent().remove()
+	})	
+function alls(tmd){
+	if($(tmd).hasClass("on")){
+		$(tmd).removeClass("on");
+		$(".m_16").removeClass("on")
+		}else{
+			$(tmd).addClass("on");
+			$(".m_16").addClass("on")
+			}
+	}	
+</script>
+</body>
+</html>

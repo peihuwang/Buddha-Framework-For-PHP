@@ -1,0 +1,54 @@
+<div class="header clearfix">
+            <div class="logo-bar left">
+                <a href="/home/"><img class="logo" src="/images/logo.png" alt="logo"></a>
+            </div>
+            <div class="adjust-width clearfix">
+
+                <nav class="top-nav left">
+                    <ul>
+                        <li {#if $smarty.request.c eq 'dashboard'#}class="active"{#/if#}><a href="index.php?a=index&c=dashboard">工作台</a></li>
+                        <li {#if $smarty.request.c eq 'campaign'#}class="active"{#/if#}><a href="index.php?a=index&c=campaign">邮件</a></li>
+                        <li {#if $smarty.request.c eq 'list'#}class="active"{#/if#}><a href="index.php?a=index&c=list">收件人</a></li>
+                        <li {#if $smarty.request.c eq 'report'#}class="active"{#/if#}><a href="index.php?a=index&c=report">报告</a></li>
+                        <li {#if $smarty.request.c eq 'mailsender'#}class="active"{#/if#}><a href="index.php?a=index&c=mailsender">设置</a></li>
+                    </ul>
+                </nav>
+                <div class="top-user right">
+                    <ul>
+                        <li class="referral">
+                            <a href="index.php?a=referral&c=credit">
+                                <span class="ref-panda">邀好友 得奖励</span>
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="index.php?a=index&c=usercenter">
+                                <span class="member-initials" title="{#$UserInfo.pyrealname#}">{#$UserInfo.pyrealname|capitalize|truncate:1:""#}</span>
+                                <span id="my-name">{#$UserInfo.realname#}</span>
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="index.php?a=logout&c=account">退出</a></li>
+                            </ul>
+                        </li>
+                        <li id="page_notice" class="dropdown user-message">
+                            <a href="index.php?a=notice&c=usercenter">消息
+                            </a>
+                            <ul class="dropdown-message" role="message">
+                                <li>
+                                    <div class="message-head">
+                                        <span class="caret-horn"></span>
+                                        <h4>系统消息</h4>
+                                    </div>
+                                    <div data-load="index.php?a=headernotice&c=usercenter">
+                                    </div>
+                                    <a href="index.php?a=notice&c=usercenter" class="view-all right">查看全部</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/home/index.php?a=helpcenter&c=home" target="_blank">帮助</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>

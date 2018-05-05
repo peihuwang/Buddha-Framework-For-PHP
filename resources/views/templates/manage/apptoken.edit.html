@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>令牌修改</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green"})
+        });
+    </script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>令牌修改</h3>
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>管理员管理</li>
+            <li><strong>令牌修改</strong></li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <p>
+        <a href="index.php?a=more&c=apptoken" class="btn btn-primary">返回上一步</a>
+    </p>
+
+    <form method="post" action="" onsubmit="return checkpost(document.checkform);" name="checkform">
+        <div class="float-e-margins">
+            <div class="ibox-title"><b>令牌修改</b></div>
+        </div>
+        <div class="ibox-content">
+            <table class="table table-hover m-b-none">
+                <tbody>
+                <input type="hidden" name="id" value="{#$optionList.id#}">
+
+                <tr>
+                    <td>应该名称 <span class="text-danger">*</span></td>
+                    <td><input type="text" value="{#$apptokeninfo.appname#}" name="appname" id="appname"
+                               class="form-control"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>应用值 <span class="text-danger">*</span></td>
+                    <td><input type="text" value="{#$apptokeninfo.appvalue#}" name="appvalue" id="appvalue"
+                               class="form-control"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>密钥 <span class="text-danger">*</span></td>
+                    <td><input type="text" value="{#$apptokeninfo.key#}" name="key" id="key" class="form-control"></td>
+                    <td></td>
+                </tr>
+                <tr>
+
+                    <td>开始时间 <span class="text-danger">*</span></td>
+                    <td><input type="text" value="{#$apptokeninfo.starttime#}" name="starttime" id="starttime"
+                               class="form-control"></td>
+                    <td>{#$apptokeninfo.starttime|date_format:"%Y-%m-%d %H:%M:%S"#}</td>
+                </tr>
+                <tr>
+
+                <tr>
+
+                    <td>结束时间 <span class="text-danger">*</span></td>
+                    <td><input type="text" value="{#$apptokeninfo.endtime#}" name="endtime" id="endtime"
+                               class="form-control"></td>
+                    <td>{#$apptokeninfo.endtime|date_format:"%Y-%m-%d %H:%M:%S"#}</td>
+                </tr>
+                <tr>
+
+                    <td>允许IP <span class="text-danger">*</span></td>
+                    <td><input type="text" value="{#$apptokeninfo.allowip#}" name="allowip" id="allowip"
+                               class="form-control"></td>
+                    <td>* 表示允许一切IP</td>
+                </tr>
+                <tr>
+                <tr>
+
+                    <td>有效时间 <span class="text-danger">*</span></td>
+                    <td><input type="text" value="{#$apptokeninfo.duetime#}" name="duetime" id="duetime"
+                               class="form-control"></td>
+                    <td>小时</td>
+                </tr>
+                <tr>
+                    <td>统计 <span class="text-danger">*</span></td>
+                    <td><input type="text" value="{#$apptokeninfo.static#}" name="static" id="static"
+                               class="form-control"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>状态</td>
+                    <td><input type="checkbox" value="1" name="buddhastatus" class="i-checks" {#if
+                               $apptokeninfo.buddhastatus eq 1#}checked{#/if#}/>
+                        {#if $apptokeninfo.buddhastatus eq 0#}禁用操作{#else#}恢复正常{#/if#}
+                    </td>
+                    <td>当前状态:{#if $apptokeninfo.buddhastatus eq 0#}正常{#else#}禁用{#/if#}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-center m-t-sm">
+            <button type="submit" class="btn btn-primary">提 交</button>
+        </div>
+    </form>
+</div>
+</div>
+
+</body>
+</html>

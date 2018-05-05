@@ -1,0 +1,23 @@
+{#include file='public.header.html'#}
+<div class="login">
+    <ul>
+        <li><a >找回密码</a></li>
+
+    </ul>
+</div>
+<form action="" id="forgottenpwdform">
+    <div class="loginr">
+        <ul>
+            <li><input type="tel" name="reg_mobile" id="reg_mobile" placeholder="手机号"></li>
+            <li class="Verification"><input type="text" name="reg_yanzheng" id="reg_yanzheng" placeholder="短信验证码">
+                <button type="button" class="cover" onclick="tacticsm()">获取验证码</button></li>
+            <li><input type="password" name="reg_pwd" id="reg_pwd" placeholder="请输入设置的新密码"></li>
+            <li><input type="password" name="reg_newpwd" id="reg_newpwd" placeholder="再次输入设置的新密码"></li>
+
+        </ul>
+    </div>
+    <button type="button" class="loginlg" onclick="_user.Forgottenpwd()">设置密码</button>
+</form>
+<script src="/style/js/jquery/jquery.min.js"></script>
+<script src="/style/js/user.js"></script>
+{#include file='public.footer.html'#}

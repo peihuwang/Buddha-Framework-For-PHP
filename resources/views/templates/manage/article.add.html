@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>文章添加</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green"})
+        });
+    </script>
+    {#$editorjs#}
+    {#$editorjstxt#}
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>文章管理</h3>
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>文章管理</li>
+            <li><strong>添加文章</strong></li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <p class="m-t-sm" id="goods_tabs">
+        <span class="btn btn-primary">基本信息</span>
+        <span class="btn btn-danger">文章描述</span>
+        <a href="index.php?a=more&c=article" class="btn btn-primary">返回上一步</a>
+    </p>
+
+    <form method="post" action="" onsubmit="return checkpost(document.checkform);" name="checkform"
+          enctype="multipart/form-data">
+        <div id="goods_main">
+            <div class="goods_tab">
+                <!-- 基本信息 -->
+                <div class="float-e-margins">
+                    <div class="ibox-title"><b>基本属性</b></div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-hover m-b-none">
+                        <tbody>
+                        <tr>
+                            <td width="120">所属分类 <span class="text-danger">*</span></td>
+                            <td width="300">
+                                <select class="form-control" name="cat_id" id="cat_id">
+                                    <option value="0">请选择文章分类</option>
+                                    {#$optionList#}
+                                </select></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>文章名称 <span class="text-danger">*</span></td>
+                            <td><input type="text" name="name" id="name" class="form-control"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>文章编号</td>
+                            <td><input type="text" name="number" class="form-control"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>排序</td>
+                            <td><input type="text" value="0" name="view_order" class="form-control"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>是否上架</td>
+                            <td><input type="checkbox" value="1" name="buddhastatus" class="i-checks" checked></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END -->
+            <!-- 文章属性开始 -->
+            <div class="float-e-margins goods_tab" style="display:none">
+                <div class="float-e-margins">
+                    <div class="ibox-title"><b>文章描述</b></div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-hover m-b-none">
+                        <tbody>
+                        <tr>
+                            <td width="100">简介</td>
+                            <td width="350"><textarea rows="4" class="form-control" name="brief"></textarea></td>
+                            <td>简短的文章介绍,请不要超过120字节.</td>
+                        </tr>
+                        <tr>
+                            <td>文章详情</td>
+                            <td colspan="2">{#$editor.content#}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--END -->
+
+        </div>
+        <div class="text-center m-t-sm">
+            <button type="submit" class="btn btn-primary">提 交</button>
+        </div>
+    </form>
+</div>
+</div>
+<script type="text/javascript">
+
+    function checkpost() {
+        if ($('#cat_id option:selected').val() == '0') {
+            alert("请选择所属分类");
+            $('#cat_id').focus();
+            return false;
+        }
+        if ($('#name').val() == '') {
+            alert("输入文章名称");
+            $('#name').focus();
+            return false;
+        }
+    }
+
+
+    $(function () {
+        var main = $('#goods_main > .goods_tab');
+        $('#goods_tabs span').bind('click', function (event) {
+            var index = $(this).index();
+            $(this).attr('class', 'btn btn-primary').siblings('span').attr('class', 'btn btn-danger');
+            main.eq(index).show().siblings('.goods_tab').hide();
+        });
+    })
+    var html = '';
+    html += '<div class="g_img">';
+    html += '<a href="javascript:;" onclick="addimg()">[+]</a> ';
+    html += '<div class="btn btn-danger btn-file"><i class="glyphicon">点击上传</i><input type="file" name="source_pic[]" class="file"></div>';
+    html += ' <a href="javascript:;" class="delimg">[-]</a>';
+    html += '</div>';
+    function addimg() {
+        var Num = $("#galley").find('.g_img').length;
+        if (Num < 6) {
+            $("#galley").append(html);
+            delimg()
+        } else {
+            alert("产品相册限制6张")
+        }
+    }
+    ;
+    function delimg() {
+        $('.delimg').on('click', function (event) {
+            event.preventDefault();
+            $(this).parent().remove();
+        });
+    }
+</script>
+</body>
+</html>

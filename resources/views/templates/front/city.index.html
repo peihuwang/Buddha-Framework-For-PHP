@@ -1,0 +1,66 @@
+{#include file='public.header.html'#}
+<div id="agent_retrieval">
+    <input type="text" value="" id="keyword" name="keyword" placeholder="输入区或县的名称">
+    <button type="button" id="retrie">搜索</button>
+</div>
+
+<div id="list"></div>
+<script src="/style/js/jquery/jquery.min.js"></script>
+<script src="/style/js/template.js"></script>
+<script id="city" type="text/html">
+{{each list as value i}}
+<div class="city">
+    <ul>
+        <h4>{{value.first}}</h4>
+        {{each list[i] as value j}}
+        {{if j<=20}}
+        <li onclick="city('{{value.number}}')">{{value.namer}}</li>
+        {{/if}}
+        {{/each}}
+        <li data-href="index.php?a=info&c=city&first={{value.first}}">更多>></li>
+    </ul>
+</div>
+{{/each}}
+</script>
+<script>
+    var url='index.php?a=ajax&c=city';
+    region(url);
+    $(function () {
+        $('#retrie').on('click',function () {
+           var keyword=$('#keyword').val();
+            if(!keyword){
+                Message.showNotify("请输入输入区或县的名称!", 500);
+                return false;
+            }
+            url=url+'&keyword='+keyword;
+            region(url);
+        });
+    });
+
+function region(url) {
+    $.get(url,function (re) {
+        if(re==0){
+            $('#list').html('你搜索的区县不存在！');
+        }else {
+            var html = template('city', re);
+        }
+        $('#list').html(html);
+        $('[data-href]').on('click',function(){
+            var url=$(this).attr('data-href');
+            loadurl(url);//加载跳转链接
+            return false;
+        });
+    });
+}
+
+    function city(number) {
+
+    $.get('index.php?a=getnumber&c=city',{number:number},function (re){
+        delCookie('sName');
+        var str = JSON.stringify(re);
+        setCookie('sName',str);
+        window.location.href='/';
+    });
+}
+</script>
+{#include file='public.footer.html'#}

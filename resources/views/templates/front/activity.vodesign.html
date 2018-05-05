@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>本地商家</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"  />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="applicable-device" content="mobile"/>
+    <link href="/style/css_two/reset.css" rel="stylesheet" type="text/css" />
+    <link href="/style/css_two/style.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/style/js_two/jquery-3.1.1.min.js"></script>
+</head>
+<body>
+<!--头部 start-->
+<div class="top w by pf">
+    <a class="back pa" href="javascript:void(0);">
+        <img src="/style/img_two/back.png"/>
+    </a>
+    <p class="f18 cw w tc">投票报名</p>
+    <a class="confirm pa" href="javascript:void(0);" onclick="activity()">
+        <img src="/style/img_two/confirm.png"/>
+    </a>
+</div>
+<!--头部 end-->
+<!--表单 start-->
+
+<div class="main_form" data-c="{#$c#}" data-id="{#$id#}">
+    <input type="hidden" name="id" value="{#$id#}">
+    <span class="title f16 cb tr">姓名</span><input class="f16 ml10 cb" type="text" placeholder="请输入您的姓名" name="name"><br>
+    <span class="title f16 cb tr">手机号</span><input class="f16 ml10 cb" type="text" placeholder="请输入您的手机号" name="phone"><br>
+    <span class="title f16 cb tr">留言</span><textarea class="f16 ml10 cb" style="border: 1px solid gray;width:60%;" placeholder="请输入留言信息" name="massage" rows="5" cols="20"></textarea><br/>
+    <span class="title f16 cb tr">店铺选择</span>
+    <select id="pid" class="f16 cb" name="shop_id" style="width:62%;">
+        <option value="0" >请选择店铺</option>{#$getshoplistOption#}</select>
+    <!--<input type="hidden" name="shop_name" value=""><br>-->
+</div>
+
+</body>
+
+<script>
+    $('select[name="shop_id"]').change(function () {
+        var shop_name= $('select[name="shop_id"] option:selected').text();
+        var shop_id= $('select[name="shop_id"] option:selected').val();
+//        $('input[name="shop_name"]').val(shop_name);
+        if(shop_id>0){//当是请选择店铺时要排除
+            ajax_shop(shop_id);
+        }
+    })
+
+
+    function ajax_shop(shop_id) {
+        var c=$('.main_form').data('c'),id=$('.main_form').data('id');
+        var url='index.php?a=vodeajax_shop&c='+c;
+        $.ajax({
+            url:url,
+            type:'POST',
+            dataTpe:'json',
+            data:{shop_id:shop_id,id:id},
+        })
+        .done(function(o){
+            if(o.isok=='true'){
+                Message.showNotify("店铺可用！", 1000);
+            }else{
+                Message.showNotify("该店铺已经报过名了，请选择其它店铺！", 1500);
+            }
+        })
+    }
+function activity(){
+    var c=$('.main_form').data('c'),
+        id=$('.main_form').data('id');
+    var url=window.location.href;
+    var name=$('input[name="name"]').val(),
+        phone=$('input[name="phone"]').val(),
+        massage=$('textarea[name="massage"]').val(),
+        shop_name= $('select[name="shop_id"] option:selected').text(),
+        shop_id= $('select[name="shop_id"] option:selected').val();
+
+    var shopurl='index.php?a=vodeajax_shop&c='+c;
+    $.ajax({
+        url:shopurl,
+        type:'POST',
+        dataTpe:'json',
+        data:{shop_id:shop_id,id:id},
+    })
+    .done(function(o){
+        var aa='true';
+        if(o.isok=='true'){
+            aa='true';
+        }else{
+            aa='false';
+            Message.showNotify("该店铺已经报过名了，请选择其它店铺！", 1500);
+        }
+        if(aa=='true'){
+           var  url='index.php?a=vodesign&c=activity';
+            $.ajax({
+                url:url,
+                type:'POST',
+                dataTpe:'json',
+                data:{name:name,phone:phone,massage:massage,shop_name:shop_name,shop_id:shop_id,id:id},
+            })
+            .done(function(o){
+                console.log(o);
+                if(o.isok=='true'){
+                    Message.showNotify(""+ o.data+"", 1500);
+                    setTimeout("window.location.href='"+o.url+"'",100);
+                }else{
+                    Message.showNotify(""+ o.data+"", 1500);
+                }
+            })
+        }
+    })
+}
+
+
+
+
+</script>
+
+
+</html>

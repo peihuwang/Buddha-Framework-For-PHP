@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>认证码</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/main.js?v=1.0"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green"})});
+    </script>
+</head>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h3>店铺认证码</h3><ol class="breadcrumb"><li>当前位置</li><li>店铺认证码</li><li> <strong>生成店铺认证码</strong></li></ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+<p><a href="index.php?a=lists&c=certification" class="btn btn-primary">进入列表</a></p>
+    <form method="post" action="" name="checkform"><!--  onsubmit="return checkpost(document.checkform);"  -->
+    <div class="ibox-content ">
+        <div class="table-responsive">
+            <table class="table table-hover m-b-none">
+                <tr>
+                    <td width="120">生成条数</td>
+                    <td width="300"><input type="tel" value="" name="numbers" id="numbers" class="form-control" required="required"></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td>有效日期</td>
+                    <td><input type="tel" value="" name="dates" id="dates" class="form-control" placeholder="单位月" required="required"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>备注</td>
+                    <td><input type="tel" value="" name="remarks" id="remarks" class="form-control" placeholder="例如：xx代理" required="required"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                	<td></td>
+                    <td>
+                    	<textarea rows="16" cols="50" id="content" name="content"></textarea>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="text-center m-t-sm">
+        <button id="but" type="button" class="btn btn-primary" onclick="numcodes();">生 成</button>
+    </div>
+    </form>
+</div>
+<script>
+	function numcodes(){//0.01378600 1503647282 //0.85249200 1503647311
+		var numbers = $('#numbers').val();
+		var dates = $('#dates').val();
+        var remarks = $('#remarks').val();
+		var $mainDiv = $('#content');
+		if(!numbers){
+			alert('请填写生成认证码的个数');
+			return false;
+		}
+		if(!dates){
+			alert('请填写生成认证码的有效期');
+			return false;
+		}
+		$.ajax({
+			type:'post',
+			url:'index.php?a=generation&c=certification',
+			data:{numbers:numbers,dates:dates,remarks:remarks},
+			dataType:'json',
+			success:function(o){
+				if(o.isok == 'true'){
+					addHtml(o.data,$mainDiv);
+					alert(o.info);
+					$('#but').hide();
+				}else{
+					alert(o.info);
+				}
+			}
+		});
+	}
+	function addHtml(json,$mainDiv){
+		var html = '';
+		for(var i=0;i<json.length;i++){
+			html+=json[i]+'\r';
+		}
+		$mainDiv.append(html);
+	}
+</script>
+</body>
+</html>

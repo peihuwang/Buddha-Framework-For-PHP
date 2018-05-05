@@ -1,0 +1,69 @@
+{#include file='public.header.html'#}
+<div id="user-basic">
+    <div class="return" data-href="index.php?a=index&c=index"><i></i></div>
+    <h1>需求</h1>
+
+    <!-- <div class="addto" data-href="business/index.php?a=add&c=demand"><i></i></div> -->
+</div>
+<div class="tab_list">
+    <ul>
+        <!--<li {#if $view eq 1#}class="cur"{#/if#} data-href="index.php?a=index&c=demand&view=1">附近</li>-->
+        <!--<li {#if $view eq 2#}class="cur"{#/if#} data-href="index.php?a=index&c=demand&view=2">最新</li>-->
+        <!--<li {#if $view eq 3#}class="cur"{#/if#} data-href="index.php?a=index&c=demand&view=3">热门</li>-->
+        <!--&lt;!&ndash; <li {#if $view eq 4#}class="cur"{#/if#} data-href="index.php?a=index&c=demand&view=4">预算</li> &ndash;&gt;-->
+        <!--<li {#if $view eq 5#}class="cur"{#/if#} data-href="index.php?a=index&c=demand&view=5">商家</li>-->
+        <!--<li data-href="index.php?a=category&c=demand">分类</li>-->
+
+        {#foreach from=$navlist  item=item key=key name=txt#}
+            <li {#if $view eq $item.view#}class="cur"{#/if#} data-href="{#$item.url#}">{#$item.chinesename#}</li>
+        {#/foreach#}
+
+    </ul>
+</div>
+<form method="get" action="">
+    <div id="agent_retrieval">
+        <input type="hidden" name="a" value="index"/> <input type="hidden" name="c" value="demand"/>
+        <input type="text" value="" id="keyword" name="keyword" placeholder="请输入地址进行查找附近商家">
+        <button type="submit" id="retrie">搜索</button>
+    </div>
+</form>
+<div id="list">
+  <!--  <div class="sup_item" data-href="index.php?a=info&c=supply&{#$location_area#}">
+        <div class="pic_img"><img src="style/img/dian.jpg"></div>
+        <div class="nearby_con">
+            <div class="title">哦多尅新式面包店哦多尅新式面包店哦多尅新式面包店哦多尅新式面包店</div>
+            <div class="price"><i></i>价格：<em>￥<i>130.00</i></em></div>
+            <div class="address"><span class="strong"><i></i>54km</span><span>上海普陀区白兰路137弄A座809室</span></div>
+        </div>
+    </div>-->
+</div>
+<div class="div_null hide"></div>
+<script src="/style/js/jquery/jquery.min.js"></script>
+<script src="/style/js/template.js"></script>
+<script src="/style/js/ajaxlist_s.js"></script>
+<script type="text/javascript">
+    $(function(){
+        var url=window.location.href;
+        $('#list').ajaxshiolist(url);
+    })
+</script>
+<script id="demo" type="text/html">
+    {{each list as value i}}
+    <div class="sup_item" data-href="index.php?a=info&c=demand&id={{value.id}}">
+        {{if value.demand_thumb}}
+        <div class="pic_img"><img src="{{value.demand_thumb}}"></div>
+        <div class="nearby_con">
+            {{else}}
+            <div class="nearby_con" style="margin-left:0">
+                {{/if}}
+                <div class="title">{{value.name}}</div>
+                <div class="price"><i></i>预算：<em>￥<i>{{value.price}}</i></em></div>
+                <div class="address"><span
+                        class="strong"><i></i>{{value.shop_name}}</span><span>{{value.roadfullname}}</span></div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+
+{#include file='public.footer.html'#}

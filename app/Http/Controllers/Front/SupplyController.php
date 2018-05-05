@@ -1,0 +1,850 @@
+<?php
+
+/**
+ * Class SupplyController
+ */
+class SupplyController extends Buddha_App_Action{  protected $tablenamestr;
+    protected $tablename;
+    public function __construct(){
+        parent::__construct();
+        $this->classname = __CLASS__;
+        $this->c = strtolower(preg_replace('/Controller/', '', __CLASS__));
+        $this->tablenamestr='供应';
+        $this->tablename='supply';
+    }
+
+    public function index(){
+        $RegionObj=new Region();
+        $ShopObj=new Shop();
+        $SupplycatObj = new Supplycat();
+
+        $cid = Buddha_Http_Input::getParameter('cid');
+        $getcategory =$SupplycatObj->getcategory();
+        if($cid){
+            $insql = $SupplycatObj->getInSqlByID($getcategory,$cid);
+        }
+
+        $locdata = $RegionObj->getLocationDataFromCookie();
+        $act=Buddha_Http_Input::getParameter('act');
+        $keyword=Buddha_Http_Input::getParameter('keyword');
+        $view=Buddha_Http_Input::getParameter('view')?(int)Buddha_Http_Input::getParameter('view'): 2;
+        $shop_id = (int)Buddha_Http_Input::getParameter('shop_id')?(int)Buddha_Http_Input::getParameter('shop_id') : 0;
+
+        if($act=='list')
+        {
+            $where = " isdel=0 and is_sure=1 and  buddhastatus=0 {$locdata['sql']} ";
+            $orderby = "";
+            if(Buddha_Atom_String::isValidString($shop_id))
+            {
+                $where .= "AND shop_id='{$shop_id}'";
+            }else{
+                $orderby = " group by shop_id ";
+            }
+            $orderby .= "  order by add_time DESC ";
+            if ($view) {
+                switch ($view) {
+                    case 2;
+                        //$where .=" and add_time ";//最新
+                        break;
+                    case 3;
+                        $where .= " and is_hot=1";//热门
+                        break;
+                    case 4;
+                        $where .= " and is_promote=1";//促销
+                        break;
+                }
+            }
+            if ($keyword) {
+                $where .= " and goods_name like '%$keyword%'";
+            }
+
+           if($cid){
+               $where.=" and  supplycat_id IN {$insql}";
+           }
+
+            $page = (int)Buddha_Http_Input::getParameter('p')?(int)Buddha_Http_Input::getParameter('p') : 1;
+            $pagesize = (int)Buddha_Http_Input::getParameter('PageSize')?(int)Buddha_Http_Input::getParameter('PageSize') : 15;
+
+            $fields = array('id', 'shop_id', 'goods_name', 'market_price', 'promote_price', 'is_promote', 'promote_start_date', 'promote_end_date', 'goods_thumb');
+
+            if($view==2)
+            {
+                $CommonindexObj = new Commonindex();
+
+                $list =  $CommonindexObj->newestmore( $this->tablename,$fields,$page,$pagesize,$where);
+
+            }else {
+                $list = $this->db->getFiledValues($fields, $this->prefix . 'supply', $where . $orderby . Buddha_Tool_Page::sqlLimit($page, $pagesize));
+            }
+            $nwstiem=time();
+            foreach($list as $k=>$v){
+                $Db_shop=$ShopObj->getSingleFiledValues(array('name','specticloc','lng','lat'),"id='{$v['shop_id']}'");
+
+                $distance=$RegionObj->getDistance($locdata['lng'],$locdata['lat'],$Db_shop['lng'],$Db_shop['lat'],2);
+                if($Db_shop['roadfullname']=='0'){
+                    $roadfullname='';
+                }else{
+                    $roadfullname=$Db_shop['specticloc'];
+                }
+                if($v['is_promote']==1){
+                    if($nwstiem>$v['promote_start_date'] and $v['promote_end_date']>$nwstiem){
+                        $price=$v['promote_price'];
+                    }else{
+                        $price= $v['market_price'];
+                    }
+                }else{
+                    $price= $v['market_price'];
+                }
+                $goodsNws[]=array(
+                    'id'=>$v['id'],
+                    'goods_name'=>$v['goods_name'],
+                    'is_promote'=>$v['is_promote'],
+                    'price'=>$price,
+                    'shop_name'=>$Db_shop['name'],
+                    'distance'=>$distance,
+                    'roadfullname'=>$roadfullname,
+                    'goods_thumb'=>$v['goods_thumb'],
+                );
+            }
+            $data=array();
+            if($goodsNws){
+                $data['isok']='true';
+                $data['list']=$goodsNws;
+                $data['data']='加载完成';
+
+            }else{
+                $data['isok']='false';
+                $data['list']='';
+                $data['data']='没数据了';
+            }
+            Buddha_Http_Output::makeJson($data);
+        }
+
+        $CommonindexObj = new Commonindex();
+        $filarr = array(
+            0=>array('filed'=>'zuixin','a'=>'index','view'=>2),
+            1=>array('filed'=>'fujin','a'=>'index','view'=>1),
+            2=>array('filed'=>'remen','a'=>'index','view'=>3),
+            3=>array('filed'=>'cuxiao','a'=>'index','view'=>4),
+            4=>array('filed'=>'fenlei','a'=>'category','view'=>5));
+
+        $Common = $CommonindexObj->indexmorenavlist($this->tablename,$filarr);
+        $this->smarty->assign('navlist',$Common);
+
+
+         $this->smarty->assign('view',$view);
+        $TPL_URL = $this->c.'.'.__FUNCTION__;
+        $this->smarty -> display($TPL_URL.'.html');
+    }
+
+
+
+
+    public function category(){
+    $SupplycatObj=new Supplycat();
+
+    $arr =$SupplycatObj->getcategory();
+    $table ='';
+    $SupplycatObj->getDivRelation($arr,$table);
+    $this->smarty->assign('category',$table);
+    $TPL_URL = $this->c.'.'.__FUNCTION__;
+    $this->smarty -> display($TPL_URL.'.html');
+}
+
+
+
+
+    public function info()
+    {
+        $SupplyObj=new Supply();
+        $RegionObj=new Region();
+        $GalleryObj=new Gallery();
+        $ShopObj=new Shop();
+        $OrderObj=new Order();
+        $UserfeeObj = new Userfee();
+        $locdata = $RegionObj->getLocationDataFromCookie();
+        $id=(int)Buddha_Http_Input::getParameter('id');
+        $now_user_id = $user_id = (int)Buddha_Http_Cookie::getCookie('uid');
+        $order_id=(int)Buddha_Http_Input::getParameter('order_id');
+        if(!$id){
+            Buddha_Http_Head::redirectofmobile('链接参数错误！','index.php?a=index&c=supply',2);
+        }
+        $goods= $SupplyObj->fetch($id);
+        if(!$goods){
+            Buddha_Http_Head::redirectofmobile('信息不存在或已删除！','index.php?a=index&c=supply',2);
+        }
+
+        $gsllery = $GalleryObj->getFiledValues(array('goods_img'),"goods_id='{$goods['id']}'");
+
+        $shopinfo= $ShopObj->getSingleFiledValues(array('id','user_id','small','name','is_verify','specticloc','lat','lng','mobile','createtimestr','level2','level3','is_verify'),"id='{$goods['shop_id']}' and isdel=0");
+        if($shopinfo['level2']){
+            $citys = $RegionObj->getSingleFiledValues('name',"id={$shopinfo['level2']}");
+            $shopinfo['level2'] = $citys['name'];
+        }
+        if($shopinfo['level3']){
+           $xian = $RegionObj->getSingleFiledValues('name',"id={$shopinfo['level3']}");
+           $shopinfo['level3'] = $xian['name'];
+        }
+        $lat1=$locdata['lat'];
+        $lng1=$locdata['lng'];
+
+        //产品属性
+        $GoodspecObj = new Goodspec();
+        $GoodsproductObj = new Goodsproduct();
+        $attr = $GoodspecObj->getSingleFiledValues(''," good_id='{$id}' AND good_table='supply'");
+        if(Buddha_Atom_Array::isValidArray($attr)){
+            if(stripos($attr['attrvalue1'],'|')){
+                $attr['attrvalue1'] = explode('|', $attr['attrvalue1']);
+            }
+            if(stripos($attr['attrvalue2'],'|')){
+                $attr['attrvalue2'] = explode('|', $attr['attrvalue2']);
+            }
+        }
+        //商品子表
+        $goodsson = $GoodsproductObj->getFiledValues('',"goods_id='{$id}' AND goodspec_id='{$attr['id']}'");
+        $stockNum=0;
+        foreach($goodsson as $k=>$v){
+            if($v['stock']){
+                $stockNum += $v['stock'];
+            }
+        }
+        $distance=$RegionObj->getDistance($lat1,$lng1,$shopinfo['lat'],$shopinfo['lng'],2);
+        @$shopinfo['distance']=$distance;
+        $data=array();
+        $data['click_count']=$goods['click_count']+1;
+        $SupplyObj->edit($data,$id);
+//        $start = time()-15*60;
+//        if($user_id){
+//            $see= $OrderObj->countRecords("user_id='{$user_id}' and good_id='{$id}' and pay_status=1 and createtime>=$start");
+//        }else{
+//            $see= $OrderObj->countRecords("id='{$order_id}' and good_id='{$id}' and pay_status=1 and createtime>=$start");
+//        }
+/////////////////////////////////////
+//        //判断用户是否认证：非认证显示7天（is_verify)
+//
+//        if ($shopinfo['is_verify']==0){
+//            //$createtime=$goods['add_time'];//免费7天的开始时间
+//            $endtime = strtotime($shopinfo['createtimestr']) + 7*86400;//免费7天的结束时间
+//            $newtime=time();
+//            if($newtime< $endtime){
+//                $shopinfo['verify']=1;
+//            }else{
+//                $shopinfo['verify']=0;
+//            }
+//        }
+        /**↓↓↓↓↓↓↓↓↓↓↓ 显示电话 ↓↓↓↓↓↓↓↓↓↓↓**/
+        // 是否显示电话
+        $isshowphone = $ShopObj->isCouldSeeCellphone($goods['shop_id'],$goods['user_id'],$now_user_id,$order_id);
+        //最终显示电话
+        $phone = $ShopObj->showCellphone($id,$this->tablename,$goods['user_id'],$now_user_id,$goods['shop_id'],$order_id);
+        $showphone = array('isshowphone'=>$isshowphone,'phone'=>$phone);
+        $this->smarty->assign('showphone',$showphone);
+        /**↑↑↑↑↑↑↑↑↑↑ 显示电话 ↑↑↑↑↑↑↑↑↑↑**/
+
+        $StaffObj = new Staff();
+        $staffInfo = $StaffObj->getFiledValues('',"boss_id='{$shopinfo['user_id']}'");
+        if(Buddha_Atom_Array::isValidArray($staffInfo)){
+            foreach ($staffInfo as $k => $v) {
+                if($v['staff_id'] == $user_id && $shopinfo['is_verify'] == 1){
+                    $isok = 1;
+                }
+            }
+        }
+
+        $userfeeinfo = $UserfeeObj->getSingleFiledValues('',"user_id={$shopinfo['user_id']}");
+        
+
+
+
+        /**↓↓↓↓↓↓↓↓↓↓↓ 店铺是否有转发有赏 ↓↓↓↓↓↓↓↓↓↓↓**/
+        $rechargeObj = new Recharge();
+        $rechargeinfo = $rechargeObj->getSingleFiledValues('',"uid={$shopinfo['user_id']} and shop_id='{$shopinfo['id']} and is_open=1'");
+        if($rechargeinfo && $rechargeinfo['balance'] >= $rechargeinfo['forwarding_money']){
+            $info = 1;
+            $this->smarty->assign('info',$info);
+        }
+        /**↑↑↑↑↑↑↑↑↑↑ 店铺是否有转发有赏 ↑↑↑↑↑↑↑↑↑↑**/
+
+
+        include PATH_ROOT . 'phpqrcode/phpqrcode.php'; // 引入phpqrcode类库
+        //生成中间带logo的二维码
+        $CommonObj = new Common();
+        $value='http://'.$_SERVER['HTTP_HOST'].'/index.php?a=codeimgpay&c=supply&staffuid=' .$user_id . '&goods_id='.$id;
+        $errorCorrectionLevel = 'L';//容错级别
+        $matrixPointSize = 3;//生成图片大小
+        $temporary= 'storage/temporary';//临时文件位置
+        $n= $CommonObj->creade_path($temporary);//创建文件夹
+        $nlog=$temporary.'/nlog_'.$shopinfo['id'].'_'.time(). '.png';//原始二维码图的路径+名称(不带logo的)
+        QRcode::png($value, $nlog, $errorCorrectionLevel, $matrixPointSize, 2);//生成二维码图片
+        $this->smarty->assign('see',$see);
+        $this->smarty->assign('isok',$isok);
+///////////////////////////////////
+        $this->smarty->assign('nlog',$nlog);
+        $this->smarty->assign('stockNum',$stockNum);
+        $this->smarty->assign('goodsson',$goodsson);
+        $this->smarty->assign('attr',$attr);
+        $this->smarty->assign('goods',$goods);
+        $this->smarty->assign('uid',$user_id);
+        $this->smarty->assign('gsllery',$gsllery);
+        $this->smarty->assign('shopinfo',$shopinfo);
+        $this->smarty->assign('userfeeinfo',$userfeeinfo);
+
+
+        ////////分享
+        if($goods['goods_brief']){
+            if(mb_strlen($goods['goods_brief']) > 20){
+                $goods['goods_brief'] = mb_substr($goods['goods_brief'],0,20) . '...';
+            }else{
+                $goods['goods_brief'] = $goods['goods_brief'];
+            }
+        }else{
+            $goods['goods_brief'] = '本地商家网：实体商家展示新渠道、广告传播新工具';
+        }
+        $WechatconfigObj  = new Wechatconfig();
+        if($goods['promote_price'] != '0.00'){
+           $goods['jia'] =  $goods['promote_price'];
+        }else{
+            $goods['jia'] =  $goods['market_price'];
+        }
+        
+        $sharearr = array(
+            'share_title'=>$goods['goods_name'],
+            'share_desc'=>"{$goods['goods_name']}，价格：{$goods['jia']}。 ".$goods['goods_brief'],
+            'ahare_link'=>"index.php?a=".__FUNCTION__."&c=".$this->c,
+            'share_imgUrl'=>$goods['goods_thumb'],
+        );
+        $WechatconfigObj->getJsSign($sharearr['share_title'],$sharearr['share_desc'],$sharearr['ahare_link'],$sharearr['share_imgUrl']);
+        //////// 分享
+        /**↓↓↓↓↓↓↓↓↓↓↓↓ 推荐 ↓↓↓↓↓↓↓↓↓↓↓↓**/
+        $CommonObj = new Common();
+        $recommend = $CommonObj->recommendBelongShop($goods['shop_id'],$this->tablename,$id);
+        $this->smarty->assign('recommend', $recommend);
+//        print_r($recommend);
+        /**↑↑↑↑↑↑↑↑↑↑↑↑ 推荐 ↑↑↑↑↑↑↑↑↑↑**/
+        $shopObj=new Shop();
+        $this->smarty->assign('shop_url',$shopObj->shop_url());
+        $TPL_URL = $this->c.'.'.__FUNCTION__;
+        $this->smarty -> display($TPL_URL.'.html');
+
+    }
+
+    function attrvalue(){//获取属对应的详情
+        $attrid = Buddha_Http_Input::getParameter('attrid');
+        $attrvalue1 = Buddha_Http_Input::getParameter('attrvalue1');
+        $attrvalue2 = Buddha_Http_Input::getParameter('attrvalue2');
+        $GoodsproductObj = new Goodsproduct();
+        $attrs = $GoodsproductObj->getSingleFiledValues('',"goodspec_id='{$attrid}' AND goods_table='supply' AND sonattr1='{$attrvalue1}' AND sonattr2='{$attrvalue2}'");
+        $attrs['money'] = $attrs['cost'] + $attrs['profit'];
+        $data = array();
+        if($attrs){
+            $data['isok'] = 1;
+            $data['info'] = $attrs;
+        }
+        Buddha_Http_Output::makeJson($data);
+    }
+
+
+
+
+    function codeimgpay(){
+        list($uid,$UserInfo)=each(Buddha_Db_Monitor::getInstance()->userPrivilege());
+        $UserObj = new User();
+        $StaffObj = new Staff();
+        $SupplyObj=new Supply();
+        if(!$uid){
+            Header("Location:'index.php?a=login&c=account'"); 
+            exit;
+        }
+        $goods_id = Buddha_Http_Input::getParameter('goods_id');
+        $staffuid = Buddha_Http_Input::getParameter('staffuid');
+        $goods= $SupplyObj->fetch($goods_id);
+        if($goods['is_promote']){
+            $money = $goods['promote_price'];
+        }else{
+            $money = $goods['market_price'];
+        }
+        $OrderObj=new Order();
+        $OrdermerchantObj=new Ordermerchant();
+        $supplyObj = new Supply();
+        $merchant_uid = $supplyObj->getSingleFiledValues(array('user_id'),"id={$goods_id}");
+        $data=array();
+        $order_sn = $OrderObj->birthOrderId($uid);//订单编号
+        $data['good_id']=$goods_id;//指定产品id
+        $data['user_id']=$uid;
+        $data['referral_id']=$staffuid;
+        $data['merchant_uid'] = $merchant_uid['user_id'];
+        $data['order_sn']= $order_sn;
+        $data['good_table']='supply';//哪个表
+        $data['pay_type']='third';//third第三方支付，point积分，balance余额
+        $data['order_type']='shopping';//money.out提现, 店铺认证shop.v,信息置顶info.top ,跨区域信息推广info.market,信息查看info.see,shopping购物
+        $data['goods_amt']=$money;//产品价格
+        $data['final_amt']=$money;//产品最终价格
+        $data['payname']='微信支付';
+        $data['make_level0']=$UserInfo['level0'];//国家
+        $data['make_level1']=$UserInfo['level1'];//省
+        $data['make_level2']=$UserInfo['level2'];//市
+        $data['make_level3']=$UserInfo['level3'];//区县
+        $data['createtime']=Buddha::$buddha_array['buddha_timestamp'];  //  时间戳
+        $data['createtimestr']=Buddha::$buddha_array['buddha_timestr']; //  时间日期
+        $order_id=$OrderObj->add($data);
+        $OrdermerchantObj->getInsertVersion1OrderMerchantInt($order_id,$order_sn,$merchant_uid['user_id'],$money,"supply:{$id}");
+        //$urls = substr($_SERVER["REQUEST_URI"],1,stripos($_SERVER["REQUEST_URI"],'?'));
+        $backurl = urlencode('user/index.php?a=index&c=order');
+        if($OrderObj){
+            $url = 'index.php?a=orderinfo&c=supply&goods_id='.$goods_id.'&order_id='.$order_id.'&backurl='.$backurl;
+            Header("Location:".$url);
+        }
+    }
+
+    public function promote(){
+
+        $RegionObj=new Region();
+        $ShopObj=new Shop();
+        $locdata = $RegionObj->getLocationDataFromCookie();
+        $act=Buddha_Http_Input::getParameter('act');
+        $keyword=Buddha_Http_Input::getParameter('keyword');
+        $view=Buddha_Http_Input::getParameter('view')?(int)Buddha_Http_Input::getParameter('view'): 1;
+
+        if($act=='list') {
+            $where = " isdel=0 and is_sure=1 and is_promote=1 and buddhastatus=0 {$locdata['sql']}";
+
+            if ($keyword){
+                $where .= " and (goods_name like '%$keyword%'  OR keywords like '%{$keyword}%') ";
+            }
+
+            $where.=" GROUP BY shop_id ";
+
+            $page = (int)Buddha_Http_Input::getParameter('p')?(int)Buddha_Http_Input::getParameter('p') : 1;
+            $pagesize = (int)Buddha_Http_Input::getParameter('PageSize')?(int)Buddha_Http_Input::getParameter('PageSize') : 15;
+
+            $orderby = " order by add_time DESC ";
+            $fields = array('id', 'shop_id', 'goods_name', 'market_price', 'promote_price', 'is_promote', 'promote_start_date', 'promote_end_date', 'goods_thumb');
+            $list = $this->db->getFiledValues ($fields,  $this->prefix.'supply', $where . $orderby . Buddha_Tool_Page::sqlLimit ( $page, $pagesize ) );
+
+            foreach($list as $k=>$v){
+                $Db_shop=$ShopObj->getSingleFiledValues(array('name','roadfullname','lng','lat'),"id='{$v['shop_id']}'");
+
+                $distance=$RegionObj->getDistance($locdata['lng'],$locdata['lat'],$Db_shop['lng'],$Db_shop['lat'],2);
+                if($Db_shop['roadfullname']=='0'){
+                    $roadfullname='';
+                }else{
+                    $roadfullname=$Db_shop['roadfullname'];
+                }
+                $goodsNws[]=array(
+                    'id'=>$v['id'],
+                    'goods_name'=>$v['goods_name'],
+                    'is_promote'=>$v['is_promote'],
+                    'price'=>$v['market_price'],
+                    'shop_name'=>$Db_shop['name'],
+                    'distance'=>$distance,
+                    'roadfullname'=>$roadfullname,
+                    'goods_thumb'=>$v['goods_thumb'],
+                );
+            }
+            $data=array();
+            if($goodsNws){
+                $data['isok']='true';
+                $data['list']=$goodsNws;
+                $data['data']='加载完成';
+
+            }else{
+                $data['isok']='false';
+                $data['list']='';
+                $data['data']='没数据了';
+            }
+            Buddha_Http_Output::makeJson($data);
+        }
+        $this->smarty->assign('view',$view);
+        $TPL_URL = $this->c.'.'.__FUNCTION__;
+        $this->smarty -> display($TPL_URL.'.html');
+    }
+
+    public function shopping(){
+        //list($uid,$UserInfo)=each(Buddha_Db_Monitor::getInstance()->userPrivilege());
+        $uid = Buddha_Http_Input::getParameter('uid');
+        if(!$uid){
+            $datas['isok']='true';
+            $datas['data'] = '';
+            $datas['url'] = "index.php?a=login&c=account";
+            Buddha_Http_Output::makeJson($datas);
+            exit;
+            //$datas['data']='/topay/wxpay/wxpayto.php?order_id='.$order_id.'&backurl='.$backurl;
+        }
+        $UserObj = new User();
+        $UserInfo = $UserObj->getSingleFiledValues('',"id='{$uid}'");
+        $id = Buddha_Http_Input::getParameter('id');
+        $money = Buddha_Http_Input::getParameter('money');
+        $number = Buddha_Http_Input::getParameter('number');
+        $OrderObj=new Order();
+        $OrdermerchantObj=new Ordermerchant();
+        $supplyObj = new Supply();
+        $merchant_uid = $supplyObj->getSingleFiledValues(array('user_id'),"id={$id}");
+        $data=array();
+        $order_sn = $OrderObj->birthOrderId($uid);//订单编号
+        $data['good_id']=$id;//指定产品id
+        $data['user_id']=$uid;
+        $data['merchant_uid'] = $merchant_uid['user_id'];
+        $data['order_sn']= $order_sn;
+        $data['good_table']='supply';//哪个表
+        $data['pay_type']='third';//third第三方支付，point积分，balance余额
+        $data['order_type']='shopping';//money.out提现, 店铺认证shop.v,信息置顶info.top ,跨区域信息推广info.market,信息查看info.see,shopping购物
+        $data['goods_amt']=$money * $number;//产品价格
+        $data['final_amt']=$money * $number;//产品最终价格
+        $data['order_total']=$number;//件数
+        $data['payname']='微信支付';
+        $data['make_level0']=$UserInfo['level0'];//国家
+        $data['make_level1']=$UserInfo['level1'];//省
+        $data['make_level2']=$UserInfo['level2'];//市
+        $data['make_level3']=$UserInfo['level3'];//区县
+        $data['createtime']=Buddha::$buddha_array['buddha_timestamp'];  //  时间戳
+        $data['createtimestr']=Buddha::$buddha_array['buddha_timestr']; //  时间日期
+        $order_id=$OrderObj->add($data);
+
+
+
+        $OrdermerchantObj->getInsertVersion1OrderMerchantInt($order_id,$order_sn,$merchant_uid['user_id'],$money * $number,"supply:{$id}");
+
+        //$urls = substr($_SERVER["REQUEST_URI"],1,stripos($_SERVER["REQUEST_URI"],'?'));
+        $backurl = urlencode('user/index.php?a=index&c=order');
+        if($OrderObj){
+            $datas['isok']='true';
+            $datas['data'] = '成功';
+            $datas['url'] = 'index.php?a=orderinfo&c=supply&goods_id='.$id.'&order_id='.$order_id.'&backurl='.$backurl;
+            //$datas['data']='/topay/wxpay/wxpayto.php?order_id='.$order_id.'&backurl='.$backurl;
+        }else{
+            $datas['isok']='false';
+            $datas['data']='服务器忙';
+        }
+        Buddha_Http_Output::makeJson($datas);
+    }
+
+
+    public function orderinfo()
+    {//支付前订单详情
+        list($uid,$UserInfo)=each(Buddha_Db_Monitor::getInstance()->userPrivilege());
+        $goods_id = Buddha_Http_Input::getParameter('goods_id');//商品id
+        $backurl = Buddha_Http_Input::getParameter('backurl');//支付后跳转的url地址
+        $backurl = urlencode($backurl);
+        $order_id = Buddha_Http_Input::getParameter('order_id');//订单id
+        $OrderObj=new Order();
+        $SupplyObj = new Supply();
+        $RegionObj = new Region();
+        $AddressObj = new Address();
+        $goodsinfo = $SupplyObj->getSingleFiledValues(array('id','goods_name','goods_thumb','promote_price','market_price'),"id={$goods_id}");//获取购买商品的详情
+        $orderinfo = $OrderObj->getSingleFiledValues('',"id={$order_id}");//获取订单号
+        $addressinfo = $AddressObj->getSingleFiledValues('',"uid={$uid} and isdef = 1");//获取收货地址
+        
+        if($addressinfo['pro']){//省
+            $pro = $RegionObj->getSingleFiledValues(array('name'),"id={$addressinfo['pro']}");
+            $addressinfo['addre'] = $pro['name'].'省';
+        }
+
+        if($addressinfo['city']){//市
+            $city = $RegionObj->getSingleFiledValues(array('name'),"id={$addressinfo['city']}");
+            $addressinfo['addre'] .= ' '. $city['name'] . '市';
+        }
+
+        if($addressinfo['area']){//区县
+            $area = $RegionObj->getSingleFiledValues(array('name'),"id={$addressinfo['area']}");
+            $addressinfo['addre'] .= ' '.$area['name'];
+        }
+        $this->smarty->assign('uid',$uid);
+        $this->smarty->assign('url',$url);
+        $this->smarty->assign('orderinfo',$orderinfo);
+        $this->smarty->assign('goodsinfo',$goodsinfo);
+        $this->smarty->assign('addressinfo',$addressinfo);
+        $TPL_URL = $this->c.'.'.__FUNCTION__;
+        $this->smarty -> display($TPL_URL.'.html');
+    }
+
+    public function updateaddress()
+    {//给订单表添加收货地址id号
+        list($uid,$UserInfo)=each(Buddha_Db_Monitor::getInstance()->userPrivilege());
+        $addressid = Buddha_Http_Input::getParameter('addressinfo');//收货地址id
+        $orderid = Buddha_Http_Input::getParameter('orderid');//订单id
+        $pay_type = Buddha_Http_Input::getParameter('pay_type');
+        $remarks = Buddha_Http_Input::getParameter('textareas');
+        $OrderObj=new Order();
+        $AddressObj = new Address();
+        $addressinfo = $AddressObj->getSingleFiledValues('',"uid={$uid} and isdef = 1");//获取收货地址
+        $backurl = urlencode('user/index.php?a=index&c=order');
+        $data['addressid'] = $addressid;
+        if($pay_type == 2){
+            $data['pay_type'] = 'selfTrading';
+            $data['remarks'] = $remarks; 
+        }
+        
+//        $backurl   = 'user/index.php?a=index&c=order';
+//        $returnurl = 'user/index.php?a=info&c=heartpro&id=17';
+
+        if($OrderObj->edit($data,$orderid)){//编辑order表
+            
+            $datas['isok']='true';
+            $datas['data'] = '即将跳转到支付页面';
+            if($pay_type == 1){
+                $datas['url'] = '/topay/wxpay/wxpayto.php?order_id='.$orderid.'&addressid='.$addressinfo['id'].'&backurl='.$backurl;
+            }else{
+                $datas['url'] =  '/user/index.php?a=detail&c=order&id=' . $orderid;
+            }
+            //跳转url
+            //$datas['data']='/topay/wxpay/wxpayto.php?order_id='.$order_id.'&backurl='.$backurl;
+            //$datas['data']='/topay/wxpay/wxpayto.php?order_id=3453&addressid=44&backurl=user/index.php?a=index&c=order&returnurl=user/index.php?a=info&c=heartpro&id=17';
+        }else{
+            $datas['isok']='false';
+            $datas['data']='服务器忙';
+        }
+        Buddha_Http_Output::makeJson($datas);
+    }
+    public function sharingmoney(){//转发有赏
+        $ShopObj = new Shop();
+        $s_id=(int)Buddha_Http_Input::getParameter('s_id');//店铺编号
+        $uid = (int)Buddha_Http_Cookie::getCookie('uid');
+        $types = Buddha_Http_Input::getParameter('types');
+        $shopinfo = $ShopObj->getSingleFiledValues('',"id=$s_id");
+        $rechargeObj = new Recharge();
+        $rechargeinfo = $rechargeObj->getSingleFiledValues('',"uid={$shopinfo['user_id']}");
+        ////////分享有赏
+        if($rechargeinfo && $rechargeinfo['balance'] >= $rechargeinfo['forwarding_money'] && $rechargeinfo['is_open'] == 1){
+            //$user_id = (int)Buddha_Http_Cookie::getCookie('uid');
+            $userObj = new User();
+            $billObj = new Bill();
+            $orderObj = new Order();
+            $sharingObj = new Sharing();
+            $sharinginfo = $sharingObj ->getSingleFiledValues('',"uid={$uid} and shop_id={$shopinfo['id']}");//该用户有没有分享过次店铺
+            if($sharinginfo){
+                if($rechargeinfo['time_period']){
+                    $set_time = explode($rechargeinfo['time_period'],'-');//转发有赏起始时间段
+                    $starttime = strtotime(date('Y-m-d').' '.$set_time[0].':00:00');
+                    $endtime = strtotime(date('Y-m-d').' '.$set_time[1].':00:00');
+                }
+                
+                if((time() - $sharinginfo['ceratetime']) >= 86400 && $set_time<=time() && $endtime>=time()){//  同家店铺分享每天分享第一次在此分享才有赏金，转发有时间段限制
+                    $times['createtime'] = strtotime(date('Ymd'));
+                    $re = $sharingObj->edit($times,$sharinginfo['id']);//更新分享时间
+                    if($re){
+                        $banlance = $userObj->getSingleFiledValues(array('id','banlance'),"id={$uid}");
+                        if($types == 'quan'){
+                            $dataes['banlance'] = $banlance['banlance'] + $rechargeinfo['forwarding_money'];//增加账户余额
+                        }elseif($types == 'hao'){
+                            $dataes['banlance'] = $banlance['banlance'] + $rechargeinfo['hao_forwarding_money'];//增加账户余额
+                        }
+                        $userObj->edit($dataes,$uid);//更新账户余额
+                        //生成订单和账单明细
+                        $data = array();
+                        $data['good_id'] = $shopinfo['id'];
+                        $data['user_id'] = $uid;
+                        $data['order_sn'] = $orderObj->birthOrderId($uid);
+                        $data['good_table'] = 'shop';
+                        if($types == 'quan'){
+                            $data['goods_amt'] = $rechargeinfo['forwarding_money'];
+                            $data['final_amt'] = $rechargeinfo['forwarding_money'];
+                        }elseif($types == 'hao'){
+                            $data['goods_amt'] = $rechargeinfo['hao_forwarding_money'];
+                            $data['final_amt'] = $rechargeinfo['hao_forwarding_money'];
+                        }
+                        $data['pay_status'] =1;
+                        $data['pay_type'] = 'balance';
+                        $data['order_type'] = 'forwarding_money';
+                        $data['payname'] = '余额支付转发有赏';
+                        $data['createtime'] = Buddha::$buddha_array['buddha_timestamp'];
+                        $data['createtimestr'] = Buddha::$buddha_array['buddha_timestr'];
+                        $order_id=$orderObj->add($data);
+                        $order_sn = $orderObj->getSingleFiledValues(array('order_sn'),"id={$order_id}");
+                        $data = array();
+                        $data['user_id'] = $uid;
+                        $data['order_sn'] = $order_sn['order_sn'];
+                        $data['order_id'] = $order_id;
+                        $data['is_order'] = 1;
+                        $data['order_type'] = 'forwarding.money';
+                        $data['order_desc']  ='转发赏金';
+                        $data['createtime'] = Buddha::$buddha_array['buddha_timestamp'];
+                        $data['createtimestr'] = Buddha::$buddha_array['buddha_timestr'];
+                        if($types == 'quan'){
+                            $data['billamt'] = $rechargeinfo['forwarding_money']; 
+                        }elseif($types == 'hao'){
+                            $data['billamt'] = $rechargeinfo['hao_forwarding_money']; 
+                        }
+                        $billObj->add($data);
+                        $data = array();//商家转发后资金减少的记录
+                        $data['user_id'] = $shopinfo['user_id'];
+                        $data['is_order'] = 0;
+                        $data['order_type'] = 'forwarding.money';
+                        $data['order_desc']  ='扣除转发赏金';
+                        $data['createtime'] = Buddha::$buddha_array['buddha_timestamp'];
+                        $data['createtimestr'] = Buddha::$buddha_array['buddha_timestr'];
+                        if($types == 'quan'){
+                            $data['billamt'] = '-' . $rechargeinfo['forwarding_money']; 
+                        }elseif($types == 'hao'){
+                            $data['billamt'] = '-' . $rechargeinfo['hao_forwarding_money']; 
+                        }
+                        $billObj->add($data);
+                        //改变对应的充值表余额
+                        if($types == 'quan'){
+                            $rech['balance'] = $rechargeinfo['balance'] - $rechargeinfo['forwarding_money'];
+                        }elseif($types == 'hao'){
+                            $rech['balance'] = $rechargeinfo['balance'] - $rechargeinfo['hao_forwarding_money'];
+                        }
+                        
+                        $rechargeObj->edit($rech,$rechargeinfo['id']);
+                        $data = array();
+                        $data['isok'] = 'true';
+                        $data['info'] = '赏金已充入余额';
+                    }
+                }elseif((time() - $sharinginfo['ceratetime']) >= 86400){//转发没有时间段限制
+                    $times['createtime'] = strtotime(date('Ymd'));
+                    $re = $sharingObj->edit($times,$sharinginfo['id']);//更新分享时间
+                    if($re){
+                        $banlance = $userObj->getSingleFiledValues(array('id','banlance'),"id={$uid}");
+                        if($types == 'quan'){
+                            $dataes['banlance'] = $banlance['banlance'] + $rechargeinfo['forwarding_money'];//增加账户余额
+                        }elseif($types == 'hao'){
+                            $dataes['banlance'] = $banlance['banlance'] + $rechargeinfo['hao_forwarding_money'];//增加账户余额
+                        }
+                        $userObj->edit($dataes,$uid);//更新账户余额
+                        //生成订单和账单明细
+                        $data = array();
+                        $data['good_id'] = $shopinfo['id'];
+                        $data['user_id'] = $uid;
+                        $data['order_sn'] = $orderObj->birthOrderId($uid);
+                        $data['good_table'] = 'shop';
+                        if($types == 'quan'){
+                            $data['goods_amt'] = $rechargeinfo['forwarding_money'];
+                            $data['final_amt'] = $rechargeinfo['forwarding_money'];
+                        }elseif($types == 'hao'){
+                            $data['goods_amt'] = $rechargeinfo['hao_forwarding_money'];
+                            $data['final_amt'] = $rechargeinfo['hao_forwarding_money'];
+                        }
+                        $data['pay_status'] =1;
+                        $data['pay_type'] = 'balance';
+                        $data['order_type'] = 'forwarding_money';
+                        $data['payname'] = '余额支付转发有赏';
+                        $data['createtime'] = Buddha::$buddha_array['buddha_timestamp'];
+                        $data['createtimestr'] = Buddha::$buddha_array['buddha_timestr'];
+                        $order_id=$orderObj->add($data);
+                        $order_sn = $orderObj->getSingleFiledValues(array('order_sn'),"id={$order_id}");
+                        $data = array();
+                        $data['user_id'] = $uid;
+                        $data['order_sn'] = $order_sn['order_sn'];
+                        $data['order_id'] = $order_id;
+                        $data['is_order'] = 1;
+                        $data['order_type'] = 'forwarding.money';
+                        $data['order_desc']  ='转发赏金';
+                        $data['createtime'] = Buddha::$buddha_array['buddha_timestamp'];
+                        $data['createtimestr'] = Buddha::$buddha_array['buddha_timestr'];
+                        if($types == 'quan'){
+                            $data['billamt'] = $rechargeinfo['forwarding_money']; 
+                        }elseif($types == 'hao'){
+                            $data['billamt'] = $rechargeinfo['hao_forwarding_money']; 
+                        }
+                        $billObj->add($data);
+                        $data = array();//商家转发后资金减少的记录
+                        $data['user_id'] = $shopinfo['user_id'];
+                        $data['is_order'] = 0;
+                        $data['order_type'] = 'forwarding.money';
+                        $data['order_desc']  ='扣除转发赏金';
+                        $data['createtime'] = Buddha::$buddha_array['buddha_timestamp'];
+                        $data['createtimestr'] = Buddha::$buddha_array['buddha_timestr'];
+                        if($types == 'quan'){
+                            $data['billamt'] = '-' . $rechargeinfo['forwarding_money']; 
+                        }elseif($types == 'hao'){
+                            $data['billamt'] = '-' . $rechargeinfo['hao_forwarding_money']; 
+                        }
+                        $billObj->add($data);
+                        //改变对应的充值表余额
+                        if($types == 'quan'){
+                            $rech['balance'] = $rechargeinfo['balance'] - $rechargeinfo['forwarding_money'];
+                        }elseif($types == 'hao'){
+                            $rech['balance'] = $rechargeinfo['balance'] - $rechargeinfo['hao_forwarding_money'];
+                        }
+                        
+                        $rechargeObj->edit($rech,$rechargeinfo['id']);
+                        $data = array();
+                        $data['isok'] = 'true';
+                        $data['info'] = '赏金已充入余额';
+                    }
+                }
+            }else{
+                $datass['uid'] = $uid;
+                $datass['shop_id'] = $shopinfo['id'];
+                $datass['ceratetime'] = strtotime(date('Ymd'));
+                //添加记录
+                if($sharingObj->add($datass)){
+                    $banlance = $userObj->getSingleFiledValues(array('id','banlance'),"id={$uid}");
+                   if($types == 'quan'){
+                        $dataes['banlance'] = $banlance['banlance'] + $rechargeinfo['forwarding_money'];//增加账户余额
+                    }elseif($types == 'hao'){
+                        $dataes['banlance'] = $banlance['banlance'] + $rechargeinfo['hao_forwarding_money'];//增加账户余额
+                    }
+                    $userObj->edit($dataes,$uid);//更新账户余额
+                    //生成订单和账单明细
+                    $data = array();
+                    $data['good_id'] = $shopinfo['id'];
+                    $data['user_id'] = $uid;
+                    $data['order_sn'] = $orderObj->birthOrderId($uid);
+                    $data['good_table'] = 'shop';
+                    if($types == 'quan'){
+                        $data['goods_amt'] = $rechargeinfo['forwarding_money'];
+                        $data['final_amt'] = $rechargeinfo['forwarding_money'];
+                    }elseif($types == 'hao'){
+                        $data['goods_amt'] = $rechargeinfo['hao_forwarding_money'];
+                        $data['final_amt'] = $rechargeinfo['hao_forwarding_money'];
+                    }
+                    $data['pay_status'] =1;
+                    $data['pay_type'] = 'balance';
+                    $data['order_type'] = 'forwarding_money';
+                    $data['payname'] = '余额支付转发有赏';
+                    $data['createtime'] = Buddha::$buddha_array['buddha_timestamp'];
+                    $data['createtimestr'] = Buddha::$buddha_array['buddha_timestr'];
+                    $order_id=$orderObj->add($data);
+                    $order_sn = $orderObj->getSingleFiledValues(array('order_sn'),"id={$order_id}");
+                    $data = array();
+                    $data['user_id'] = $uid;
+                    $data['order_sn'] = $order_sn['order_sn'];
+                    $data['order_id'] = $order_id;
+                    $data['is_order'] = 1;
+                    $data['order_type'] = 'forwarding.money';
+                    $data['order_desc']  ='转发赏金';
+                    $data['createtime'] = Buddha::$buddha_array['buddha_timestamp'];
+                    $data['createtimestr'] = Buddha::$buddha_array['buddha_timestr'];
+                    if($types == 'quan'){
+                        $data['billamt'] = $rechargeinfo['forwarding_money']; 
+                    }elseif($types == 'hao'){
+                        $data['billamt'] = $rechargeinfo['hao_forwarding_money']; 
+                    }
+                    $billObj->add($data);
+
+                    //商家转发后资金减少的记录
+                    $data = array();
+                    $data['user_id'] = $shopinfo['user_id'];
+                    $data['is_order'] = 0;
+                    $data['order_type'] = 'forwarding.money';
+                    $data['order_desc']  ='扣除转发赏金';
+                    $data['createtime'] = Buddha::$buddha_array['buddha_timestamp'];
+                    $data['createtimestr'] = Buddha::$buddha_array['buddha_timestr'];
+                    if($types == 'quan'){
+                        $data['billamt'] = '-' . $rechargeinfo['forwarding_money']; 
+                    }elseif($types == 'hao'){
+                        $data['billamt'] = '-' . $rechargeinfo['hao_forwarding_money']; 
+                    }
+                    $billObj->add($data);
+                    //改变对应的充值表余额
+                    if($types == 'quan'){
+                            $rech['balance'] = $rechargeinfo['balance'] - $rechargeinfo['forwarding_money'];
+                        }elseif($types == 'hao'){
+                            $rech['balance'] = $rechargeinfo['balance'] - $rechargeinfo['hao_forwarding_money'];
+                        }
+                    $rechargeObj->edit($rech,$rechargeinfo['id']);
+                    $data = array();
+                    $data['isok'] = 'true';
+                    $data['info'] = '赏金已充入余额';
+                }
+            }
+        }else{
+            $data = array();
+            $data['isok'] = 'false';
+            $data['info'] = '';
+        }
+        Buddha_Http_Output::makeJson($data);
+    }
+
+}

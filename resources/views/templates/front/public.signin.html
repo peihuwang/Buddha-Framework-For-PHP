@@ -1,0 +1,21 @@
+<div style="padding-bottom: 5px;border-bottom: 1px solid #e0e0e0;width: 100%">
+    <ul class="asasas">
+        <li class="bain1" style="border-right: 1px solid #e0e0e0;"><strong>￥{#$UserInfo.banlance#}元</strong><span>余额</span></li>
+        <li onclick="sign();" class="bain1" style="border-right: 1px solid #e0e0e0;"><strong><img src="/style/images/icon_sign.png" width="20" height="17"></strong><span>签到</span></li>
+        <li><strong id="memercardpoint">{#if $UserInfo.memercardpoint eq ''#}0{#else#}{#$UserInfo.memercardpoint#}{#/if#}</strong><span>积分</span></li>
+    </ul>
+</div>
+<script type="text/javascript">
+	function sign(){
+        $.ajax({
+            type:'post',
+            url:'/index.php?a=signin&c=personalCenter',
+            dataType:'json',
+            success:function(o){
+                $('#memercardpoint').text(o.memercardpoint);
+                Message.showNotify(o.info,2000);
+
+            }
+        });   
+    }
+</script>
